@@ -1,0 +1,369 @@
+body {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.20px;
+    padding: 40px 0px 0px 0px;
+    margin: 0px 40px;
+    color: rgba(0, 0, 0, 0.6);
+    background-color: #ffffff;
+    animation: fadein 2s;
+}
+
+/* FONT STYLES */
+
+h1 {
+    font-size: 3.052rem;
+    font-weight: 600;
+    line-height: 52px; 
+    margin: 40px 0px 16px 0px;
+    color: rgba(0, 0, 0, 0.92);
+}
+
+h2 {    
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 40px; 
+    margin: 0px 0px 24px 0px;
+    color: rgba(0, 0, 0, 0.92);
+    text-wrap: balance;
+
+}
+
+h3 {
+    font-size: 2.441rem;
+    font-weight: 600;
+    line-height: 48px; 
+    margin: 0px 0px 16px 0px;
+    color: rgba(0, 0, 0, 0.92);
+}
+
+h4 {
+    font-size: 1.563rem;
+    font-weight: 400;
+    line-height: 32px; 
+    margin: 0px;
+    text-wrap: balance;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+p {
+    color: rgba(0, 0, 0, 0.54);
+    margin: 0px;
+    font-family: Inter;
+    font-weight: 400;
+    text-wrap: balance;
+}
+
+a {
+    color: #598AFF;
+    font-family: Inter;
+    font-weight: 500;
+    line-height: 22px;
+    height: auto; 
+    text-decoration: none;
+}
+
+a:hover {
+    color: #154ccc;
+    font-weight: 500;
+}
+
+span:hover {
+    text-decoration: none;
+}
+
+
+
+/* GENERAL STYLES */
+
+section {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.row-1 {
+    display: flex;
+    flex-direction: column;
+}
+
+.description {
+    padding-top: 16px;
+}
+
+.hide {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: rgba(0, 0, 0, 0.00);  
+    padding: 0px 0px 40px 0px;
+    border-radius: 18px;
+}
+
+.bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.bottom {
+    padding: 24px;
+}
+
+.profile-pic {
+    width: 144px;
+    height: 144px;
+    border-radius: 400px;
+    box-shadow: 0px 1.4945px 3.62304px 0px rgba(0, 0, 0, 0.02), 0px 4.13211px 10.01724px 0px rgba(0, 0, 0, 0.04), 0px 9.94853px 24.11766px 0px rgba(0, 0, 0, 0.05), 0px 33px 80px 0px rgba(0, 0, 0, 0.07);
+} 
+
+a {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+.outlinks {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 24px;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+
+/* WORK CARD CONTENT */
+
+.work-content {
+    width: auto;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 24px;
+}
+
+.work-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    width: auto;
+    min-height: 544px;
+    margin-bottom: 32px;
+    transition: transform .4s, filter 1s ease-in-out;
+}
+
+.work-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    border-radius: 18px;
+    box-shadow: none
+}
+
+.work-image-container {
+    display: flex;
+}
+
+.icon {
+    margin-bottom: 32px;
+    width: 40px;
+    height: 40px;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.card {
+    background-color: rgba(0, 0, 0, 0.04);  
+    border-radius: 18px;
+}
+
+.deliveroo {
+    background-color: #d2fcf9;
+}
+
+.ovo {
+    background-color: #e0fcdf;
+}
+
+.pago {
+    background-color: #fde9fa;
+    padding: 0px;
+}
+
+.work-card:hover {
+    transform: scale(1.019);
+} 
+
+/* CONTACT */
+
+.contact {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.call {
+    box-shadow: none;
+    margin-bottom: 32px;
+}
+
+.center {
+    text-align: center;
+    max-width: 600px;
+}
+
+
+/* FOOTER */
+
+.footer {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 44px 0px;
+}
+
+.footnote {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.40);
+}
+
+
+/* RESPONSIVE STYLES */
+
+  @media screen and (min-width:701px) and (max-width: 1024px) {
+
+    body {
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 28px;
+        padding: 40px 0px 0px 0px;
+        margin: 0px 40px;
+    }
+    
+    .outlinks {
+        flex-direction: column;
+        gap: 0px;
+    }
+
+    a {
+        margin-top: 40px;
+    }
+
+    a:last-child {
+        margin-top: 24px;
+    }
+
+    .row-1 {
+        display: flex;
+        flex-direction: row;
+        gap: 0px;
+    }
+
+    .hide {
+        padding: 52px 56px;
+        min-width: 30%;
+    }
+
+    .bottom {
+        padding: 52px 56px;
+        max-width: 45%;
+    }
+
+    /* WORK CARD STYLES */
+
+    .work-content {
+        padding: 44px 48px;;
+    }
+    
+  }
+  
+  @media screen and (min-width: 1025px) and (max-width: 2400px) {
+
+    /* GENERAL STYLES */
+
+    body {
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 28px;
+        padding: 60px 0px 0px 0px;
+        margin: 0px 60px;
+    }
+
+    .profile-pic {
+        width: 160px;
+        height: 160px;
+        border-radius: 600px;
+    }
+
+    .row-1 {
+        display: flex;
+        flex-direction: row;
+        gap: 0px;
+    }
+
+    .hide {
+        padding: 52px 56px;
+        min-width: 30%;
+    }
+
+    .bottom {
+        padding: 52px 56px;
+        max-width: 45%;
+    }
+
+    .card {
+        border-radius: 28px;
+    }
+
+    /* WORK CARD STYLES */
+
+    .work-card {
+        display: flex;
+        flex-direction: row;
+        overflow: hidden;
+    }
+
+    .work-content {
+        padding: 68px 0px 68px 64px;
+    }
+
+    .work-image {
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .work-image-container {
+        align-items: end;
+        max-width: 60%;
+    }
+    
+    .footer {
+        padding: 64px 0px;
+    }
+
+    .contact {
+        padding: 60px;
+    }
+
+  }
