@@ -24,7 +24,7 @@ h1 {
 h2 {    
     font-size: 1.25rem;
     font-weight: 400;
-    line-height: 28px; 
+    line-height: 26px; 
     margin: 0px 0px 24px 0px;
     color: rgba(0, 0, 0, 0.92);
     text-wrap: balance;
@@ -59,9 +59,14 @@ a {
     color: #598AFF;
     font-family: 'Inter', sans-serif;
     font-weight: 500;
+    font-size: 20px;
     line-height: 22px;
     height: auto; 
     text-decoration: none;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
 }
 
 a:hover {
@@ -122,13 +127,6 @@ section {
     box-shadow: 0px 1.4945px 3.62304px 0px rgba(0, 0, 0, 0.02), 0px 4.13211px 10.01724px 0px rgba(0, 0, 0, 0.04), 0px 9.94853px 24.11766px 0px rgba(0, 0, 0, 0.05), 0px 33px 80px 0px rgba(0, 0, 0, 0.07);
 } 
 
-a {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: row;
-    gap: 2px;
-}
-
 .outlinks {
     display: flex;
     flex-direction: row;
@@ -152,7 +150,7 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 24px;
+    padding: 28px 24px 24px;
 }
 
 .work-card {
