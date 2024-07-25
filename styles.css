@@ -47,12 +47,23 @@ h4 {
     color: rgba(0, 0, 0, 0.54);
 }
 
-p {
-    color: rgba(0, 0, 0, 0.54);
+h5 {
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    text-wrap: balance;
     margin: 0px;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+p {   
     font-family: 'Inter', sans-serif;
     font-weight: 400;
     text-wrap: balance;
+    margin: 0px;
+    color: rgba(0, 0, 0, 0.54);
 }
 
 a {
@@ -66,12 +77,18 @@ a {
     margin-top: 40px;
     display: flex;
     flex-direction: row;
-    gap: 2px;
+    gap: 4px;
+    padding: 7px 6px 5px 10px;
+    border-radius: 6px;
 }
 
 a:hover {
     color: #154ccc;
     font-weight: 500;
+    color: #154ccc;
+    font-weight: 500;
+    background-color: #164cca17;
+    transition: 0.3s ease;
 }
 
 span:hover {
@@ -136,7 +153,8 @@ section {
     display: flex;
     flex-direction: row;
     align-items: baseline;
-    gap: 24px;
+    gap: 12px;
+    margin-left: -9px;
 }
 
 .icon {
@@ -278,9 +296,14 @@ section {
         color: rgba(0, 0, 0, 0.92);
     }
 
+    h5 {
+        font-size: 20px;
+    }
+
     .outlinks {
         flex-direction: column;
         gap: 0px;
+        margin-left: -9px;
     }
 
     a {
@@ -362,6 +385,10 @@ section {
         line-height: 48px; 
         margin: 0px 0px 16px 0px;
         color: rgba(0, 0, 0, 0.92);
+    }
+
+    h5 {
+        font-size: 20px;
     }
 
     a.smaller {
