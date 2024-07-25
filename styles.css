@@ -77,12 +77,18 @@ a {
     margin-top: 40px;
     display: flex;
     flex-direction: row;
-    gap: 2px;
+    gap: 4px;
+    padding: 7px 6px 5px 10px;
+    border-radius: 6px;
 }
 
 a:hover {
     color: #154ccc;
     font-weight: 500;
+    color: #154ccc;
+    font-weight: 500;
+    background-color: #164cca17;
+    transition: 0.3s ease;
 }
 
 span:hover {
@@ -147,7 +153,8 @@ section {
     display: flex;
     flex-direction: row;
     align-items: baseline;
-    gap: 24px;
+    gap: 12px;
+    margin-left: -9px;
 }
 
 .icon {
@@ -296,6 +303,7 @@ section {
     .outlinks {
         flex-direction: column;
         gap: 0px;
+        margin-left: -9px;
     }
 
     a {
