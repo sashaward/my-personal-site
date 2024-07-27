@@ -91,7 +91,12 @@
             <img class="profile-pic call" src="./images/contact-image.png" alt="Memoji of Sasha Ward with a call me hand sign, smiling.">
             <h3>Let's chat!</h3>
             <p class="center">Want to know more about these projects or just a friendly chat? Drop me an email.</p>
-            <a class="smaller" href="mailto:sashabward@gmail.com">sashabward@gmail.com</a>
+
+            <div class="tooltip">
+                <a class="smaller" href="mailto:sashabward@gmail.com" id="myLink" onclick="copyLinkText(event)">sashabward@gmail.com</a>
+                <span class="tooltiptext" id="tooltipText">Copy</span>
+            </div>
+            
         </div>
             
 
@@ -101,6 +106,8 @@
         </div>
 
     </main>
+
+    <script src="./copy.js"></script>
 
 </body>
 </html>
