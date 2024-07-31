@@ -5,7 +5,7 @@ body {
     font-size: 16px;
     font-weight: 400;
     line-height: 22px;
-    letter-spacing: -0.30px;
+    letter-spacing: -0.1px;
     padding: 40px 0px 0px 0px;
     margin: 0px 24px;
     color: rgba(0, 0, 0, 0.6);
@@ -51,7 +51,6 @@ h4 {
 
 h5 {
     font-family: 'Geist Mono', monospace;
-    font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
     text-wrap: balance;
