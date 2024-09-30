@@ -68,7 +68,7 @@ p {
 }
 
 a {
-    color: #598AFF;
+    color: #2F60F4;
     font-family: 'Geist', sans-serif;
     font-weight: 500;
     font-size: 20px;
@@ -97,7 +97,11 @@ span:hover {
 
 a.smaller {
     font-size: 16px;
-    /* margin-top: 16px; */
+}
+
+span.lock {
+    font-size: 16px;
+    line-height: 21px;
 }
 
 /* GENERAL STYLES */
@@ -115,6 +119,7 @@ section {
 
 .description {
     padding-top: 16px;
+    margin-bottom: 32px;
 }
 
 .hide {
@@ -332,7 +337,11 @@ section {
 
     a.smaller {
         font-size: 20px;
-        /* margin-top: 16px; */
+    }
+
+    span.lock {
+        font-size: 22px;
+        line-height: 19px;
     }
 
     .center {
@@ -418,6 +427,11 @@ section {
 
     a.smaller {
         font-size: 20px;
+    }
+
+    span.lock {
+        font-size: 22px;
+        line-height: 19px;
     }
 
     .center {
