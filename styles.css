@@ -214,17 +214,26 @@ section {
     background-color: #d2fcf9;
 }
 
-.ovo {
-    background-color: #e0fcdf;
-}
-
-.pago {
-    background-color: #fde9fa;
-    padding: 0px;
-}
-
 .work-card:hover {
     transform: scale(1.019);
+} 
+
+/* PROJECT CARD */
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: stretch;
+    border-radius: 28px;
+    padding: 24px 24px 16px 24px;
+    width: auto;
+    transition: transform .4s, filter 1s ease-in-out;
+}
+
+.project-card:hover {
+    transform: scale(1.03);
 } 
 
 /* CONTACT */
@@ -292,6 +301,39 @@ section {
     visibility: visible;
     opacity: 1;
 }
+
+.three-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.card-item {
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-item img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 16px;
+}
+
+@media screen and (min-width: 768px) {
+    .three-cards {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .card-item {
+        width: 30%;
+    }
+}
+
 
 
 /* RESPONSIVE STYLES */
@@ -380,6 +422,12 @@ section {
 
     .work-content {
         padding: 44px 48px;;
+    }
+
+    /* PROJECT CARD STYLES */
+
+    .project-card {
+        padding: 32px 32px 24px;
     }
 
     /* FOOTER  */
@@ -499,6 +547,13 @@ section {
 
     .contact {
         padding: 60px;
+    }
+
+    /* PROJECT CARD STYLES */
+
+    .project-card {
+        padding: 32px 32px 24px;
+        width: 100%;
     }
 
     /* FOOTER  */
