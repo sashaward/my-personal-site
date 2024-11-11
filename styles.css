@@ -226,7 +226,7 @@ section {
     flex-grow: 1;
     justify-content: space-between;
     align-items: stretch;
-    border-radius: 28px;
+    border-radius: 18px;
     padding: 24px 24px 16px 24px;
     width: auto;
     transition: transform .4s, filter 1s ease-in-out;
@@ -315,13 +315,51 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card-item img {
     width: 40px;
     height: 40px;
     margin-bottom: 16px;
+}
+
+/* Logo Scroller Container */
+.logo-scroller {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+/* Logo List */
+.logo-list {
+    display: flex;
+    animation: scroll 45s linear infinite;
+}
+
+.logo-list li {
+    display: flex;
+    margin-right: 32px;
+}
+
+.logo-list li:last-child {
+    margin-right: 0px;
+}
+
+.logo-list img {
+    height: 86px;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 
 @media screen and (min-width: 768px) {
@@ -422,6 +460,10 @@ section {
 
     .work-content {
         padding: 44px 48px;;
+    }
+
+    .logo-scroller {
+        margin-bottom: 32px;
     }
 
     /* PROJECT CARD STYLES */
@@ -554,6 +596,11 @@ section {
     .project-card {
         padding: 32px 32px 24px;
         width: 100%;
+        border-radius: 28px;
+    }
+
+    .logo-scroller {
+        margin-bottom: 32px;
     }
 
     /* FOOTER  */
