@@ -1,20 +1,34 @@
 function copyLinkText(event) {
-    event.preventDefault(); // Prevent default link behavior
+    event.preventDefault();
 
-    // Get the link text
     var linkText = document.getElementById("myLink").textContent;
-    var tooltip = document.getElementById("tooltipText");
+    var container = event.currentTarget.closest('.tooltip');
+    var tooltip = container ? container.querySelector('.tooltiptext') : document.getElementById("tooltipText");
+    var originalText = tooltip.textContent;
 
-    // Copy the text to the clipboard
     navigator.clipboard.writeText(linkText).then(function() {
-        // Change tooltip text to "Copied"
-        tooltip.textContent = "Copied 👍 ";
+        tooltip.textContent = "Copied 👍";
 
-        // Reset tooltip text after a delay
         setTimeout(function() {
-            tooltip.textContent = "Copy";
+            tooltip.textContent = originalText;
         }, 2000);
     }).catch(function(err) {
         console.error('Could not copy text: ', err);
     });
 }
+
+const fadeObserver = new IntersectionObserver(
+    (entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                fadeObserver.unobserve(entry.target);
+            }
+        });
+    },
+    { threshold: 0.1 }
+);
+
+document.querySelectorAll('.fade-in-block').forEach((block) => {
+    fadeObserver.observe(block);
+});

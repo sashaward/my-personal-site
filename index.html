@@ -14,7 +14,7 @@
 
     <main>
     
-        <section class="row-1">
+        <section class="row-1 fade-in-block">
 
             <div class="hide">
                 <img class="profile-pic" src="./images/profile-picture.png" alt="Sasha Ward, a product designer from the UK, smiling.">
@@ -33,7 +33,7 @@
             
         </section>
 
-        <div class="card work-card deliveroo">
+        <div class="card work-card deliveroo fade-in-block">
             <div class="work-content">
                 <img class="icon" src="./images/roo-no-background.svg" alt="Deliveroo logo">
                 
@@ -54,7 +54,7 @@
             
         </div>
 
-        <div class="card work-card deliveroo">
+        <div class="card work-card deliveroo fade-in-block">
             <div class="work-content">
                 <img class="icon" src="./images/roo-no-background.svg" alt="Deliveroo logo">
                 
@@ -75,7 +75,7 @@
             
         </div>
 
-        <div class="card work-card deliveroo">
+        <div class="card work-card deliveroo fade-in-block">
             <div class="work-content">
                 <img class="icon" src="./images/roo-no-background.svg" alt="Deliveroo logo">
                 
@@ -96,7 +96,7 @@
             
         </div>
 
-        <div class="logo-scroller card">
+        <div class="logo-scroller card fade-in-block">
             <ul class="logo-list">
                 <li><img src="./images/deliveroo-logo.png" alt="Deliveroo logo"></li>
                 <li><img src="./images/ovoenergy-logo.png" alt="OVO Energy logo"></li>
@@ -126,35 +126,45 @@
         </div>
         
 
-        <section class="three-cards">
+        <section class="three-cards fade-in-block">
             <div class="project-card" style="background-color: rgba(0, 0, 0, 0.04)">
-                <img class="icon" src="./images/q-icon.svg" alt="Icon 1">
-                <p>Side project</p>
-                <h2>Nice quotes</h2>
+                <img class="icon" src="./images/KiloappIcon.png" alt="Icon 3" style="border-radius: 12px;">
+                <p>iOS App</p>
+                <h2>Kilo</h2>
                 <div class="outlinks">
-                    <a class="smaller" href="https://sashaward.github.io/quotes" target="_blank">Open<span class="material-symbols-rounded">arrow_outward</span></a>
+                    <a class="smaller" href="https://testflight.apple.com/join/ybEHRun7" target="_blank">Open<span class="material-symbols-rounded">arrow_outward</span></a>
                 </div>
             </div>
             <div class="project-card" style="background-color: rgba(0, 0, 0, 0.04)">
                 <img class="icon" src="./images/lr-icon.svg" alt="Icon 2">
-                <p>Side project</p>
-                <h2>Travel photos</h2>
+                <p>Photography</p>
+                <h2>Travel</h2>
                 <div class="outlinks">
                     <a class="smaller" href="https://lightroom.adobe.com/u/sashaward2" target="_blank">Open<span class="material-symbols-rounded">arrow_outward</span></a>
                 </div>
             </div>
             <div class="project-card" style="background-color: rgba(0, 0, 0, 0.04)">
-                <img class="icon" src="./images/blank-icon.png" alt="Icon 3">
-                <p>Side project</p>
-                <h2>Coming soon...</h2>
+                <img class="icon" src="./images/q-icon.svg" alt="Icon 1">
+                <p>Web app</p>
+                <h2>Nice quotes</h2>
                 <div class="outlinks">
-                    <a class="smaller" href="https://www.youtube.com/watch?v=RFjOiqTL8U4&ab_channel=GreenDay-Topic" target="_blank">Open<span class="material-symbols-rounded">arrow_outward</span></a>
+                    <a class="smaller" href="https://sashaward.github.io/quotes" target="_blank">Open<span class="material-symbols-rounded">arrow_outward</span></a>
                 </div>
             </div>
         </section>        
 
-        <div class="contact card">
-            <img class="profile-pic call" src="./images/contact-image.png" alt="Memoji of Sasha Ward with a call me hand sign, smiling.">
+        <div class="contact card fade-in-block">
+            <div class="flip-container tooltip" onclick="copyLinkText(event)">
+                <div class="flip-inner">
+                    <div class="flip-front">
+                        <img class="profile-pic call" src="./images/contact-image.png" alt="Memoji of Sasha Ward with a call me hand sign, smiling.">
+                    </div>
+                    <div class="flip-back">
+                        <span class="material-symbols-rounded phone-icon">mail</span>
+                    </div>
+                </div>
+                <span class="tooltiptext" id="flipTooltipText">Copy</span>
+            </div>
             <h3>Let's chat!</h3>
             <p class="center">Want to know more about these projects or just a friendly chat? Drop me an email.</p>
 
@@ -167,7 +177,7 @@
 
         <div class="footer">
             <p class="footnote">Designed and hand-coded by me</p>
-            <p class="footnote">© 2024 Sasha Ward</p>
+            <p class="footnote">© 2026 Sasha Ward</p>
         </div>
 
     </main>
