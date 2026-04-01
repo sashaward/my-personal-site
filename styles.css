@@ -220,13 +220,26 @@ section {
     margin-bottom: 32px;
     width: 40px;
     height: 40px;
+    object-fit: contain;
     border-radius: 0px;
     box-shadow: none;
+}
+
+.icon--wordmark {
+    width: auto;
+    max-width: min(100%, 200px);
+    height: 40px;
+    object-fit: contain;
+    object-position: left center;
 }
 
 .card {
     background-color: rgba(0, 0, 0, 0.04);  
     border-radius: 18px;
+}
+
+.monzo {
+    background-color: #ffecee;
 }
 
 .deliveroo {
