@@ -355,7 +355,7 @@ section {
     line-height: 22px;
     letter-spacing: -0.1px;
     text-wrap: balance;
-    color: #598aff;
+    color: #2F60F4;
     white-space: nowrap;
     text-align: center;
     cursor: pointer;
@@ -364,6 +364,10 @@ section {
 .bento-personality-badge:hover {
     text-decoration: none;
     filter: brightness(1.02);
+}
+
+.bento-personality-badge:hover .bento-personality-badge__text {
+    color: #154ccc;
 }
 
 /* Map — overflow visible so the pulse ring’s box-shadow isn’t clipped */
@@ -675,15 +679,15 @@ section {
     transform: translate(40px, 0) rotate(8deg) translate(-50%, -37%);
 }
 
-/* CrossFit — black tile, lime badges; faster marquee; trailing spacing matches inter-badge gap */
+/* CrossFit — bento tile grey (same as music / carousel); ranked pill colours */
 .bento-cell--crossfit {
-    background-color: #000000;
+    background-color: #f5f5f5;
 }
 
 .bento-cell__inner--crossfit {
-    gap: 32px;
-    /* No horizontal padding so the marquee clips at the cell’s rounded edge */
-    padding: 62px 0 55px 0;
+    gap: 24px;
+    /* Tighter vertical padding so 2× logo fits the fixed bento height */
+    padding: 36px 0 28px 0;
     min-width: 0;
     width: 100%;
 }
@@ -698,9 +702,9 @@ section {
 }
 
 .bento-cf-logo img {
-    height: 56px;
+    height: 100px;
     width: auto;
-    max-width: min(107px, 100%);
+    max-width: 100%;
     object-fit: contain;
 }
 
@@ -735,13 +739,13 @@ section {
     justify-content: center;
     padding: 8px 12px;
     border-radius: 24px;
-    background-color: rgba(224, 253, 83, 0.1);
     font-family: 'Geist Mono', monospace;
     font-weight: 500;
     font-size: 16px;
     line-height: normal;
-    color: #e0fd53;
     white-space: nowrap;
+    background-color: #000000;
+    color: #e0fd53;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -972,6 +976,14 @@ section {
     .bento-carousel__dots-pill {
         transition: none;
     }
+
+    .project-card .icon {
+        transition: none;
+    }
+
+    .project-card:hover .icon {
+        transform: none;
+    }
 }
 
 @keyframes fadein {
@@ -1099,6 +1111,15 @@ section {
 
 .project-card:hover {
     transform: scale(1.03);
+}
+
+.project-card .icon {
+    transition: transform 0.4s ease;
+    transform-origin: center center;
+}
+
+.project-card:hover .icon {
+    transform: rotate(-4deg);
 }
 
 /* CONTACT */
