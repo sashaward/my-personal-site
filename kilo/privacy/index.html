@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kilo · Privacy Policy</title>
+    <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background-color: #09090b;
+            color: #ffffff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            max-width: 1280px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeSlideDown 0.8s ease-out forwards;
+        }
+
+        .nav__logo {
+            height: 32px;
+            filter: invert(1);
+            opacity: 0.9;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .nav__logo:hover {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+        .nav__contact {
+            font-size: 14px;
+            color: #a1a1aa;
+            text-decoration: none;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .nav__contact:hover {
+            color: #ffffff;
+            transform: translateX(2px);
+        }
+
+        /* Content */
+        .content {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 64px 32px 120px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeSlideUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .content__title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .content__date {
+            font-size: 14px;
+            color: #52525b;
+            margin-bottom: 48px;
+        }
+
+        .content h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 48px;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .content p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #a1a1aa;
+            margin-bottom: 16px;
+        }
+
+        .content ul {
+            list-style: none;
+            margin-bottom: 16px;
+            padding-left: 0;
+        }
+
+        .content ul li {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #a1a1aa;
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 4px;
+        }
+
+        .content ul li::before {
+            content: "·";
+            position: absolute;
+            left: 4px;
+            color: #52525b;
+            font-weight: 700;
+        }
+
+        .content a {
+            color: #ffffff;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: #3f3f46;
+            transition: text-decoration-color 0.2s;
+        }
+
+        .content a:hover {
+            text-decoration-color: #ffffff;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 48px 32px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.8s forwards;
+        }
+
+        .footer__email {
+            color: #52525b;
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s, transform 0.2s;
+            display: inline-block;
+        }
+
+        .footer__email:hover {
+            color: #a1a1aa;
+            transform: translateY(-1px);
+        }
+
+        /* Animations */
+        @keyframes fadeSlideDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 20px 24px;
+            }
+
+            .content {
+                padding: 40px 24px 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <a href="/kilo/">
+            <img class="nav__logo" src="../images/wordmark.png" alt="Kilo">
+        </a>
+        <a class="nav__contact" href="mailto:kilolifting@gmail.com">Contact</a>
+    </nav>
+
+    <main class="content">
+        <h1 class="content__title">Privacy Policy</h1>
+
+        <p>Kilo stores your data exclusively on your phone.</p>
+
+        <p>Kilo does not require an account or sign-in. Kilo does not use analytics, tracking, telemetry, or third-party SDKs. Kilo does not transmit your data to any server, cloud service, or third party.</p>
+
+        <h2>What Kilo stores</h2>
+        <p>Kilo may store information that you choose to add in the app, including:</p>
+        <ul>
+            <li>Name <em>(optional)</em></li>
+            <li>Age <em>(optional)</em></li>
+            <li>Height <em>(optional)</em></li>
+            <li>Bodyweight</li>
+            <li>Profile photo <em>(optional)</em></li>
+            <li>Workout data, including lifts, sets, and personal records</li>
+        </ul>
+        <p>All of this data is stored locally on your phone only.</p>
+
+        <h2>How Kilo uses your data</h2>
+        <p>Kilo uses this information only to power features inside the app on your phone.</p>
+        <ul>
+            <li><strong>Bodyweight</strong> is used only for on-phone calculation of lifting performance standards.</li>
+            <li><strong>Workout data</strong> is used only to track progress, calculate percentages, and display your lifting history.</li>
+            <li><strong>Profile photo</strong> is used only within the app and is stored locally.</li>
+        </ul>
+        <p>Kilo does not send this data anywhere.</p>
+
+        <h2>Photos and camera access</h2>
+        <p>If you choose to set a profile photo, Kilo may request access to your camera or photo library.</p>
+        <p>This access is used only so you can choose or take a profile photo. That photo is stored locally on your phone and is never transmitted by Kilo.</p>
+
+        <h2>Device sensors</h2>
+        <p>Kilo may use device sensors such as the accelerometer for visual effects inside the app.</p>
+        <p>This sensor data is not recorded, stored, or transmitted.</p>
+
+        <h2>External links</h2>
+        <p>Kilo may include a voluntary feedback link to a Google Form.</p>
+        <p>If you choose to open that link, it opens in your phone's system browser. Any information you submit there is provided directly by you to Google through that external page, not through Kilo itself.</p>
+        <p>Kilo does not send that data.</p>
+
+        <h2>Data sharing</h2>
+        <p>Kilo does not share your data with us or with third parties because Kilo does not transmit your data off your phone.</p>
+
+        <h2>Data retention and deletion</h2>
+        <p>All data remains inside the app's local storage on your phone.</p>
+        <p>If you delete the app, its data is deleted from the app's sandbox on your phone. Kilo does not keep any copy of your data anywhere else.</p>
+
+        <h2>Children's privacy</h2>
+        <p>Kilo does not knowingly collect personal data from children through any server or external service, because Kilo does not collect or transmit user data at all.</p>
+
+        <h2>Changes to this policy</h2>
+        <p>If Kilo's data practices change in the future, this Privacy Policy will be updated on this page.</p>
+
+        <h2>Contact</h2>
+        <p>If you have any questions about this Privacy Policy, contact:</p>
+        <p><a href="mailto:kilolifting@gmail.com"><strong>kilolifting@gmail.com</strong></a></p>
+
+        <p class="content__date">Effective date: May 12, 2026 · Last updated: May 12, 2026</p>
+    </main>
+
+    <footer class="footer">
+        <a class="footer__email" href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a>
+    </footer>
+
+</body>
+</html>
