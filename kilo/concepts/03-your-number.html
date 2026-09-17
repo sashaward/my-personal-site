@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kilo · What's your squat?</title>
+<link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
+<link rel="stylesheet" href="kilo.css">
+<style>
+    body { background: #09090b; }
+
+    /* ---- The gate: one question, nothing else ---- */
+    .gate {
+        position: fixed; inset: 0; z-index: 100;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 28px; text-align: center;
+        background: radial-gradient(110% 70% at 50% 40%, #16161a 0%, #09090b 62%), #09090b;
+        transition: opacity .55s ease, transform .55s cubic-bezier(.4,0,.2,1);
+    }
+    .gate.done { opacity: 0; transform: scale(1.06); pointer-events: none; }
+
+    .gate label { font-size: clamp(1.4rem, 4.4vw, 2.6rem); font-weight: 600;
+                  letter-spacing: -.025em; margin-bottom: 8px; }
+    .gate .hint { font-size: 13px; color: var(--steel); margin-bottom: 40px; }
+
+    .gate-field { display: flex; align-items: baseline; gap: 12px;
+                  border-bottom: 2px solid rgba(255,255,255,.14); padding-bottom: 10px;
+                  transition: border-color .25s; }
+    .gate-field:focus-within { border-color: var(--acid); }
+    .gate-field input {
+        font: inherit; font-size: clamp(4rem, 15vw, 9rem); font-weight: 700;
+        letter-spacing: -.05em; line-height: 1; background: none; border: 0; outline: none;
+        color: #fff; width: 3.6ch; text-align: center; padding: 0;
+        font-variant-numeric: tabular-nums; caret-color: var(--acid);
+    }
+    .gate-field input::-webkit-outer-spin-button,
+    .gate-field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .gate-field input[type=number] { -moz-appearance: textfield; }
+    .gate-field input::placeholder { color: #2c2c31; }
+    .gate-field span { font-size: clamp(1.1rem, 3vw, 1.8rem); color: var(--steel); font-weight: 600; }
+
+    .gate-go {
+        margin-top: 38px; font: inherit; font-size: 15px; font-weight: 500;
+        background: var(--acid); color: #0a0a0a; border: 0; border-radius: 999px;
+        padding: 15px 40px; cursor: pointer;
+        transition: transform .14s, box-shadow .3s, opacity .2s;
+    }
+    .gate-go:hover { box-shadow: 0 12px 38px rgba(198,242,78,.25); }
+    .gate-go:active { transform: scale(.98); }
+    .gate-go[disabled] { opacity: .3; cursor: not-allowed; box-shadow: none; }
+    .gate-skip { margin-top: 20px; background: none; border: 0; color: var(--steel);
+                 font: inherit; font-size: 13px; cursor: pointer; text-decoration: underline;
+                 text-underline-offset: 3px; }
+    .gate-skip:hover { color: var(--bone); }
+
+    /* ---- The site, now in their numbers ---- */
+    .site { opacity: 0; transition: opacity .5s ease .25s; }
+    .site.live { opacity: 1; }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
+    .nav img { height: 25px; }
+    .nav .reset { background: none; border: 1px solid rgba(255,255,255,.15); color: var(--bone);
+                  border-radius: 999px; padding: 7px 14px; font: inherit; font-size: 12px;
+                  cursor: pointer; transition: border-color .2s, background .2s; }
+    .nav .reset:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.3); }
+    .nav .reset b { font-weight: 600; }
+
+    .head { padding: 44px 0 30px; }
+    .head h1 { font-size: clamp(2.1rem, 5.6vw, 3.9rem); font-weight: 700;
+               letter-spacing: -.035em; line-height: 1.05; max-width: 19ch; }
+    .head h1 em { font-style: normal; color: var(--acid); font-variant-numeric: tabular-nums; }
+    .head p { color: var(--bluegray); font-size: 1.05rem; margin-top: 16px; max-width: 48ch;
+              line-height: 1.55; }
+
+    .panel { background: var(--card); border: 1px solid rgba(255,255,255,.055);
+             border-radius: 20px; padding: 26px; margin-bottom: 18px; }
+    .panel h3 { font-size: 12px; letter-spacing: .15em; text-transform: uppercase;
+                color: var(--steel); font-weight: 500; margin-bottom: 20px; }
+
+    .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: start; }
+
+    /* Percentage table — the thing a lifter actually wants */
+    .pct { width: 100%; border-collapse: collapse; }
+    .pct th { text-align: left; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+              color: #4b4b52; font-weight: 500; padding-bottom: 10px; }
+    .pct th:last-child, .pct td:last-child { text-align: right; }
+    .pct td { padding: 11px 0; border-top: 1px solid rgba(255,255,255,.055);
+              font-variant-numeric: tabular-nums; }
+    .pct tr { cursor: pointer; transition: background .15s; }
+    .pct tbody tr:hover td { color: #fff; }
+    .pct tr[aria-selected="true"] td { color: #fff; }
+    .pct tr[aria-selected="true"] .p { color: var(--acid); font-weight: 600; }
+    .pct .p { color: var(--bluegray); width: 4.5ch; }
+    .pct .kg { font-size: 1.15rem; font-weight: 600; }
+    .pct .load { color: var(--steel); font-size: 12.5px; }
+
+    .bar-panel { text-align: center; }
+    .kbar { width: 100%; height: auto; overflow: visible; }
+    .kbar__total { display: none; }
+    .kbar__plate { animation: pop .38s cubic-bezier(.2,1.3,.4,1) backwards; }
+    @keyframes pop { from { opacity: 0; transform: scale(.55) } to { opacity: 1; transform: scale(1) } }
+    .bar-panel .big { font-size: clamp(2.6rem, 8vw, 4.4rem); font-weight: 700;
+                      letter-spacing: -.04em; font-variant-numeric: tabular-nums; margin-top: 4px; }
+    .bar-panel .big small { font-size: .28em; color: var(--steel); }
+    .bar-panel .cap { color: var(--steel); font-size: 13px; }
+
+    /* Projection */
+    .proj { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .proj div { background: var(--raised); border-radius: 14px; padding: 16px; }
+    .proj .n { font-size: 1.7rem; font-weight: 700; letter-spacing: -.03em;
+               font-variant-numeric: tabular-nums; }
+    .proj .l { font-size: 11.5px; color: var(--steel); margin-top: 4px; line-height: 1.35; }
+    .proj .up { color: var(--mint); }
+
+    .closer { text-align: center; padding: 74px 0 90px; }
+    .closer h2 { font-size: clamp(1.8rem, 4.4vw, 2.9rem); font-weight: 700;
+                 letter-spacing: -.03em; margin-bottom: 14px; }
+    .closer h2 span { color: var(--steel); }
+    .closer p { color: var(--bluegray); max-width: 42ch; margin: 0 auto 32px; line-height: 1.55; }
+    .cta { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: #000;
+           padding: 17px 38px; border-radius: 999px; font-size: 16px; font-weight: 500;
+           text-decoration: none; transition: transform .14s, box-shadow .3s; }
+    .cta:hover { box-shadow: 0 12px 40px rgba(255,255,255,.18); }
+    .cta:active { transform: scale(.98); }
+    .cta svg { width: 20px; height: 20px; }
+    .closer .mail { display: block; margin-top: 34px; color: #3f3f46; font-size: 13px;
+                    text-decoration: none; }
+
+    @media (max-width: 800px) {
+        .grid { grid-template-columns: 1fr; }
+        .proj { grid-template-columns: 1fr; }
+        .proj div { display: flex; align-items: baseline; gap: 12px; }
+        .proj .l { margin-top: 0; }
+    }
+</style>
+</head>
+<body>
+
+<!-- One question. Nothing else is shown until it's answered. -->
+<div class="gate" id="gate">
+    <label for="squat">What's your back squat?</label>
+    <p class="hint">Best single, in kilos. We'll build the rest of this page around it.</p>
+
+    <form class="gate-field" id="gate-form">
+        <input id="squat" type="number" min="20" max="400" step="2.5" placeholder="100"
+               inputmode="decimal" autocomplete="off" aria-describedby="hint">
+        <span>kg</span>
+    </form>
+
+    <button class="gate-go" id="go" type="button" disabled>Show me</button>
+    <button class="gate-skip" id="skip" type="button">I don't know it yet</button>
+</div>
+
+<div class="site" id="site" aria-hidden="true">
+    <div class="wrap">
+        <nav class="nav">
+            <a href="/kilo/"><img class="k-wordmark" src="../images/wordmark.png" alt="Kilo"></a>
+            <button class="reset" id="reset">Squat: <b id="chip">—</b> · change</button>
+        </nav>
+
+        <header class="head">
+            <h1>At <em id="h-max">—</em>, your working sets look like this.</h1>
+            <p>Every number below is yours. This is one lift on one day — Kilo does it
+               for every lift you train, every time you log one.</p>
+        </header>
+
+        <div class="grid">
+            <div class="panel">
+                <h3>Your percentages</h3>
+                <table class="pct">
+                    <thead><tr><th>%</th><th>Weight</th><th>Per side</th></tr></thead>
+                    <tbody id="pct-body"></tbody>
+                </table>
+            </div>
+
+            <div class="panel bar-panel">
+                <h3>On the bar</h3>
+                <div id="bar"></div>
+                <p class="big tnum" id="bar-kg">—</p>
+                <p class="cap" id="bar-cap">—</p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Where this goes</h3>
+            <div class="proj">
+                <div>
+                    <p class="n tnum" id="p-rep">—</p>
+                    <p class="l">Estimated 5-rep max, from Epley</p>
+                </div>
+                <div>
+                    <p class="n tnum up" id="p-12">—</p>
+                    <p class="l">In 12 weeks at +2.5 kg a week</p>
+                </div>
+                <div>
+                    <p class="n tnum" id="p-tonnage">—</p>
+                    <p class="l">Tonnage in one 5 × 5 at 75%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="closer">
+        <div class="wrap">
+            <h2>That took one number. <span>Kilo knows all of them.</span></h2>
+            <p>Log a lift and every percentage, plate load and projection on this page
+               updates itself — for every movement you train.</p>
+            <a class="cta" href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
+               target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+                Download Kilo
+            </a>
+            <a class="mail" href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a>
+        </div>
+    </section>
+</div>
+
+<script src="plates.js"></script>
+<script src="concept.js"></script>
+<script>
+(function () {
+    var gate   = document.getElementById('gate');
+    var form   = document.getElementById('gate-form');
+    var input  = document.getElementById('squat');
+    var go     = document.getElementById('go');
+    var skip   = document.getElementById('skip');
+    var site   = document.getElementById('site');
+    var reset  = document.getElementById('reset');
+
+    var PCTS = [95, 90, 85, 80, 75, 70, 60, 50];
+    var selected = 80;
+    var oneRM = 100;
+
+    function build() {
+        document.getElementById('h-max').textContent = Kilo.fmt(oneRM) + ' kg';
+        document.getElementById('chip').textContent = Kilo.fmt(oneRM) + ' kg';
+
+        var tbody = document.getElementById('pct-body');
+        tbody.innerHTML = '';
+
+        PCTS.forEach(function (pct) {
+            // Round to something loadable before showing it — a percentage you
+            // can't put on a bar is no use in a gym.
+            var raw = oneRM * pct / 100;
+            var cfg = Kilo.calculatePlates(raw, { barWeight: 20, increment: 2.5, snapOnce: true });
+
+            var tr = document.createElement('tr');
+            tr.setAttribute('aria-selected', String(pct === selected));
+            tr.innerHTML =
+                '<td class="p">' + pct + '%</td>' +
+                '<td class="kg">' + Kilo.fmt(cfg.totalWeight) + ' <span style="font-size:.7em;color:#6b6b6b">kg</span></td>' +
+                '<td class="load">' + (cfg.perSide.length
+                    ? cfg.perSide.map(function (p) { return p.count + '×' + Kilo.fmt(p.weight); }).join(' · ')
+                    : 'bar only') + '</td>';
+            tr.addEventListener('click', function () { selected = pct; build(); });
+            tbody.appendChild(tr);
+        });
+
+        var target = Kilo.calculatePlates(oneRM * selected / 100,
+        { barWeight: 20, increment: 2.5, snapOnce: true });
+        document.getElementById('bar').innerHTML = Kilo.renderBar(target, { showLabels: false });
+        document.getElementById('bar-kg').innerHTML = Kilo.fmt(target.totalWeight) + '<small> kg</small>';
+        document.getElementById('bar-cap').textContent =
+            selected + '% · ' + Kilo.describe(target);
+
+        // Epley, inverted: the load you should manage for 5.
+        document.getElementById('p-rep').innerHTML =
+            Kilo.fmt(Kilo.roundTo(oneRM / (1 + 5 / 30), 2.5)) + '<small style="font-size:.5em;color:#6b6b6b"> kg</small>';
+        document.getElementById('p-12').innerHTML =
+            '+' + Kilo.fmt(30) + '<small style="font-size:.5em;color:#6b6b6b"> kg → ' +
+            Kilo.fmt(oneRM + 30) + '</small>';
+        var tonnage = Kilo.roundTo(oneRM * 0.75, 2.5) * 25;
+        document.getElementById('p-tonnage').innerHTML =
+            Kilo.fmt(Math.round(tonnage)) + '<small style="font-size:.5em;color:#6b6b6b"> kg</small>';
+    }
+
+    function enter(value) {
+        oneRM = Kilo.roundTo(Math.max(20, Math.min(400, value)), 2.5);
+        build();
+        gate.classList.add('done');
+        site.classList.add('live');
+        site.setAttribute('aria-hidden', 'false');
+        setTimeout(function () { gate.style.display = 'none'; }, 600);
+    }
+
+    function valid() {
+        var v = parseFloat(input.value);
+        return !isNaN(v) && v >= 20 && v <= 400;
+    }
+
+    input.addEventListener('input', function () { go.disabled = !valid(); });
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (valid()) enter(parseFloat(input.value));
+    });
+    go.addEventListener('click', function () { if (valid()) enter(parseFloat(input.value)); });
+    skip.addEventListener('click', function () { enter(100); });
+
+    reset.addEventListener('click', function () {
+        gate.style.display = '';
+        // Force a reflow so the transition runs again rather than snapping.
+        void gate.offsetWidth;
+        gate.classList.remove('done');
+        site.classList.remove('live');
+        input.value = '';
+        go.disabled = true;
+        input.focus();
+    });
+
+    setTimeout(function () { input.focus(); }, 350);
+})();
+</script>
+</body>
+</html>

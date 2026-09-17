@@ -1,0 +1,93 @@
+/* Kilo concept prototypes — shared design tokens.
+   Values ported from KiloTracker/Theme.swift so the site and the app agree. */
+
+:root {
+    /* Ground & surface */
+    --ink: #000000;
+    --ground: #09090b;
+    --card: #121214;
+    --raised: #1c1c1f;
+
+    /* Text */
+    --bone: #eae8e3;          /* Chalk Bone */
+    --steel: #6b6b6b;         /* Steel Grey */
+    --bluegray: #8a94a6;
+
+    /* Brand accents */
+    --acid: #c6f24e;          /* Acid Kilo */
+    --acid-warm: #e3dc4f;
+    --rust: #e4623f;
+    --mint: #00d391;
+
+    /* Plate colours (AppTheme.plate*) */
+    --p25: #ff4d52;
+    --p20: #408cff;
+    --p15: #ffd959;
+    --p10: #59e6b3;
+    --p5:  #a6a6b3;
+    --p05: #f5f5f7;
+
+    /* Bar */
+    --steel-bar: #b9bcc4;
+    --steel-bar-dark: #74777e;
+
+    --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    font-family: var(--font);
+    background: var(--ground);
+    color: #fff;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular numerals everywhere a weight is shown — weights should never jitter. */
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+a { color: inherit; }
+
+/* Shared back-to-gallery pill, present on every concept page. */
+.concept-back {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 999;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(18, 18, 20, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--bone);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+.concept-back:hover { background: rgba(28, 28, 31, 0.92); border-color: rgba(255,255,255,0.22); }
+
+/* Hidden when the page is embedded in the gallery's own preview frame. */
+.embedded .concept-back { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Force the wordmark white regardless of the source PNG's own colour.
+   Plain invert(1) renders it black on black — the bug the live /kilo/ page has. */
+.k-wordmark { filter: brightness(0) invert(1); opacity: .92; }
