@@ -7,7 +7,7 @@
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
 <link rel="stylesheet" href="kilo.css">
 <style>
-    body { background: #050506; }
+    body { background: var(--ground); }
     body.locked { overflow: hidden; height: 100svh; }
 
     /* ---- The lift ---- */
@@ -20,42 +20,47 @@
     /* Floor line — what the bar is resting on. */
     .floor {
         position: absolute; left: 0; right: 0; bottom: 96px; height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,.16) 22%,
-                    rgba(255,255,255,.16) 78%, transparent);
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,.18) 22%,
+                    rgba(255,255,255,.18) 78%, transparent);
     }
     .floor::after {
         content: ''; position: absolute; left: 0; right: 0; top: 0; height: 120px;
-        background: linear-gradient(to bottom, rgba(255,255,255,.028), transparent);
+        background: linear-gradient(to bottom, rgba(255,255,255,.025), transparent);
     }
 
-    .brand { position: absolute; top: 22px; left: 28px; z-index: 5; }
-    .brand img { height: 24px; }
+    .brand { position: absolute; top: 16px; left: 20px; z-index: 5; }
+    .brand img { height: 20px; }
 
     .instruction {
-        position: absolute; top: 50%; left: 0; right: 0; text-align: center;
+        position: absolute; top: 30%; left: 0; right: 0; text-align: center;
         transform: translateY(-50%); z-index: 1; pointer-events: none;
         transition: opacity .4s ease;
     }
-    .instruction .big {
-        font-size: clamp(1.6rem, 4.4vw, 2.6rem); font-weight: 600; letter-spacing: -.03em;
-        color: rgba(255,255,255,.2);
+    /* On a short viewport the headline grows up into the instruction's band.
+       Drop the instruction out rather than let the two overlap. */
+    @media (max-height: 620px) {
+        .instruction { display: none; }
+        .load h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 24px; }
     }
-    .instruction .small { font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
-                          color: #33333a; margin-top: 12px; }
+    .instruction .big {
+        font-size: clamp(1.6rem, 4.6vw, 2.8rem); font-weight: 700; letter-spacing: -.04em;
+        color: var(--fg-3);
+    }
+    .instruction .small { font-size: 11px; font-weight: 500; letter-spacing: .14em;
+                          text-transform: uppercase; color: var(--fg-3); margin-top: 12px; }
     .lifted .instruction { opacity: 0; }
 
     /* Effort gauge fills as you pull. */
     .effort {
-        position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%);
+        position: absolute; left: 50%; bottom: 36px; transform: translateX(-50%);
         width: min(300px, 62vw); z-index: 4; text-align: center;
         transition: opacity .4s ease;
     }
-    .effort .track { height: 3px; border-radius: 2px; background: rgba(255,255,255,.1);
-                     overflow: hidden; }
+    .effort .track { height: 2px; background: rgba(255,255,255,.12); overflow: hidden; }
     .effort .fill { height: 100%; width: 0%; background: var(--acid);
                     transition: background .2s; }
-    .effort .label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
-                     color: #3b3b42; margin-top: 12px; }
+    .effort .label { font-size: 11px; font-weight: 500; letter-spacing: .14em;
+                     text-transform: uppercase; color: var(--fg-3); margin-top: 12px; }
     .lifted .effort { opacity: 0; }
 
     /* The thing being lifted: headline + loaded bar, as one rigid object. */
@@ -66,10 +71,10 @@
     }
     .load.dragging { cursor: grabbing; }
     .load h1 {
-        font-size: clamp(2.6rem, 9vw, 7rem); font-weight: 700; letter-spacing: -.045em;
-        line-height: .95; text-align: center; margin-bottom: 34px; padding: 0 24px;
+        font-size: clamp(2.6rem, 9.4vw, 7.4rem); font-weight: 700; letter-spacing: -.05em;
+        line-height: .92; text-align: center; margin-bottom: 34px; padding: 0 24px;
     }
-    .load h1 span { color: var(--steel); display: block; }
+    .load h1 span { color: var(--fg-2); display: block; }
     .load .kbar { width: min(1100px, 92vw); height: auto; display: block; margin: 0 auto;
                   overflow: visible; }
     .kbar__total { display: none; }
@@ -85,35 +90,35 @@
     .lifted .after > *:nth-child(1) { animation-delay: .05s; }
     .lifted .after > *:nth-child(2) { animation-delay: .16s; }
     .lifted .after > *:nth-child(3) { animation-delay: .27s; }
-    .lifted .after > *:nth-child(4) { animation-delay: .38s; }
     @keyframes massDrop {
         0%   { opacity: 0; transform: translateY(-120px); }
         100% { opacity: 1; transform: translateY(0); }
     }
 
-    .after { max-width: 900px; margin: 0 auto; padding-bottom: 100px; }
-    .after .claim {
-        text-align: center; padding: 96px 0 0;
-    }
-    .after .claim h2 { font-size: clamp(1.9rem, 5vw, 3.4rem); font-weight: 700;
-                       letter-spacing: -.035em; line-height: 1.06; margin-bottom: 16px; }
+    .after { max-width: 960px; margin: 0 auto; padding-bottom: 96px; }
+    .after .claim { text-align: center; padding: 96px 0 0; }
+    .after .claim h2 { font-size: clamp(1.9rem, 5.4vw, 3.6rem); font-weight: 700;
+                       letter-spacing: -.045em; line-height: 1; margin-bottom: 16px; }
     .after .claim h2 em { font-style: normal; color: var(--acid); }
-    .after .claim p { color: var(--bluegray); max-width: 44ch; margin: 0 auto;
-                      font-size: 1.08rem; line-height: 1.55; }
+    .after .claim p { color: var(--fg-2); max-width: 48ch; margin: 0 auto;
+                      font-size: 14px; font-weight: 500; letter-spacing: -.01em;
+                      line-height: 1.4; }
 
-    .shots { display: flex; justify-content: center; gap: 18px; margin-top: 70px; flex-wrap: wrap; }
-    .shots img { width: 196px; border-radius: 18px;
-                 box-shadow: 0 30px 60px -18px rgba(0,0,0,.85); }
+    .shots { display: flex; justify-content: center; gap: var(--gutter);
+             margin-top: 64px; flex-wrap: wrap; }
+    .shots img { width: 208px; border-radius: var(--radius); }
 
-    .end { text-align: center; margin-top: 80px; }
-    .cta { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: #000;
-           padding: 17px 38px; border-radius: 999px; font-size: 16px; font-weight: 500;
-           text-decoration: none; transition: transform .14s, box-shadow .3s; }
-    .cta:hover { box-shadow: 0 12px 40px rgba(255,255,255,.18); }
+    .end { text-align: center; margin-top: 76px; }
+    .cta { display: inline-flex; align-items: center; gap: 8px;
+           background: var(--fg); color: #000; padding: 12px 24px;
+           border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
+           letter-spacing: -.005em; text-decoration: none;
+           transition: background .2s, transform .12s; }
+    .cta:hover { background: #e2e2e2; }
     .cta:active { transform: scale(.98); }
-    .cta svg { width: 20px; height: 20px; }
-    .end .mail { display: block; margin-top: 30px; color: #3f3f46; font-size: 13px;
-                 text-decoration: none; }
+    .cta svg { width: 15px; height: 15px; }
+    .end .mail { display: block; margin-top: 28px; color: var(--fg-3); font-size: 14px;
+                 font-weight: 500; letter-spacing: -.01em; text-decoration: none; }
 
     @media (max-width: 620px) {
         .shots img { width: 140px; }

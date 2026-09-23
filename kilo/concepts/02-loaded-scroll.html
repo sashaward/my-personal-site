@@ -7,27 +7,27 @@
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
 <link rel="stylesheet" href="kilo.css">
 <style>
-    body { background: #000; }
+    body { background: var(--ground); }
 
     /* Fixed chrome ------------------------------------------------------ */
     .top {
         position: fixed; top: 0; left: 0; right: 0; z-index: 60;
         display: flex; justify-content: space-between; align-items: center;
-        padding: 20px 28px; pointer-events: none;
+        padding: 16px 20px; pointer-events: none;
     }
-    .top img { height: 24px; pointer-events: auto; }
+    .top img { height: 20px; pointer-events: auto; }
     .top .weight {
-        font-size: 15px; font-weight: 600; letter-spacing: -.01em;
-        font-variant-numeric: tabular-nums; color: var(--bone);
-        display: flex; align-items: baseline; gap: 5px;
+        font-size: 14px; font-weight: 500; letter-spacing: -.01em;
+        font-variant-numeric: tabular-nums; color: var(--fg);
+        display: flex; align-items: baseline; gap: 6px;
     }
-    .top .weight small { font-size: 11px; color: var(--steel); font-weight: 400; }
+    .top .weight small { font-size: 14px; font-weight: 500; color: var(--fg-2); }
 
     /* The rack: a bar that gains plates as you descend the page. */
     .rack {
         position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-        padding: 0 0 18px; pointer-events: none;
-        background: linear-gradient(to top, rgba(0,0,0,.92) 32%, rgba(0,0,0,0));
+        padding: 0 0 16px; pointer-events: none;
+        background: linear-gradient(to top, rgba(0,0,0,.94) 34%, rgba(0,0,0,0));
     }
     .rack svg { width: min(1180px, 94vw); height: auto; display: block; margin: 0 auto;
                 overflow: visible; }
@@ -39,19 +39,19 @@
     }
 
     /* Progress rail, marked in plates rather than percent. */
-    .rail { position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
-            z-index: 60; display: flex; flex-direction: column; gap: 10px; }
+    .rail { position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
+            z-index: 60; display: flex; flex-direction: column; gap: 8px; }
     .rail button {
-        width: 10px; height: 10px; padding: 0; border-radius: 50%; cursor: pointer;
-        border: 1px solid rgba(255,255,255,.28); background: transparent;
-        transition: background .25s, transform .25s, border-color .25s;
+        width: 8px; height: 8px; padding: 0; border-radius: 50%; cursor: pointer;
+        border: 0; background: transparent;
+        transition: transform .25s, opacity .25s;
     }
-    .rail button[aria-current="true"] { transform: scale(1.5); border-color: transparent; }
+    .rail button[aria-current="true"] { transform: scale(1.6); }
 
     /* Sections ---------------------------------------------------------- */
     section {
         min-height: 100svh; display: flex; align-items: center;
-        position: relative; padding: 110px 28px 240px;
+        position: relative; padding: 100px 24px 220px;
         scroll-snap-align: start;
         /* The ghost numeral is deliberately bled off the right edge — clip it here
            so it can't widen the document and create a horizontal scrollbar. */
@@ -65,32 +65,33 @@
     .ghost {
         position: absolute; right: -10px; top: 50%; z-index: 1;
         transform: translateY(-58%);
-        font-size: clamp(11rem, 34vw, 30rem); font-weight: 700; letter-spacing: -.06em;
-        line-height: .78; color: var(--tint); opacity: .12;
+        font-size: clamp(11rem, 34vw, 30rem); font-weight: 700; letter-spacing: -.07em;
+        line-height: .76; color: var(--tint); opacity: .11;
         pointer-events: none; user-select: none; font-variant-numeric: tabular-nums;
     }
-    .ghost small { font-size: .26em; letter-spacing: -.02em; }
+    .ghost small { font-size: .24em; letter-spacing: -.03em; }
 
     .tag {
         display: inline-flex; align-items: center; gap: 9px;
-        font-size: 11px; letter-spacing: .17em; text-transform: uppercase;
-        color: var(--tint); margin-bottom: 22px;
+        font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+        color: var(--tint); margin-bottom: 20px;
     }
-    .tag i { width: 9px; height: 26px; border-radius: 3px; background: var(--tint);
+    .tag i { width: 8px; height: 22px; border-radius: 1px; background: var(--tint);
              display: inline-block; }
 
     h1, h2 {
-        font-size: clamp(2.4rem, 7vw, 5rem); font-weight: 700; letter-spacing: -.035em;
-        line-height: 1.03; max-width: 16ch; margin-bottom: 20px;
+        font-size: clamp(2.4rem, 7.4vw, 5.4rem); font-weight: 700; letter-spacing: -.045em;
+        line-height: .98; max-width: 16ch; margin-bottom: 20px;
     }
     h2 em { font-style: normal; color: var(--tint); }
     section p {
-        font-size: clamp(1.05rem, 2vw, 1.3rem); color: var(--bluegray);
-        max-width: 44ch; line-height: 1.55;
+        font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 500; letter-spacing: -.012em;
+        color: var(--fg-2); max-width: 44ch; line-height: 1.35;
     }
 
     /* Copy lifts in as its section arrives. */
-    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1); }
+    .reveal { opacity: 0; transform: translateY(24px);
+              transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1); }
     section.on .reveal { opacity: 1; transform: none; }
     section.on .reveal:nth-child(2) { transition-delay: .06s; }
     section.on .reveal:nth-child(3) { transition-delay: .12s; }
@@ -101,28 +102,34 @@
     .intro p:not(.scroll-cue) { margin: 0 auto; }
     /* Needs to out-specify `.intro p` above, which would otherwise zero the gap
        and let the bobbing animation run the cue into the paragraph. */
-    .intro p.scroll-cue { margin: 52px auto 0; font-size: 12px; letter-spacing: .14em;
-                  text-transform: uppercase; color: var(--steel);
+    .intro p.scroll-cue { margin: 52px auto 0; font-size: 11px; font-weight: 500;
+                  letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3);
                   animation: cue 2.4s ease-in-out infinite; }
-    @keyframes cue { 0%,100% { transform: translateY(0); opacity: .6 } 50% { transform: translateY(7px); opacity: 1 } }
+    @keyframes cue { 0%,100% { transform: translateY(0); opacity: .7 }
+                     50% { transform: translateY(7px); opacity: 1 } }
 
     .outro .inner { text-align: center; }
-    .outro .total { font-size: clamp(5rem, 19vw, 15rem); font-weight: 700; letter-spacing: -.055em;
-                    line-height: .86; font-variant-numeric: tabular-nums; }
-    .outro .total small { font-size: .2em; color: var(--steel); letter-spacing: -.01em; }
-    .outro .sub { color: var(--bluegray); font-size: 1.15rem; margin: 18px auto 38px; max-width: 34ch; }
-    .cta { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: #000;
-           padding: 17px 38px; border-radius: 999px; font-size: 16px; font-weight: 500;
-           text-decoration: none; transition: transform .14s, box-shadow .3s; }
-    .cta:hover { box-shadow: 0 12px 40px rgba(255,255,255,.2); }
+    .outro .total { font-size: clamp(5rem, 19vw, 15rem); font-weight: 700;
+                    letter-spacing: -.065em; line-height: .84;
+                    font-variant-numeric: tabular-nums; }
+    .outro .total small { font-size: .18em; color: var(--fg-2); letter-spacing: -.02em; }
+    .outro .sub { color: var(--fg-2); font-size: 1.15rem; font-weight: 500;
+                  letter-spacing: -.012em; margin: 18px auto 34px; max-width: 34ch; }
+    .cta { display: inline-flex; align-items: center; gap: 8px;
+           background: var(--fg); color: #000; padding: 12px 24px;
+           border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
+           letter-spacing: -.005em; text-decoration: none;
+           transition: background .2s, transform .12s; }
+    .cta:hover { background: #e2e2e2; }
     .cta:active { transform: scale(.98); }
-    .cta svg { width: 20px; height: 20px; }
-    .outro a.mail { display: block; margin-top: 30px; color: #3f3f46; font-size: 13px;
+    .cta svg { width: 15px; height: 15px; }
+    .outro a.mail { display: block; margin-top: 28px; color: var(--fg-3);
+                    font-size: 14px; font-weight: 500; letter-spacing: -.01em;
                     text-decoration: none; }
 
     @media (max-width: 720px) {
         .rail { display: none; }
-        section { padding: 96px 22px 210px; }
+        section { padding: 88px 20px 200px; }
         .ghost { opacity: .085; }
     }
 </style>

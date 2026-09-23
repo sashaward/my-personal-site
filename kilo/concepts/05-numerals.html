@@ -8,14 +8,14 @@
 <link rel="stylesheet" href="kilo.css">
 <style>
     html { scroll-snap-type: y mandatory; }
-    body { background: #000; }
+    body { background: var(--ground); }
 
-    .brand { position: fixed; top: 20px; left: 26px; z-index: 40; }
-    .brand img { height: 23px; }
+    .brand { position: fixed; top: 16px; left: 20px; z-index: 40; }
+    .brand img { height: 20px; }
 
     .counter {
-        position: fixed; top: 22px; right: 26px; z-index: 40;
-        font-size: 12px; letter-spacing: .13em; color: #3a3a41;
+        position: fixed; top: 18px; right: 20px; z-index: 40;
+        font-size: 14px; font-weight: 500; letter-spacing: -.01em; color: var(--fg-3);
         font-variant-numeric: tabular-nums;
     }
 
@@ -30,7 +30,7 @@
     /* A hairline rule keyed to the scene's colour, like a plate's edge. */
     .scene::before {
         content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
-        background: var(--tint); opacity: .8;
+        background: var(--tint); opacity: .85;
         transform: scaleX(0); transform-origin: left;
         transition: transform 1s cubic-bezier(.2,.9,.25,1);
     }
@@ -38,15 +38,15 @@
 
     /* The numeral */
     .num {
-        font-size: clamp(7rem, 31vw, 26rem); font-weight: 700; letter-spacing: -.06em;
-        line-height: .8; font-variant-numeric: tabular-nums;
+        font-size: clamp(7rem, 31vw, 26rem); font-weight: 700; letter-spacing: -.07em;
+        line-height: .78; font-variant-numeric: tabular-nums;
         display: flex; align-items: baseline; justify-content: center;
         color: var(--tint);
     }
     .num .unit {
-        font-size: .16em; letter-spacing: -.01em; font-weight: 600;
-        color: var(--steel); margin-left: .12em; align-self: flex-end;
-        padding-bottom: .5em;
+        font-size: .14em; letter-spacing: -.02em; font-weight: 700;
+        color: var(--fg-2); margin-left: .14em; align-self: flex-end;
+        padding-bottom: .55em;
     }
 
     /* Odometer: digits roll into place rather than fading. */
@@ -59,62 +59,63 @@
     .roll .strip span { display: block; height: 1em; line-height: 1; }
 
     .caption {
-        margin-top: 46px; max-width: 30ch;
-        font-size: clamp(1.1rem, 2.5vw, 1.55rem); font-weight: 500;
-        letter-spacing: -.015em; line-height: 1.35; color: #fff;
+        margin-top: 44px; max-width: 26ch;
+        font-size: clamp(1.15rem, 2.2vw, 1.6rem); font-weight: 700;
+        letter-spacing: -.028em; line-height: 1.12; color: var(--fg);
         opacity: 0; transform: translateY(18px);
         transition: opacity .7s ease .25s, transform .7s cubic-bezier(.2,.9,.3,1) .25s;
     }
     .sub {
-        margin-top: 14px; max-width: 38ch; font-size: .95rem; color: var(--steel);
-        line-height: 1.5;
+        margin-top: 14px; max-width: 40ch; font-size: 14px; font-weight: 500;
+        letter-spacing: -.01em; color: var(--fg-2); line-height: 1.4;
         opacity: 0; transform: translateY(18px);
         transition: opacity .7s ease .38s, transform .7s cubic-bezier(.2,.9,.3,1) .38s;
     }
     .scene.on .caption, .scene.on .sub { opacity: 1; transform: none; }
 
     .kicker {
-        position: absolute; top: 76px; left: 50%; transform: translateX(-50%);
-        font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+        position: absolute; top: 72px; left: 50%; transform: translateX(-50%);
+        font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
         color: var(--tint); opacity: 0; transition: opacity .6s ease .1s;
     }
-    .scene.on .kicker { opacity: .85; }
+    .scene.on .kicker { opacity: .9; }
 
     /* First scene sets the rules of the page. */
-    .opening .num { color: #fff; }
-    .opening .caption { max-width: 22ch; font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 600; }
+    .opening .num { color: var(--fg); }
+    .opening .caption { max-width: 20ch; font-size: clamp(1.5rem, 4vw, 2.6rem);
+                        letter-spacing: -.035em; }
 
-    .cue { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
-           font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #2f2f35;
-           animation: cue 2.4s ease-in-out infinite; }
-    @keyframes cue { 0%,100% { transform: translate(-50%,0); opacity: .55 }
+    .cue { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+           font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+           color: var(--fg-3); animation: cue 2.4s ease-in-out infinite; }
+    @keyframes cue { 0%,100% { transform: translate(-50%,0); opacity: .6 }
                      50% { transform: translate(-50%,6px); opacity: 1 } }
 
     /* Final scene */
     .final .num { font-size: clamp(4rem, 15vw, 12rem); }
-    .cta { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: #000;
-           padding: 17px 38px; border-radius: 999px; font-size: 16px; font-weight: 500;
-           text-decoration: none; margin-top: 40px;
-           transition: transform .14s, box-shadow .3s;
-           opacity: 0; }
+    .cta { display: inline-flex; align-items: center; gap: 8px;
+           background: var(--fg); color: #000; padding: 12px 24px;
+           border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
+           letter-spacing: -.005em; text-decoration: none; margin-top: 38px;
+           transition: background .2s, transform .12s; opacity: 0; }
     .final.on .cta { animation: rise .7s cubic-bezier(.2,.9,.3,1) .5s forwards; }
     @keyframes rise { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: none } }
-    .cta:hover { box-shadow: 0 12px 40px rgba(255,255,255,.2); }
+    .cta:hover { background: #e2e2e2; }
     .cta:active { transform: scale(.98); }
-    .cta svg { width: 20px; height: 20px; }
-    .final .mail { margin-top: 28px; color: #303036; font-size: 13px; text-decoration: none;
-                   opacity: 0; }
+    .cta svg { width: 15px; height: 15px; }
+    .final .mail { margin-top: 26px; color: var(--fg-3); font-size: 14px; font-weight: 500;
+                   letter-spacing: -.01em; text-decoration: none; opacity: 0; }
     .final.on .mail { animation: rise .7s ease .72s forwards; }
 
     /* Plate-coloured tick marks down the side, one per scene. */
-    .ticks { position: fixed; left: 0; top: 0; bottom: 0; width: 3px; z-index: 40;
+    .ticks { position: fixed; left: 0; top: 0; bottom: 0; width: 2px; z-index: 40;
              display: flex; flex-direction: column; }
     .ticks div { flex: 1; background: var(--c); opacity: .16; transition: opacity .4s; }
     .ticks div.on { opacity: 1; }
 
     @media (max-width: 620px) {
-        .kicker { top: 64px; }
-        .caption { margin-top: 34px; }
+        .kicker { top: 62px; }
+        .caption { margin-top: 32px; }
     }
 </style>
 </head>
