@@ -20,7 +20,8 @@
        is never covered. The sentinel is whatever [data-nav-after] points at. */
     function initNav() {
         var nav = document.querySelector('[data-nav]');
-        if (!nav) return;
+        if (!nav || nav.dataset.bound) return;
+        nav.dataset.bound = '1';
         var after = document.querySelector('[data-nav-after]') ||
                     document.querySelector('header, .hero');
         if (!after) { nav.classList.add('is-on'); return; }
@@ -34,15 +35,32 @@
     }
 
     /* ---- Scroll reveals --------------------------------------------------
-       One observer for the whole page. Elements reveal once and stay revealed;
+       Reveal-on-scroll parks content at opacity 0 and waits for JavaScript to
+       let it through, which means every way this can fail shows a blank page.
+       So it is built to fail open, with three independent paths to visible:
+
+         1. an IntersectionObserver, for the nicely staggered common case
+         2. a rect check on scroll, in case the observer never delivers
+         3. a timer that gives up and shows everything
+
+       Any one of them is enough. Elements reveal once and stay revealed —
        replaying on the way back up reads as a glitch, not a flourish. */
+    var revealEls = [];
+
+    function showAll() {
+        // This is the give-up path, so it must not depend on a transition
+        // running: without animation frames the opacity would never advance
+        // off zero and the class alone would change nothing on screen.
+        document.documentElement.classList.add('no-anim');
+        revealEls.forEach(function (el) { el.classList.add('is-in'); });
+    }
+
     function initReveals() {
-        var els = document.querySelectorAll('.ap-reveal');
-        if (!els.length) return;
-        if (reduced) {
-            Array.prototype.forEach.call(els, function (el) { el.classList.add('is-in'); });
-            return;
-        }
+        revealEls = Array.prototype.slice.call(document.querySelectorAll('.ap-reveal'));
+        if (!revealEls.length) return;
+        if (reduced) { showAll(); return; }
+
+        // 1. The observer.
         var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (e) {
                 if (!e.isIntersecting) return;
@@ -50,12 +68,49 @@
                 io.unobserve(e.target);
             });
         }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
-        Array.prototype.forEach.call(els, function (el) { io.observe(el); });
+        revealEls.forEach(function (el) { io.observe(el); });
+
+        // 2. A plain rect check, which needs neither frames nor the observer.
+        var pending = false;
+        function sweep() {
+            pending = false;
+            var h = global.innerHeight;
+            var remaining = false;
+            revealEls.forEach(function (el) {
+                if (el.classList.contains('is-in')) return;
+                var b = el.getBoundingClientRect();
+                if (b.top < h * 0.92 && b.bottom > 0) {
+                    el.classList.add('is-in');
+                    io.unobserve(el);
+                } else {
+                    remaining = true;
+                }
+            });
+            if (!remaining) {
+                global.removeEventListener('scroll', onScroll);
+                global.removeEventListener('resize', onScroll);
+            }
+        }
+        function onScroll() {
+            if (pending) return;
+            pending = true;
+            // rAF when it's available, a timer when it isn't.
+            if (global.requestAnimationFrame) global.requestAnimationFrame(sweep);
+            else global.setTimeout(sweep, 16);
+        }
+        global.addEventListener('scroll', onScroll, { passive: true });
+        global.addEventListener('resize', onScroll);
+        sweep();
+
+        // 3. Last resort. Better an un-animated page than an empty one.
+        global.setTimeout(showAll, 4000);
     }
 
     /* ---- Horizontal snap gallery ----------------------------------------- */
     function initGalleries() {
         Array.prototype.forEach.call(document.querySelectorAll('[data-gallery]'), function (g) {
+            if (g.dataset.bound) return;      // refresh() must not double-bind
+            g.dataset.bound = '1';
             var track = g.querySelector('.ap-gallery__track');
             var prev  = g.querySelector('[data-prev]');
             var next  = g.querySelector('[data-next]');
@@ -87,6 +142,8 @@
        it to whatever it likes without this file knowing about plates. */
     function initSwatches() {
         Array.prototype.forEach.call(document.querySelectorAll('[data-swatch]'), function (group) {
+            if (group.dataset.bound) return;  // refresh() must not double-bind
+            group.dataset.bound = '1';
             var label = group.parentElement.querySelector('.ap-swatch-label');
             var items = group.querySelectorAll('.ap-swatch');
 
