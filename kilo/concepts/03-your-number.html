@@ -7,146 +7,97 @@
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
 <link rel="stylesheet" href="kilo.css">
 <style>
-    body { background: var(--ground); }
-
     /* ---- The gate: one question, nothing else ---- */
     .gate {
-        position: fixed; inset: 0; z-index: 100;
+        position: fixed; inset: 0; z-index: 200; background: var(--bg);
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 28px; text-align: center; background: var(--ground);
-        transition: opacity .55s ease, transform .55s cubic-bezier(.4,0,.2,1);
+        padding: 28px; text-align: center;
+        transition: opacity .5s var(--ease), transform .5s var(--ease);
     }
-    .gate.done { opacity: 0; transform: scale(1.06); pointer-events: none; }
+    .gate.done { opacity: 0; transform: scale(1.04); pointer-events: none; }
+    .gate .eyebrow { margin-bottom: 14px; }
+    .gate h1 { margin-bottom: 12px; }
+    .gate .hint { color: var(--text-2); margin-bottom: 40px; max-width: 34ch; }
 
-    .gate label { font-size: clamp(1.5rem, 4.6vw, 3rem); font-weight: 700;
-                  letter-spacing: -.04em; line-height: 1; margin-bottom: 12px; }
-    .gate .hint { font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-                  color: var(--fg-2); margin-bottom: 44px; }
-
-    .gate-field { display: flex; align-items: baseline; gap: 10px;
-                  border-bottom: 2px solid var(--hair); padding-bottom: 10px;
-                  transition: border-color .25s; }
-    .gate-field:focus-within { border-color: var(--acid); }
+    .gate-field { display: flex; align-items: baseline; gap: 8px; }
     .gate-field input {
-        font: inherit; font-size: clamp(4rem, 15vw, 9rem); font-weight: 700;
-        letter-spacing: -.055em; line-height: 1; background: none; border: 0; outline: none;
-        color: var(--fg); width: 3.6ch; text-align: center; padding: 0;
-        font-variant-numeric: tabular-nums; caret-color: var(--acid);
+        font: inherit; font-size: clamp(4rem, 14vw, 8rem); font-weight: 600;
+        letter-spacing: -0.012em; line-height: 1; background: none; border: 0;
+        outline: none; color: var(--text); width: 3.6ch; text-align: center; padding: 0;
+        font-variant-numeric: tabular-nums; caret-color: var(--accent);
     }
     .gate-field input::-webkit-outer-spin-button,
     .gate-field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .gate-field input[type=number] { -moz-appearance: textfield; }
-    .gate-field input::placeholder { color: var(--fg-3); }
-    .gate-field span { font-size: clamp(1rem, 2.6vw, 1.6rem); color: var(--fg-2);
-                       font-weight: 700; letter-spacing: -.02em; }
+    .gate-field input::placeholder { color: rgba(0,0,0,.16); }
+    .gate-field span { font-size: clamp(1.2rem, 3vw, 1.9rem); color: var(--text-2);
+                       font-weight: 600; }
+    .gate-rule { width: min(300px, 70vw); height: 2px; background: var(--hair);
+                 margin: 10px auto 0; transition: background .25s var(--ease); }
+    .gate-field:focus-within ~ .gate-rule { background: var(--accent); }
 
-    .gate-go {
-        margin-top: 40px; font-family: inherit; font-size: 12px; font-weight: 500;
-        letter-spacing: -.005em; background: var(--acid); color: #0a0a0a; border: 0;
-        border-radius: var(--radius-pill); padding: 12px 28px; cursor: pointer;
-        transition: transform .12s, opacity .2s, background .2s;
-    }
-    .gate-go:hover { background: #d3f767; }
-    .gate-go:active { transform: scale(.98); }
-    .gate-go[disabled] { opacity: .28; cursor: not-allowed; }
-    .gate-skip { margin-top: 18px; background: none; border: 0; color: var(--fg-2);
-                 font-family: inherit; font-size: 14px; font-weight: 500;
-                 letter-spacing: -.01em; cursor: pointer; text-decoration: underline;
-                 text-underline-offset: 3px; }
-    .gate-skip:hover { color: var(--fg); }
+    .gate-acts { margin-top: 40px; display: flex; flex-direction: column;
+                 align-items: center; gap: 16px; }
 
     /* ---- The site, now in their numbers ---- */
-    .site { opacity: 0; transition: opacity .5s ease .25s; }
+    .site { opacity: 0; transition: opacity .5s var(--ease) .2s; }
     .site.live { opacity: 1; }
 
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter); }
-    .nav { display: flex; justify-content: space-between; align-items: center;
-           padding: 16px 2px; }
-    .nav img { height: 20px; }
-    .nav .reset { background: rgba(255,255,255,.1); border: 0; color: var(--fg);
-                  border-radius: var(--radius-pill); padding: 10px 16px;
-                  font-family: inherit; font-size: 12px; font-weight: 500;
-                  letter-spacing: -.005em; cursor: pointer; transition: background .2s; }
-    .nav .reset:hover { background: rgba(255,255,255,.2); }
-    .nav .reset b { font-weight: 500; }
-
-    .head { padding: 40px 2px 28px; }
-    .head h1 { font-size: clamp(2.1rem, 6vw, 4.2rem); font-weight: 700;
-               letter-spacing: -.045em; line-height: .98; max-width: 19ch; }
-    .head h1 em { font-style: normal; color: var(--acid);
+    .hero { padding: clamp(48px, 7vw, 88px) 22px clamp(30px, 4vw, 44px); text-align: center; }
+    .hero .eyebrow { margin-bottom: 14px; }
+    .hero h1 { margin-bottom: 16px; }
+    .hero h1 em { font-style: normal; color: var(--accent);
                   font-variant-numeric: tabular-nums; }
-    .head p { color: var(--fg-2); font-size: 14px; font-weight: 500;
-              letter-spacing: -.01em; margin-top: 16px; max-width: 52ch; line-height: 1.4; }
+    .hero .sub { color: var(--text-2); max-width: 46ch; margin: 0 auto; }
 
-    .panel { background: var(--tile); border-radius: var(--radius);
-             padding: 22px 20px; margin-bottom: var(--gutter); }
-    .panel h3 { font-size: 11px; font-weight: 500; letter-spacing: .14em;
-                text-transform: uppercase; color: var(--fg-2); margin-bottom: 20px; }
-
-    .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--gutter);
-            align-items: start; }
+    .grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px; align-items: start; }
+    .ap-card h3 { margin-bottom: 20px; }
 
     /* Percentage table — the thing a lifter actually wants */
     .pct { width: 100%; border-collapse: collapse; }
-    .pct th { text-align: left; font-size: 11px; font-weight: 500; letter-spacing: .12em;
-              text-transform: uppercase; color: var(--fg-3); padding-bottom: 10px; }
+    .pct th { text-align: left; font-size: 12px; font-weight: 400; color: var(--text-2);
+              padding-bottom: 10px; }
     .pct th:last-child, .pct td:last-child { text-align: right; }
-    .pct td { padding: 11px 0; border-top: 1px solid var(--hair-soft);
-              font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 500;
-              letter-spacing: -.01em; }
+    .pct td { padding: 12px 0; border-top: 1px solid var(--hair);
+              font-variant-numeric: tabular-nums; font-size: 15px; }
     .pct tr { cursor: pointer; }
-    .pct tbody tr:hover td { color: var(--fg); }
-    .pct tr[aria-selected="true"] td { color: var(--fg); }
-    .pct tr[aria-selected="true"] .p { color: var(--acid); }
-    .pct .p { color: var(--fg-2); width: 4.5ch; }
-    .pct .kg { font-size: 1.05rem; font-weight: 700; letter-spacing: -.025em; }
-    .pct .load { color: var(--fg-2); }
+    .pct tbody tr:hover td { color: var(--text); }
+    .pct tr[aria-selected="true"] .p { color: var(--accent); font-weight: 600; }
+    .pct .p { color: var(--text-2); width: 4.5ch; }
+    .pct .kg { font-size: 17px; font-weight: 600; }
+    .pct .load { color: var(--text-2); font-size: 13px; }
 
     .bar-panel { text-align: center; }
     .kbar { width: 100%; height: auto; overflow: visible; }
     .kbar__total { display: none; }
-    .kbar__plate { animation: pop .38s cubic-bezier(.2,1.3,.4,1) backwards; }
-    @keyframes pop { from { opacity: 0; transform: scale(.55) } to { opacity: 1; transform: scale(1) } }
-    .bar-panel .big { font-size: clamp(2.6rem, 8vw, 4.6rem); font-weight: 700;
-                      letter-spacing: -.05em; font-variant-numeric: tabular-nums;
-                      margin-top: 4px; line-height: 1; }
-    .bar-panel .big small { font-size: .24em; color: var(--fg-2); letter-spacing: -.02em; }
-    .bar-panel .cap { color: var(--fg-2); font-size: 14px; font-weight: 500;
-                      letter-spacing: -.01em; margin-top: 8px; }
+    .kbar__plate { animation: pop .4s var(--ease) backwards; }
+    @keyframes pop { from { opacity: 0; transform: scale(.6) } to { opacity: 1; transform: scale(1) } }
+    .bar-panel .big { font-size: clamp(2.6rem, 7vw, 4rem); font-weight: 600;
+                      letter-spacing: -0.01em; font-variant-numeric: tabular-nums;
+                      line-height: 1; margin-top: 6px; }
+    .bar-panel .big small { font-size: .26em; color: var(--text-2); }
+    .bar-panel .cap { color: var(--text-2); font-size: 13px; margin-top: 10px; }
 
-    /* Projection */
-    .proj { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-    .proj div { background: var(--raised); border-radius: var(--radius); padding: 16px; }
-    .proj .n { font-size: 1.7rem; font-weight: 700; letter-spacing: -.04em;
-               font-variant-numeric: tabular-nums; line-height: 1; }
-    .proj .l { font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-               color: var(--fg-2); margin-top: 7px; line-height: 1.3; }
+    .proj { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            text-align: center; }
+    .proj .n { font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 600;
+               letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1; }
+    .proj .n small { font-size: .38em; color: var(--text-2); font-weight: 400; }
+    .proj .l { font-size: 13px; color: var(--text-2); margin-top: 10px; line-height: 1.35; }
     .proj .up { color: var(--mint); }
 
-    .closer { text-align: center; padding: 76px 0 88px; }
-    .closer h2 { font-size: clamp(1.9rem, 5vw, 3.4rem); font-weight: 700;
-                 letter-spacing: -.04em; line-height: 1; margin-bottom: 16px; }
-    .closer h2 span { color: var(--fg-2); }
-    .closer p { color: var(--fg-2); font-size: 14px; font-weight: 500;
-                letter-spacing: -.01em; max-width: 46ch; margin: 0 auto 30px;
-                line-height: 1.4; }
-    .cta { display: inline-flex; align-items: center; gap: 8px;
-           background: var(--fg); color: #000; padding: 12px 24px;
-           border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
-           letter-spacing: -.005em; text-decoration: none;
-           transition: background .2s, transform .12s; }
-    .cta:hover { background: #e2e2e2; }
-    .cta:active { transform: scale(.98); }
-    .cta svg { width: 15px; height: 15px; }
-    .closer .mail { display: block; margin-top: 30px; color: var(--fg-3);
-                    font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-                    text-decoration: none; }
+    .shots { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+             margin-top: clamp(30px, 4vw, 48px); }
+    .shots img { width: 200px; border-radius: 26px;
+                 box-shadow: 0 18px 50px -16px rgba(0,0,0,.35); }
+
+    .foot { text-align: center; padding: 40px 22px 64px; }
+    .foot a { color: var(--text-3); font-size: 12px; text-decoration: none; }
 
     @media (max-width: 800px) {
         .grid { grid-template-columns: 1fr; }
-        .proj { grid-template-columns: 1fr; }
-        .proj div { display: flex; align-items: baseline; gap: 12px; }
-        .proj .l { margin-top: 0; }
+        .proj { grid-template-columns: 1fr; gap: 26px; }
+        .shots img { width: 150px; }
     }
 </style>
 </head>
@@ -154,94 +105,120 @@
 
 <!-- One question. Nothing else is shown until it's answered. -->
 <div class="gate" id="gate">
-    <label for="squat">What's your back squat?</label>
-    <p class="hint">Best single, in kilos. We'll build the rest of this page around it.</p>
+    <p class="eyebrow ap-eyebrow">Kilo</p>
+    <h1 class="ap-hero">What's your back squat?</h1>
+    <p class="hint ap-body">Best single, in kilos. We'll build the rest of this page around it.</p>
 
-    <form class="gate-field" id="gate-form">
-        <input id="squat" type="number" min="20" max="400" step="2.5" placeholder="100"
-               inputmode="decimal" autocomplete="off" aria-describedby="hint">
-        <span>kg</span>
+    <form id="gate-form">
+        <div class="gate-field">
+            <input id="squat" type="number" min="20" max="400" step="2.5" placeholder="100"
+                   inputmode="decimal" autocomplete="off" aria-label="Back squat in kilograms">
+            <span>kg</span>
+        </div>
+        <div class="gate-rule"></div>
     </form>
 
-    <button class="gate-go" id="go" type="button" disabled>Show me</button>
-    <button class="gate-skip" id="skip" type="button">I don't know it yet</button>
+    <div class="gate-acts">
+        <button class="ap-btn ap-btn--primary" id="go" type="button" disabled>Show me</button>
+        <button class="ap-link" id="skip" type="button"
+                style="background:none;border:0;cursor:pointer;font-family:inherit">
+            I don't know it yet</button>
+    </div>
 </div>
 
 <div class="site" id="site" aria-hidden="true">
-    <div class="wrap">
-        <nav class="nav">
-            <a href="/kilo/"><img class="k-wordmark" src="../images/wordmark.png" alt="Kilo"></a>
-            <button class="reset" id="reset">Squat: <b id="chip">—</b> · change</button>
-        </nav>
 
-        <header class="head">
-            <h1>At <em id="h-max">—</em>, your working sets look like this.</h1>
-            <p>Every number below is yours. This is one lift on one day — Kilo does it
-               for every lift you train, every time you log one.</p>
-        </header>
+    <nav class="ap-nav" data-nav>
+        <div class="ap-nav__in">
+            <span class="ap-nav__name">Kilo <small>Your numbers</small></span>
+            <span class="ap-nav__sp"></span>
+            <button class="ap-btn ap-btn--sm ap-btn--ghost" type="button" id="reset">
+                Squat <b class="tnum" id="chip">—</b></button>
+            <a class="ap-btn ap-btn--sm ap-btn--primary"
+               href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
+               target="_blank" rel="noopener">Download</a>
+        </div>
+    </nav>
 
-        <div class="grid">
-            <div class="panel">
-                <h3>Your percentages</h3>
-                <table class="pct">
-                    <thead><tr><th>%</th><th>Weight</th><th>Per side</th></tr></thead>
-                    <tbody id="pct-body"></tbody>
-                </table>
-            </div>
+    <header class="hero" data-nav-after>
+        <p class="eyebrow ap-eyebrow">Built from your number</p>
+        <h1 class="ap-hero">At <em id="h-max">—</em>,<br>this is your training.</h1>
+        <p class="sub ap-body">One lift on one day. Kilo does this for every lift you
+           train, every time you log one.</p>
+    </header>
 
-            <div class="panel bar-panel">
-                <h3>On the bar</h3>
-                <div id="bar"></div>
-                <p class="big tnum" id="bar-kg">—</p>
-                <p class="cap" id="bar-cap">—</p>
+    <section class="ap-section--tight">
+        <div class="ap-col">
+            <div class="grid">
+                <div class="ap-card ap-reveal">
+                    <h3 class="ap-h3">Your percentages</h3>
+                    <table class="pct">
+                        <thead><tr><th>%</th><th>Weight</th><th>Per side</th></tr></thead>
+                        <tbody id="pct-body"></tbody>
+                    </table>
+                </div>
+                <div class="ap-card bar-panel ap-reveal" data-d="1">
+                    <h3 class="ap-h3">On the bar</h3>
+                    <div id="bar"></div>
+                    <p class="big tnum" id="bar-kg">—</p>
+                    <p class="cap" id="bar-cap">—</p>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div class="panel">
-            <h3>Where this goes</h3>
+    <section class="ap-section ap-section--alt">
+        <div class="ap-col">
+            <h2 class="ap-h2 ap-center ap-reveal" style="margin-bottom:44px">Where this goes.</h2>
             <div class="proj">
-                <div>
+                <div class="ap-reveal" data-d="1">
                     <p class="n tnum" id="p-rep">—</p>
                     <p class="l">Estimated 5-rep max, from Epley</p>
                 </div>
-                <div>
+                <div class="ap-reveal" data-d="2">
                     <p class="n tnum up" id="p-12">—</p>
                     <p class="l">In 12 weeks at +2.5 kg a week</p>
                 </div>
-                <div>
+                <div class="ap-reveal" data-d="3">
                     <p class="n tnum" id="p-tonnage">—</p>
                     <p class="l">Tonnage in one 5 × 5 at 75%</p>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <section class="closer">
-        <div class="wrap">
-            <h2>That took one number. <span>Kilo knows all of them.</span></h2>
-            <p>Log a lift and every percentage, plate load and projection on this page
-               updates itself — for every movement you train.</p>
-            <a class="cta" href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
-               target="_blank" rel="noopener noreferrer">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-                Download Kilo
-            </a>
-            <a class="mail" href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a>
+    <section class="ap-section ap-section--dark ap-center">
+        <div class="ap-col">
+            <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">That took one number.</h2>
+            <p class="ap-body ap-dim ap-reveal" data-d="1"
+               style="max-width:44ch;margin:0 auto 30px">
+               Kilo knows all of them. Log a lift and every percentage, plate load and
+               projection here updates itself.</p>
+            <div class="ap-reveal" data-d="2">
+                <a class="ap-btn ap-btn--primary"
+                   href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
+                   target="_blank" rel="noopener">Download on the App Store</a>
+            </div>
+            <div class="shots ap-reveal" data-d="3">
+                <img src="../images/app-screen-1.png" alt="">
+                <img src="../images/app-screen-2.png" alt="">
+                <img src="../images/app-screen-3.png" alt="">
+            </div>
         </div>
     </section>
+
+    <footer class="foot"><a href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a></footer>
 </div>
 
 <script src="plates.js"></script>
 <script src="concept.js"></script>
 <script>
 (function () {
-    var gate   = document.getElementById('gate');
-    var form   = document.getElementById('gate-form');
-    var input  = document.getElementById('squat');
-    var go     = document.getElementById('go');
-    var skip   = document.getElementById('skip');
-    var site   = document.getElementById('site');
-    var reset  = document.getElementById('reset');
+    var gate  = document.getElementById('gate');
+    var form  = document.getElementById('gate-form');
+    var input = document.getElementById('squat');
+    var go    = document.getElementById('go');
+    var site  = document.getElementById('site');
 
     var PCTS = [95, 90, 85, 80, 75, 70, 60, 50];
     var selected = 80;
@@ -255,16 +232,16 @@
         tbody.innerHTML = '';
 
         PCTS.forEach(function (pct) {
-            // Round to something loadable before showing it — a percentage you
-            // can't put on a bar is no use in a gym.
-            var raw = oneRM * pct / 100;
-            var cfg = Kilo.calculatePlates(raw, { barWeight: 20, increment: 2.5, snapOnce: true });
+            // snapOnce: a percentage is a derived number, so it should land on the
+            // nearest loadable weight rather than being rounded twice.
+            var cfg = Kilo.calculatePlates(oneRM * pct / 100,
+                { barWeight: 20, increment: 2.5, snapOnce: true });
 
             var tr = document.createElement('tr');
             tr.setAttribute('aria-selected', String(pct === selected));
             tr.innerHTML =
                 '<td class="p">' + pct + '%</td>' +
-                '<td class="kg">' + Kilo.fmt(cfg.totalWeight) + ' <span style="font-size:.7em;color:#6b6b6b">kg</span></td>' +
+                '<td class="kg">' + Kilo.fmt(cfg.totalWeight) + '</td>' +
                 '<td class="load">' + (cfg.perSide.length
                     ? cfg.perSide.map(function (p) { return p.count + '×' + Kilo.fmt(p.weight); }).join(' · ')
                     : 'bar only') + '</td>';
@@ -273,21 +250,18 @@
         });
 
         var target = Kilo.calculatePlates(oneRM * selected / 100,
-        { barWeight: 20, increment: 2.5, snapOnce: true });
+            { barWeight: 20, increment: 2.5, snapOnce: true });
         document.getElementById('bar').innerHTML = Kilo.renderBar(target, { showLabels: false });
-        document.getElementById('bar-kg').innerHTML = Kilo.fmt(target.totalWeight) + '<small> kg</small>';
-        document.getElementById('bar-cap').textContent =
-            selected + '% · ' + Kilo.describe(target);
+        document.getElementById('bar-kg').innerHTML =
+            Kilo.fmt(target.totalWeight) + '<small> kg</small>';
+        document.getElementById('bar-cap').textContent = selected + '% · ' + Kilo.describe(target);
 
-        // Epley, inverted: the load you should manage for 5.
         document.getElementById('p-rep').innerHTML =
-            Kilo.fmt(Kilo.roundTo(oneRM / (1 + 5 / 30), 2.5)) + '<small style="font-size:.5em;color:#6b6b6b"> kg</small>';
+            Kilo.fmt(Kilo.roundTo(oneRM / (1 + 5 / 30), 2.5)) + '<small> kg</small>';
         document.getElementById('p-12').innerHTML =
-            '+' + Kilo.fmt(30) + '<small style="font-size:.5em;color:#6b6b6b"> kg → ' +
-            Kilo.fmt(oneRM + 30) + '</small>';
-        var tonnage = Kilo.roundTo(oneRM * 0.75, 2.5) * 25;
+            '+30<small> kg → ' + Kilo.fmt(oneRM + 30) + '</small>';
         document.getElementById('p-tonnage').innerHTML =
-            Kilo.fmt(Math.round(tonnage)) + '<small style="font-size:.5em;color:#6b6b6b"> kg</small>';
+            Kilo.fmt(Math.round(Kilo.roundTo(oneRM * 0.75, 2.5) * 25)) + '<small> kg</small>';
     }
 
     function enter(value) {
@@ -296,7 +270,10 @@
         gate.classList.add('done');
         site.classList.add('live');
         site.setAttribute('aria-hidden', 'false');
-        setTimeout(function () { gate.style.display = 'none'; }, 600);
+        setTimeout(function () {
+            gate.style.display = 'none';
+            if (window.KiloUI) window.KiloUI.refresh();
+        }, 550);
     }
 
     function valid() {
@@ -310,21 +287,22 @@
         if (valid()) enter(parseFloat(input.value));
     });
     go.addEventListener('click', function () { if (valid()) enter(parseFloat(input.value)); });
-    skip.addEventListener('click', function () { enter(100); });
+    document.getElementById('skip').addEventListener('click', function () { enter(100); });
 
-    reset.addEventListener('click', function () {
+    document.getElementById('reset').addEventListener('click', function () {
         gate.style.display = '';
-        // Force a reflow so the transition runs again rather than snapping.
-        void gate.offsetWidth;
+        void gate.offsetWidth;   // force a reflow so the transition replays
         gate.classList.remove('done');
         site.classList.remove('live');
         input.value = '';
         go.disabled = true;
+        window.scrollTo(0, 0);
         input.focus();
     });
 
-    setTimeout(function () { input.focus(); }, 350);
+    setTimeout(function () { input.focus(); }, 300);
 })();
 </script>
+<script src="ui.js"></script>
 </body>
 </html>

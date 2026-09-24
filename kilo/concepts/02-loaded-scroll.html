@@ -7,155 +7,128 @@
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
 <link rel="stylesheet" href="kilo.css">
 <style>
-    body { background: var(--ground); }
+    .hero { padding: clamp(48px, 7vw, 92px) 22px clamp(40px, 6vw, 72px); text-align: center; }
+    .hero .eyebrow { margin-bottom: 14px; }
+    .hero h1 { margin-bottom: 16px; }
+    .hero .sub { color: var(--text-2); max-width: 40ch; margin: 0 auto 26px; }
+    .hero .cue { font-size: 12px; color: var(--text-3); }
 
-    /* Fixed chrome ------------------------------------------------------ */
-    .top {
-        position: fixed; top: 0; left: 0; right: 0; z-index: 60;
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 16px 20px; pointer-events: none;
-    }
-    .top img { height: 20px; pointer-events: auto; }
-    .top .weight {
-        font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-        font-variant-numeric: tabular-nums; color: var(--fg);
-        display: flex; align-items: baseline; gap: 6px;
-    }
-    .top .weight small { font-size: 14px; font-weight: 500; color: var(--fg-2); }
+    /* ---- The dark chapter: a pinned bar that loads as you scroll ---- */
+    .chapter { background: var(--bg-dark); color: var(--d-text); position: relative; }
 
-    /* The rack: a bar that gains plates as you descend the page. */
     .rack {
-        position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-        padding: 0 0 16px; pointer-events: none;
-        background: linear-gradient(to top, rgba(0,0,0,.94) 34%, rgba(0,0,0,0));
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+        padding: 0 0 20px; pointer-events: none;
+        background: linear-gradient(to top, rgba(0,0,0,.95) 36%, rgba(0,0,0,0));
+        opacity: 0; transition: opacity .45s var(--ease);
     }
-    .rack svg { width: min(1180px, 94vw); height: auto; display: block; margin: 0 auto;
+    .rack.is-on { opacity: 1; }
+    .rack svg { width: min(1100px, 92vw); height: auto; display: block; margin: 0 auto;
                 overflow: visible; }
+    .rack .tally {
+        text-align: center; margin-top: 10px; font-size: 12px; color: var(--d-text-2);
+        font-variant-numeric: tabular-nums;
+    }
+    .rack .tally b { color: var(--d-text); font-weight: 600; font-size: 17px; }
     .kbar__total { display: none; }
-    .kbar__plate { animation: plateLoad .5s cubic-bezier(.16,1.1,.3,1) backwards; }
+    .kbar__plate { animation: plateLoad .55s var(--ease) backwards; }
     @keyframes plateLoad {
-        from { opacity: 0; transform: translateX(46px) rotate(9deg); }
+        from { opacity: 0; transform: translateX(44px) rotate(8deg); }
         to   { opacity: 1; transform: translateX(0) rotate(0); }
     }
 
-    /* Progress rail, marked in plates rather than percent. */
-    .rail { position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
-            z-index: 60; display: flex; flex-direction: column; gap: 8px; }
-    .rail button {
-        width: 8px; height: 8px; padding: 0; border-radius: 50%; cursor: pointer;
-        border: 0; background: transparent;
-        transition: transform .25s, opacity .25s;
-    }
-    .rail button[aria-current="true"] { transform: scale(1.6); }
-
-    /* Sections ---------------------------------------------------------- */
-    section {
+    .step {
         min-height: 100svh; display: flex; align-items: center;
-        position: relative; padding: 100px 24px 220px;
-        scroll-snap-align: start;
-        /* The ghost numeral is deliberately bled off the right edge — clip it here
-           so it can't widen the document and create a horizontal scrollbar. */
-        overflow: hidden;
+        position: relative; overflow: hidden;
+        padding: 96px 22px 240px;
     }
-    html { scroll-snap-type: y proximity; }
-
-    .inner { max-width: 980px; margin: 0 auto; width: 100%; position: relative; z-index: 2; }
+    .step__in { max-width: var(--col); margin: 0 auto; width: 100%; position: relative; z-index: 2; }
 
     /* The section's plate weight, set enormous behind the copy. */
     .ghost {
-        position: absolute; right: -10px; top: 50%; z-index: 1;
-        transform: translateY(-58%);
-        font-size: clamp(11rem, 34vw, 30rem); font-weight: 700; letter-spacing: -.07em;
-        line-height: .76; color: var(--tint); opacity: .11;
+        position: absolute; right: -8px; top: 50%; z-index: 1;
+        transform: translateY(-56%);
+        font-size: clamp(10rem, 30vw, 26rem); font-weight: 600; letter-spacing: -0.02em;
+        line-height: .8; color: var(--tint); opacity: .13;
         pointer-events: none; user-select: none; font-variant-numeric: tabular-nums;
     }
-    .ghost small { font-size: .24em; letter-spacing: -.03em; }
+    .ghost small { font-size: .26em; }
 
-    .tag {
-        display: inline-flex; align-items: center; gap: 9px;
-        font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
-        color: var(--tint); margin-bottom: 20px;
-    }
-    .tag i { width: 8px; height: 22px; border-radius: 1px; background: var(--tint);
-             display: inline-block; }
+    .tag { display: inline-flex; align-items: center; gap: 10px; font-size: 17px;
+           font-weight: 600; color: var(--tint); margin-bottom: 18px; }
+    .tag i { width: 10px; height: 10px; border-radius: 50%; background: var(--tint); }
 
-    h1, h2 {
-        font-size: clamp(2.4rem, 7.4vw, 5.4rem); font-weight: 700; letter-spacing: -.045em;
-        line-height: .98; max-width: 16ch; margin-bottom: 20px;
-    }
-    h2 em { font-style: normal; color: var(--tint); }
-    section p {
-        font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 500; letter-spacing: -.012em;
-        color: var(--fg-2); max-width: 44ch; line-height: 1.35;
-    }
+    .step h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); font-weight: 600;
+               letter-spacing: -0.005em; line-height: 1.07; max-width: 17ch;
+               margin-bottom: 18px; }
+    .step h2 em { font-style: normal; color: var(--tint); }
+    .step p { font-size: clamp(1rem, 1.4vw, 1.25rem); color: var(--d-text-2);
+              max-width: 46ch; line-height: 1.45; }
 
-    /* Copy lifts in as its section arrives. */
-    .reveal { opacity: 0; transform: translateY(24px);
-              transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1); }
-    section.on .reveal { opacity: 1; transform: none; }
-    section.on .reveal:nth-child(2) { transition-delay: .06s; }
-    section.on .reveal:nth-child(3) { transition-delay: .12s; }
+    .reveal { opacity: 0; transform: translateY(28px);
+              transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .step.on .reveal { opacity: 1; transform: none; }
+    .step.on .reveal:nth-child(2) { transition-delay: .08s; }
+    .step.on .reveal:nth-child(3) { transition-delay: .16s; }
 
-    /* Intro + outro get their own treatment. */
-    .intro .inner { text-align: center; }
-    .intro h1 { margin: 0 auto 20px; max-width: 14ch; }
-    .intro p:not(.scroll-cue) { margin: 0 auto; }
-    /* Needs to out-specify `.intro p` above, which would otherwise zero the gap
-       and let the bobbing animation run the cue into the paragraph. */
-    .intro p.scroll-cue { margin: 52px auto 0; font-size: 11px; font-weight: 500;
-                  letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3);
-                  animation: cue 2.4s ease-in-out infinite; }
-    @keyframes cue { 0%,100% { transform: translateY(0); opacity: .7 }
-                     50% { transform: translateY(7px); opacity: 1 } }
+    /* Progress rail, marked in plates rather than percent. */
+    .rail { position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+            z-index: 45; display: flex; flex-direction: column; gap: 10px;
+            opacity: 0; transition: opacity .45s var(--ease); }
+    .rail.is-on { opacity: 1; }
+    .rail button { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 0;
+                   cursor: pointer; transition: transform .25s var(--ease), opacity .25s; }
+    .rail button[aria-current="true"] { transform: scale(1.7); }
 
-    .outro .inner { text-align: center; }
-    .outro .total { font-size: clamp(5rem, 19vw, 15rem); font-weight: 700;
-                    letter-spacing: -.065em; line-height: .84;
-                    font-variant-numeric: tabular-nums; }
-    .outro .total small { font-size: .18em; color: var(--fg-2); letter-spacing: -.02em; }
-    .outro .sub { color: var(--fg-2); font-size: 1.15rem; font-weight: 500;
-                  letter-spacing: -.012em; margin: 18px auto 34px; max-width: 34ch; }
-    .cta { display: inline-flex; align-items: center; gap: 8px;
-           background: var(--fg); color: #000; padding: 12px 24px;
-           border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
-           letter-spacing: -.005em; text-decoration: none;
-           transition: background .2s, transform .12s; }
-    .cta:hover { background: #e2e2e2; }
-    .cta:active { transform: scale(.98); }
-    .cta svg { width: 15px; height: 15px; }
-    .outro a.mail { display: block; margin-top: 28px; color: var(--fg-3);
-                    font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-                    text-decoration: none; }
+    .total-card { text-align: center; padding: clamp(80px, 11vw, 150px) 22px; }
+    .total-card .n { font-size: clamp(5rem, 17vw, 12rem); font-weight: 600;
+                     letter-spacing: -0.015em; line-height: .9;
+                     font-variant-numeric: tabular-nums; }
+    .total-card .n small { font-size: .2em; color: var(--d-text-2); }
+    .total-card p { color: var(--d-text-2); margin-top: 16px; }
 
-    @media (max-width: 720px) {
+    .shots { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+             margin-top: clamp(30px, 4vw, 48px); }
+    .shots img { width: 200px; border-radius: 26px;
+                 box-shadow: 0 18px 50px -16px rgba(0,0,0,.35); }
+
+    .foot { text-align: center; padding: 40px 22px 64px; }
+    .foot a { color: var(--text-3); font-size: 12px; text-decoration: none; }
+
+    @media (max-width: 760px) {
         .rail { display: none; }
-        section { padding: 88px 20px 200px; }
-        .ghost { opacity: .085; }
+        .step { padding: 80px 20px 210px; }
+        .shots img { width: 150px; }
     }
 </style>
 </head>
 <body>
 
-<div class="top">
-    <a href="/kilo/"><img class="k-wordmark" src="../images/wordmark.png" alt="Kilo"></a>
-    <div class="weight tnum"><span id="w">20</span> kg <small id="wsub">empty bar</small></div>
-</div>
+<nav class="ap-nav" data-nav>
+    <div class="ap-nav__in">
+        <span class="ap-nav__name">Kilo <small>Load the bar</small></span>
+        <span class="ap-nav__sp"></span>
+        <span class="ap-btn ap-btn--sm ap-btn--ghost tnum" id="nav-weight">20 kg</span>
+        <a class="ap-btn ap-btn--sm ap-btn--primary"
+           href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
+           target="_blank" rel="noopener">Download</a>
+    </div>
+</nav>
+
+<header class="hero" data-nav-after>
+    <p class="eyebrow ap-eyebrow">Kilo</p>
+    <h1 class="ap-hero">Every section<br>adds a plate.</h1>
+    <p class="sub ap-body">Six reasons to train with Kilo. Scroll, and the bar loads —
+       by the bottom of this page you'll have put 170 kg on it.</p>
+    <p class="cue">Scroll to load</p>
+</header>
 
 <nav class="rail" id="rail" aria-label="Sections"></nav>
 
-<main>
-    <section class="intro" data-plate="0" style="--tint:#eae8e3">
-        <div class="inner">
-            <h1 class="reveal">Every section adds a plate.</h1>
-            <p class="reveal">Six reasons to train with Kilo. Scroll and the bar loads —
-               by the bottom of this page you'll have put 170 kg on it.</p>
-            <p class="scroll-cue reveal">Scroll to load</p>
-        </div>
-    </section>
-
-    <section data-plate="25" style="--tint:#ff4d52">
+<div class="chapter" id="chapter">
+    <section class="step" data-plate="25" style="--tint:#ff4d52">
         <div class="ghost tnum">25<small>kg</small></div>
-        <div class="inner">
+        <div class="step__in">
             <p class="tag reveal"><i></i> First plate · 25 kg</p>
             <h2 class="reveal">Log a set in <em>four taps</em>.</h2>
             <p class="reveal">Pick the lift, punch the weight, punch the reps, done.
@@ -163,19 +136,19 @@
         </div>
     </section>
 
-    <section data-plate="20" style="--tint:#408cff">
+    <section class="step" data-plate="20" style="--tint:#408cff">
         <div class="ghost tnum">20<small>kg</small></div>
-        <div class="inner">
+        <div class="step__in">
             <p class="tag reveal"><i></i> Second plate · 20 kg</p>
             <h2 class="reveal">Every PR, <em>kept</em>.</h2>
-            <p class="reveal">Kilo watches the numbers you log and tells you the moment one
-               of them is a best. Back squat, snatch, strict press — all of it, dated.</p>
+            <p class="reveal">Kilo watches the numbers you log and tells you the moment
+               one of them is a best. Back squat, snatch, strict press — all of it, dated.</p>
         </div>
     </section>
 
-    <section data-plate="15" style="--tint:#ffd959">
+    <section class="step" data-plate="15" style="--tint:#ffd959">
         <div class="ghost tnum">15<small>kg</small></div>
-        <div class="inner">
+        <div class="step__in">
             <p class="tag reveal"><i></i> Third plate · 15 kg</p>
             <h2 class="reveal">Percentages, <em>already worked out</em>.</h2>
             <p class="reveal">Programme says 80% of your 1RM? It's on the screen, in kilos,
@@ -183,19 +156,19 @@
         </div>
     </section>
 
-    <section data-plate="10" style="--tint:#59e6b3">
+    <section class="step" data-plate="10" style="--tint:#59e6b3">
         <div class="ghost tnum">10<small>kg</small></div>
-        <div class="inner">
+        <div class="step__in">
             <p class="tag reveal"><i></i> Fourth plate · 10 kg</p>
             <h2 class="reveal">Plate maths, <em>solved</em>.</h2>
-            <p class="reveal">The fewest plates per side for any number, for a 15 or 20 kg bar.
-               The same sum this page is doing at the bottom of your screen.</p>
+            <p class="reveal">The fewest plates per side for any number, for a 15 or 20 kg
+               bar. The same sum this page is doing at the bottom of your screen.</p>
         </div>
     </section>
 
-    <section data-plate="5" style="--tint:#a6a6b3">
+    <section class="step" data-plate="5" style="--tint:#a6a6b3">
         <div class="ghost tnum">5<small>kg</small></div>
-        <div class="inner">
+        <div class="step__in">
             <p class="tag reveal"><i></i> Fifth plate · 5 kg</p>
             <h2 class="reveal">Progress you can <em>actually see</em>.</h2>
             <p class="reveal">Twelve months of a lift on one line. The plateaus, the jumps,
@@ -203,45 +176,63 @@
         </div>
     </section>
 
-    <section class="outro" data-plate="0" style="--tint:#c6f24e">
-        <div class="inner">
-            <p class="total tnum reveal">170<small> kg</small></p>
-            <p class="sub reveal">Loaded. Now go and lift something.</p>
-            <p class="reveal">
-                <a class="cta" href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
-                   target="_blank" rel="noopener noreferrer">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-                    Download Kilo
-                </a>
-            </p>
-            <a class="mail" href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a>
+    <section class="step total-card" data-plate="0" style="--tint:#c6f24e">
+        <div class="step__in">
+            <p class="n tnum reveal">170<small> kg</small></p>
+            <p class="ap-body reveal">Loaded. Now go and lift something.</p>
         </div>
     </section>
-</main>
+</div>
 
-<div class="rack" aria-hidden="true"><div id="bar"></div></div>
+<section class="ap-section ap-center">
+    <div class="ap-col">
+        <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">Track your lifts.</h2>
+        <p class="ap-body ap-dim ap-reveal" data-d="1" style="max-width:44ch;margin:0 auto 30px">
+           Log workouts, track PRs and see your progress. Train with intent.</p>
+        <div class="ap-reveal" data-d="2">
+            <a class="ap-btn ap-btn--primary"
+               href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
+               target="_blank" rel="noopener">Download on the App Store</a>
+        </div>
+        <div class="shots ap-reveal" data-d="3">
+            <img src="../images/app-screen-1.png" alt="">
+            <img src="../images/app-screen-2.png" alt="">
+            <img src="../images/app-screen-3.png" alt="">
+        </div>
+    </div>
+</section>
+
+<footer class="foot"><a href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a></footer>
+
+<div class="rack" id="rack" aria-hidden="true">
+    <div id="bar"></div>
+    <p class="tally"><b class="tnum" id="w">20</b> kg · <span id="wsub">empty bar</span></p>
+</div>
 
 <script src="plates.js"></script>
 <script src="concept.js"></script>
 <script>
 (function () {
-    var sections = Array.prototype.slice.call(document.querySelectorAll('section'));
-    var barEl  = document.getElementById('bar');
-    var wEl    = document.getElementById('w');
-    var wSubEl = document.getElementById('wsub');
-    var rail   = document.getElementById('rail');
+    var steps   = Array.prototype.slice.call(document.querySelectorAll('.step'));
+    var barEl   = document.getElementById('bar');
+    var wEl     = document.getElementById('w');
+    var wSubEl  = document.getElementById('wsub');
+    var navW    = document.getElementById('nav-weight');
+    var rail    = document.getElementById('rail');
+    var rack    = document.getElementById('rack');
+    var chapter = document.getElementById('chapter');
 
     var BAR = 20;
 
-    // Cumulative load after each section: the bar plus every plate added so far (both sides).
+    // Cumulative load after each step: the bar plus every plate added so far.
     var cumulative = [];
     var running = BAR;
-    sections.forEach(function (s) {
+    steps.forEach(function (s) {
         running += parseFloat(s.dataset.plate) * 2;
         cumulative.push(running);
     });
 
-    sections.forEach(function (s, i) {
+    steps.forEach(function (s, i) {
         var b = document.createElement('button');
         b.type = 'button';
         b.style.background = s.style.getPropertyValue('--tint');
@@ -259,11 +250,11 @@
         active = index;
 
         var total = cumulative[index];
-        // Build the load explicitly from the plates the reader has "earned", rather
-        // than asking the solver — the point is that these exact plates went on.
+        // Build the load from the plates the reader has "earned" rather than
+        // asking the solver — the point is that these exact plates went on.
         var perSide = {};
         for (var i = 0; i <= index; i++) {
-            var p = parseFloat(sections[i].dataset.plate);
+            var p = parseFloat(steps[i].dataset.plate);
             if (p > 0) perSide[p] = (perSide[p] || 0) + 1;
         }
         var order = Object.keys(perSide).map(parseFloat).sort(function (a, b) { return b - a; });
@@ -280,28 +271,39 @@
         barEl.innerHTML = Kilo.renderBar(config, { showLabels: false });
 
         wEl.textContent = Kilo.fmt(total);
-        wSubEl.textContent = index === 0 ? 'empty bar'
-            : (index >= sections.length - 1 ? 'loaded'
-               : order.length + (order.length === 1 ? ' plate a side' : ' plates a side'));
+        navW.textContent = Kilo.fmt(total) + ' kg';
+        wSubEl.textContent = index >= steps.length - 1 ? 'loaded'
+            : order.length + (order.length === 1 ? ' plate a side' : ' plates a side');
 
         Array.prototype.forEach.call(rail.children, function (b, i) {
             b.setAttribute('aria-current', String(i === index));
-            b.style.opacity = i <= index ? '1' : '.34';
+            b.style.opacity = i <= index ? '1' : '.32';
         });
 
-        sections.forEach(function (s, i) { s.classList.toggle('on', i <= index); });
+        steps.forEach(function (s, i) { s.classList.toggle('on', i <= index); });
     }
 
-    // A section counts as active once its midpoint passes the middle of the viewport.
+    // A step counts as active once its midpoint passes the middle of the viewport.
     var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
-            if (e.isIntersecting) draw(sections.indexOf(e.target));
+            if (e.isIntersecting) draw(steps.indexOf(e.target));
         });
     }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    steps.forEach(function (s) { io.observe(s); });
 
-    sections.forEach(function (s) { io.observe(s); });
+    // The rack and rail belong to the dark chapter only — they'd be invisible
+    // against the light sections either side of it.
+    var chapterIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            rack.classList.toggle('is-on', e.isIntersecting);
+            rail.classList.toggle('is-on', e.isIntersecting);
+        });
+    }, { rootMargin: '-10% 0px -10% 0px', threshold: 0 });
+    chapterIO.observe(chapter);
+
     draw(0);
 })();
 </script>
+<script src="ui.js"></script>
 </body>
 </html>

@@ -7,144 +7,178 @@
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
 <link rel="stylesheet" href="kilo.css">
 <style>
-    /* ---- Mosaic tiles ---- */
-    .thumb {
+    /* ---- Preview frames: a live page standing in for Apple's product media ---- */
+    .frame {
         position: relative; overflow: hidden; cursor: pointer;
-        border-radius: var(--radius); background: #050505;
+        /* Placeholder tone while the frame loads. Neutral rather than black so
+           a light concept doesn't flash dark before it paints. */
+        border-radius: var(--r-card); background: var(--bg-alt);
+        box-shadow: 0 2px 10px rgba(0,0,0,.06), 0 18px 48px -18px rgba(0,0,0,.28);
     }
-    .thumb iframe {
+    .frame iframe {
         position: absolute; top: 0; left: 0; border: 0;
         transform-origin: top left; pointer-events: none;
     }
-    .thumb .veil {
+    .frame .veil {
         position: absolute; inset: 0; z-index: 2; opacity: 0;
         display: flex; align-items: center; justify-content: center;
-        background: rgba(0,0,0,.5); transition: opacity .22s;
+        background: rgba(0,0,0,.35); transition: opacity .25s var(--ease);
     }
-    .thumb:hover .veil, .thumb:focus-visible .veil { opacity: 1; }
-    .thumb .veil span {
-        border-radius: var(--radius-pill); padding: 11px 22px;
-        background: rgba(255,255,255,.9); color: #000;
-        font-size: 12px; font-weight: 500;
-    }
-    .thumb .idx {
-        position: absolute; top: 8px; left: 8px; z-index: 3;
-        font-size: 11px; font-weight: 500; letter-spacing: .02em;
-        color: rgba(255,255,255,.55); mix-blend-mode: difference;
+    .frame:hover .veil, .frame:focus-visible .veil { opacity: 1; }
+    .frame .veil span {
+        background: rgba(255,255,255,.96); color: var(--text);
+        border-radius: var(--r-pill); padding: 12px 22px;
+        font-size: 15px; font-weight: 400;
     }
 
-    /* ---- Text tiles sit in the same grid as the work ---- */
-    .txt {
-        background: var(--tile); border-radius: var(--radius);
-        padding: 22px 20px 24px;
-    }
-    .txt h1 {
-        font-size: clamp(1.45rem, 2.2vw, 1.9rem);
-        font-weight: 700; letter-spacing: -0.03em; line-height: 1.04;
-        margin-bottom: 14px;
-    }
-    .txt p { font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
-             line-height: 1.35; color: var(--fg-2); }
-    .txt p + p { margin-top: 12px; }
-    .txt p a { color: var(--fg); text-decoration: none;
-               border-bottom: 1px solid var(--fg-3); }
-    .txt p a:hover { border-bottom-color: var(--fg); }
+    /* ---- Hero ---- */
+    .hero { padding: clamp(60px, 9vw, 110px) 22px clamp(40px, 5vw, 64px); text-align: center; }
+    .hero .mark { height: 26px; margin-bottom: 26px; }
+    .hero h1 { margin-bottom: 20px; }
+    .hero .sub { max-width: 34ch; margin: 0 auto 30px; color: var(--text-2); }
+    .hero .acts { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-    .mark {
-        background: var(--tile); border-radius: var(--radius);
-        aspect-ratio: 16 / 7; display: flex; align-items: center;
-        justify-content: center; padding: 18px;
-    }
-    .mark img { width: 72%; max-width: 260px; height: auto; }
+    /* ---- Highlights strip ---- */
+    .hl { background: #fff; border-radius: var(--r-card); padding: 26px 24px 28px;
+          height: 100%; display: flex; flex-direction: column;
+          box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .hl .n { font-size: 12px; font-weight: 600; color: var(--accent);
+             letter-spacing: .02em; margin-bottom: 14px; }
+    .hl h3 { margin-bottom: 10px; }
+    .hl p { color: var(--text-2); font-size: 15px; line-height: 1.45; flex: 1; }
+    .hl .go { margin-top: 18px; }
 
-    .stat { display: flex; gap: 2px; flex-direction: column; }
-    .stat .row {
-        background: var(--tile); border-radius: var(--radius);
-        padding: 13px 16px; display: flex; justify-content: space-between;
-        align-items: baseline; gap: 12px;
-    }
-    .stat .row b { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
-    .stat .row span { font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
-                      color: var(--fg-2); text-align: right; }
+    /* ---- Concept sections ---- */
+    .cs__head { text-align: center; max-width: 60ch; margin: 0 auto clamp(30px, 4vw, 48px); }
+    .cs__head .eyebrow { margin-bottom: 12px; }
+    .cs__head h2 { margin-bottom: 16px; }
+    .cs__head p { color: var(--text-2); }
+    .cs__acts { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+                margin-top: clamp(24px, 3vw, 36px); }
+    .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+               max-width: 780px; margin: clamp(24px, 3vw, 36px) auto 0; }
+    .verdict div { background: rgba(0,0,0,.035); border-radius: var(--r-media);
+                   padding: 18px 20px; }
+    .ap-section--dark .verdict div { background: rgba(255,255,255,.07); }
+    .verdict b { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px;
+                 letter-spacing: .02em; }
+    .verdict .bet b { color: var(--accent); }
+    .ap-section--dark .verdict .bet b { color: var(--acid); }
+    .verdict .risk b { color: var(--text-2); }
+    .ap-section--dark .verdict .risk b { color: var(--d-text-2); }
+    .verdict p { font-size: 15px; line-height: 1.45; color: var(--text-2); }
+    .ap-section--dark .verdict p { color: var(--d-text-2); }
 
     /* ---- Viewer ---- */
-    .viewer { position: fixed; inset: 0; z-index: 200; background: #000;
+    .viewer { position: fixed; inset: 0; z-index: 300; background: var(--bg);
               display: none; flex-direction: column; }
     .viewer.open { display: flex; }
-    /* The dock is fixed and sits above the viewer's stacking context, so it has
-       to be taken out explicitly rather than relying on z-index. */
-    body.viewing .og-dock { display: none; }
+    body.viewing { overflow: hidden; }
 
     .vbar { display: flex; align-items: center; gap: 10px; flex: none;
-            padding: 8px; }
-    .vbar .who { display: flex; align-items: baseline; gap: 9px; min-width: 0;
+            height: var(--nav-h); padding: 0 12px;
+            border-bottom: 1px solid var(--hair);
+            background: rgba(255,255,255,.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px); }
+    .vbar .who { display: flex; align-items: baseline; gap: 8px; min-width: 0;
                  padding-left: 8px; white-space: nowrap; overflow: hidden; }
-    .vbar .who b { font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
+    .vbar .who b { font-size: 17px; font-weight: 600; letter-spacing: -.01em;
                    overflow: hidden; text-overflow: ellipsis; }
-    .vbar .who span { font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
-                      color: var(--fg-2); }
-    .vbar .spacer { flex: 1; }
-
-    .vbar button, .vbar a {
-        font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer;
-        text-decoration: none; border: 0; border-radius: var(--radius-pill);
-        background: rgba(255,255,255,.14); color: var(--fg); padding: 10px 16px;
-        transition: background .18s;
-    }
-    .vbar button:hover, .vbar a:hover { background: rgba(255,255,255,.26); }
-    .vbar .seg { display: inline-flex; gap: 2px; }
-    .vbar .seg button[aria-pressed="true"] { background: var(--fg); color: #000; }
-    .vbar .count { font-size: 12px; font-weight: 500; color: var(--fg-2);
-                   font-variant-numeric: tabular-nums; min-width: 4ch;
+    .vbar .who span { font-size: 12px; color: var(--text-2); }
+    .vbar .sp { flex: 1; }
+    .vbar .count { font-size: 12px; color: var(--text-2);
+                   font-variant-numeric: tabular-nums; min-width: 3.5ch;
                    text-align: center; }
-
-    .note {
-        flex: none; padding: 0 16px 10px; font-size: 14px; font-weight: 500;
-        letter-spacing: -0.01em; line-height: 1.35; color: var(--fg-2);
-        max-width: 92ch;
-    }
-    .note b { color: var(--fg); font-weight: 500; }
+    .vseg { display: inline-flex; background: rgba(0,0,0,.05);
+            border-radius: var(--r-pill); padding: 2px; }
+    .vseg button { border: 0; background: transparent; cursor: pointer;
+                   font-family: inherit; font-size: 12px; color: var(--text);
+                   padding: 6px 13px; border-radius: var(--r-pill);
+                   transition: background .2s var(--ease); }
+    .vseg button[aria-pressed="true"] { background: #fff;
+                                        box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 
     .stage { flex: 1; min-height: 0; display: flex; align-items: center;
-             justify-content: center; padding: 0 8px 8px; }
+             justify-content: center; background: var(--bg-alt); padding: 14px; }
     .stage iframe { border: 0; width: 100%; height: 100%; background: #000;
-                    border-radius: var(--radius); display: block; }
-    .stage.phone { padding: 0 8px 16px; }
+                    border-radius: var(--r-media); display: block;
+                    box-shadow: 0 10px 40px -12px rgba(0,0,0,.3); }
     .stage.phone iframe { width: 390px; max-width: 100%; flex: none;
-                          border-radius: 18px; }
+                          border-radius: 26px; }
 
-    @media (max-width: 900px) {
-        .og-mosaic { flex-direction: column; }
-        .vbar .seg { display: none; }
-        .vbar .who span { display: none; }
-        .note { display: none; }
+    @media (max-width: 760px) {
+        .verdict { grid-template-columns: 1fr; }
+        .vbar .who span, .vseg { display: none; }
     }
 </style>
 </head>
 <body>
 
-<div class="og-mosaic" id="mosaic"></div>
+<nav class="ap-nav" data-nav>
+    <div class="ap-nav__in">
+        <span class="ap-nav__name">Site concepts <small>Kilo</small></span>
+        <span class="ap-nav__sp"></span>
+        <a class="ap-btn ap-btn--sm ap-btn--ghost" href="../">Current site</a>
+        <button class="ap-btn ap-btn--sm ap-btn--primary" type="button" data-open="0">Preview</button>
+    </div>
+</nav>
 
-<div class="og-dock">
-    <a class="og-pill og-pill--ghost" href="../">Current site</a>
-    <a class="og-pill og-pill--solid" href="mailto:kilolifting@gmail.com">Contact</a>
-</div>
+<header class="hero" data-nav-after>
+    <img class="mark k-wordmark" src="../images/wordmark.png" alt="Kilo">
+    <h1 class="ap-hero">Five directions.<br>One of them is Kilo.</h1>
+    <p class="sub ap-body">Every concept below is a real, working page — not a mockup.
+       Open them, use them, and pick the one that feels right.</p>
+    <div class="acts">
+        <button class="ap-btn ap-btn--primary" type="button" data-open="0">Start with 01</button>
+        <a class="ap-link" href="../">See the current site</a>
+    </div>
+</header>
+
+<!-- Highlights strip, in the pattern Apple uses to preview a page's sections -->
+<section class="ap-section--tight ap-section--alt">
+    <div class="ap-col--wide ap-center" style="padding:0 22px 6px">
+        <h2 class="ap-h3 ap-reveal">Get the highlights.</h2>
+    </div>
+    <div class="ap-gallery" data-gallery>
+        <div class="ap-gallery__track" id="hl-track"></div>
+        <div class="ap-gallery__nav">
+            <button class="ap-arrow" type="button" data-prev aria-label="Previous">&#8249;</button>
+            <button class="ap-arrow" type="button" data-next aria-label="Next">&#8250;</button>
+        </div>
+    </div>
+</section>
+
+<main id="sections"></main>
+
+<section class="ap-section ap-section--dark ap-center">
+    <div class="ap-col">
+        <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">All five are real pages.</h2>
+        <p class="ap-body ap-dim ap-reveal" data-d="1"
+           style="max-width:48ch;margin:0 auto 32px">
+           They share Kilo's design tokens and a JavaScript port of the app's
+           plate-solving algorithm, so every weight on every page is one you
+           could actually load.</p>
+        <div class="ap-reveal" data-d="2">
+            <a class="ap-btn ap-btn--primary" href="mailto:kilolifting@gmail.com">Send feedback</a>
+        </div>
+    </div>
+</section>
 
 <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Concept preview">
     <div class="vbar">
         <span class="who"><b id="v-title">—</b><span id="v-from"></span></span>
-        <span class="spacer"></span>
-        <span class="seg">
+        <span class="sp"></span>
+        <span class="vseg">
             <button type="button" id="v-desktop" aria-pressed="true">Desktop</button>
             <button type="button" id="v-phone" aria-pressed="false">Phone</button>
         </span>
-        <button type="button" id="v-prev" aria-label="Previous concept">←</button>
+        <button class="ap-arrow" type="button" id="v-prev" aria-label="Previous">&#8249;</button>
         <span class="count" id="v-count">1/5</span>
-        <button type="button" id="v-next" aria-label="Next concept">→</button>
-        <a id="v-open" href="#" target="_blank" rel="noopener">Open ↗</a>
-        <button type="button" id="v-close" aria-label="Close preview">Close</button>
+        <button class="ap-arrow" type="button" id="v-next" aria-label="Next">&#8250;</button>
+        <a class="ap-btn ap-btn--sm ap-btn--ghost" id="v-open" href="#" target="_blank" rel="noopener">Open</a>
+        <button class="ap-btn ap-btn--sm ap-btn--dark" type="button" id="v-close">Close</button>
     </div>
-    <p class="note" id="v-note"></p>
     <div class="stage" id="v-stage"><iframe id="v-frame" title="Concept preview"></iframe></div>
 </div>
 
@@ -153,93 +187,96 @@
 (function () {
     var M = KiloConcepts.MANIFEST;
 
-    /* Per-concept: the caption line, the tile's aspect ratio, and the longer
-       note shown in the viewer. Ratios are varied deliberately so the mosaic
-       has the same uneven rhythm as a studio index rather than a card grid. */
+    // Concepts change constantly while they're being reviewed, and a cached
+    // copy in a preview frame silently shows the wrong design. Stamp each load.
+    var STAMP = '?r=' + Date.now();
+
     var META = {
-        1: { cat: 'Working tool', ratio: 4 / 5,
-             note: '<b>Bet:</b> a tool people actually use beats a headline they skim. ' +
-                   '<b>Risk:</b> it demos one feature, not the product.' },
-        2: { cat: 'Scroll mechanic', ratio: 1,
-             note: '<b>Bet:</b> nobody else can credibly own these five colours. ' +
-                   '<b>Risk:</b> the gimmick has to survive a second visit.' },
-        3: { cat: 'Personalisation', ratio: 4 / 3,
-             note: '<b>Bet:</b> something a screenshot grid can never do. ' +
-                   '<b>Risk:</b> a gate before the content costs you visitors.' },
-        4: { cat: 'Direct manipulation', ratio: 3 / 4,
-             note: '<b>Bet:</b> the visitor performs the product’s subject matter. ' +
-                   '<b>Risk:</b> friction in front of the pitch.' },
-        5: { cat: 'Typographic', ratio: 1,
-             note: '<b>Bet:</b> refusing screenshots is the boldest thing an app site can do. ' +
-                   '<b>Risk:</b> people may still want to see the app.' }
+        1: { cat: 'Working tool', ratio: 16/10, dark: false,
+             head: 'The hero is the product.',
+             body: 'Instead of a headline you skim, a plate calculator you use. ' +
+                   'Type a weight and the bar loads with the fewest plates a side.',
+             bet: 'A tool people actually use beats a headline they skim.',
+             risk: 'It demos one feature, not the product.' },
+        2: { cat: 'Scroll mechanic', ratio: 16/10, dark: true,
+             head: 'Every section adds a plate.',
+             body: 'Six reasons to train with Kilo, and each one you scroll past ' +
+                   'loads a plate onto a bar fixed at the bottom of the screen.',
+             bet: 'Nobody else can credibly own these five colours.',
+             risk: 'The gimmick has to survive a second visit.' },
+        3: { cat: 'Personalisation', ratio: 16/10, dark: false,
+             head: 'One question, then it’s your site.',
+             body: 'It asks for your back squat before anything else. Every ' +
+                   'percentage, plate load and projection after that is yours.',
+             bet: 'Something a screenshot grid can never do.',
+             risk: 'A gate before the content costs you visitors.' },
+        4: { cat: 'Direct manipulation', ratio: 16/10, dark: true,
+             head: 'Nothing moves until you move it.',
+             body: 'The headline and a loaded bar sit on the floor. You drag them ' +
+                   'up against real resistance — hardest at lockout.',
+             bet: 'The visitor performs the product’s subject matter.',
+             risk: 'Friction in front of the pitch.' },
+        5: { cat: 'Typographic', ratio: 16/10, dark: false,
+             head: 'Seven numbers. No screenshots.',
+             body: 'One figure per screen, rolling into place like an odometer. ' +
+                   'There is not a single device mockup on the page.',
+             bet: 'Refusing screenshots is the boldest thing an app site can do.',
+             risk: 'People may still want to see the app.' }
     };
 
-    function tile(i) {
-        var c = M[i], m = META[c.n];
-        return '<div>' +
-            '<div class="thumb" data-i="' + i + '" role="button" tabindex="0" ' +
-                 'style="aspect-ratio:' + m.ratio + '" aria-label="Preview ' + c.title + '">' +
-                '<span class="idx">' + String(c.n).padStart(2, '0') + '</span>' +
-                '<iframe src="' + c.file + '" tabindex="-1" aria-hidden="true" ' +
-                        'scrolling="no" loading="lazy" data-ratio="' + m.ratio + '"></iframe>' +
-                '<span class="veil"><span>Preview</span></span>' +
+    /* ---- Highlights strip ---- */
+    document.getElementById('hl-track').innerHTML = M.map(function (c, i) {
+        var m = META[c.n];
+        return '<div class="ap-gallery__item">' +
+            '<div class="hl">' +
+                '<p class="n">' + String(c.n).padStart(2, '0') + ' &nbsp;' + m.cat + '</p>' +
+                '<h3 class="ap-h3">' + c.title + '</h3>' +
+                '<p>' + m.body + '</p>' +
+                '<p class="go"><button class="ap-btn ap-btn--sm ap-btn--primary" ' +
+                    'type="button" data-open="' + i + '">Preview</button></p>' +
             '</div>' +
-            '<div class="og-cap og-meta"><b>' + c.title + '</b>' +
-                '<span>' + m.cat + ', ' + c.idea + '</span></div>' +
         '</div>';
-    }
-
-    var lede =
-        '<div class="txt">' +
-            '<h1>Five directions, built to be clicked.</h1>' +
-            '<p>Each one is a real working page, not a mockup — same product, ' +
-               'five different bets on what the site should <em>be</em>.</p>' +
-            '<p>They share Kilo’s own design tokens and a JavaScript port of the ' +
-               'app’s plate-solving algorithm, so every weight shown is a weight ' +
-               'you could really load. Compare against <a href="../">the current page</a>.</p>' +
-        '</div>';
-
-    var stats =
-        '<div class="stat">' +
-            '<div class="row"><b>Concepts</b><span>5</span></div>' +
-            '<div class="row"><b>Previews</b><span>Live, not screenshots</span></div>' +
-            '<div class="row"><b>Switch</b><span>← → or 1–5</span></div>' +
-            '<div class="row"><b>Build step</b><span>None</span></div>' +
-        '</div>';
-
-    var mark = '<div class="mark"><img class="k-wordmark" src="../images/wordmark.png" alt="Kilo"></div>';
-
-    // The page as it stands today, live in the same grid, so the concepts are
-    // judged against the real thing rather than a memory of it.
-    var current =
-        '<div>' +
-            '<div class="thumb" style="aspect-ratio:1.6" onclick="window.open(\'../\')">' +
-                '<span class="idx">00</span>' +
-                '<iframe src="../" tabindex="-1" aria-hidden="true" scrolling="no" ' +
-                        'loading="lazy" data-ratio="1.6"></iframe>' +
-                '<span class="veil"><span>Open ↗</span></span>' +
-            '</div>' +
-            '<div class="og-cap og-meta"><b>Current site</b><span>Live, today</span></div>' +
-        '</div>';
-
-    // Hand-composed columns, balanced by eye for total height — an even
-    // distribution would flatten the rhythm and leave one column short.
-    var columns = [
-        [mark, tile(0), current],
-        [lede, tile(1), tile(2), stats],
-        [tile(3), tile(4)]
-    ];
-
-    document.getElementById('mosaic').innerHTML = columns.map(function (col) {
-        return '<div class="og-col">' + col.join('') + '</div>';
     }).join('');
 
-    /* Each thumbnail renders the real page at 1440px wide and is scaled to fit
-       its tile. Frame height follows the tile ratio so a tall tile shows more
-       of the page rather than cropping it. */
-    function fitThumbs() {
-        Array.prototype.forEach.call(document.querySelectorAll('.thumb'), function (t) {
+    /* ---- One full section per concept, alternating tone ---- */
+    document.getElementById('sections').innerHTML = M.map(function (c, i) {
+        var m = META[c.n];
+        var tone = m.dark ? ' ap-section--dark' : (i % 2 ? ' ap-section--alt' : '');
+        return '<section class="ap-section' + tone + '">' +
+            '<div class="ap-col--wide">' +
+                '<div class="cs__head ap-reveal">' +
+                    '<p class="eyebrow ap-eyebrow">' + String(c.n).padStart(2, '0') +
+                        ' &nbsp;' + c.title + '</p>' +
+                    '<h2 class="ap-h2">' + m.head + '</h2>' +
+                    '<p class="ap-body ap-dim">' + m.body + '</p>' +
+                '</div>' +
+                '<div class="frame ap-reveal" data-d="1" data-open="' + i + '" ' +
+                     'role="button" tabindex="0" style="aspect-ratio:' + m.ratio + '" ' +
+                     'aria-label="Preview ' + c.title + '">' +
+                    '<iframe src="' + c.file + STAMP + '" tabindex="-1" aria-hidden="true" ' +
+                            'scrolling="no" loading="lazy" data-ratio="' + m.ratio + '"></iframe>' +
+                    '<span class="veil"><span>Preview</span></span>' +
+                '</div>' +
+                '<div class="verdict ap-reveal" data-d="2">' +
+                    '<div class="bet"><b>The bet</b><p>' + m.bet + '</p></div>' +
+                    '<div class="risk"><b>The risk</b><p>' + m.risk + '</p></div>' +
+                '</div>' +
+                '<div class="cs__acts ap-reveal" data-d="3">' +
+                    '<button class="ap-btn ' +
+                        (m.dark ? 'ap-btn--primary' : 'ap-btn--primary') +
+                        '" type="button" data-open="' + i + '">Preview ' + c.title + '</button>' +
+                    '<a class="ap-btn ap-btn--ghost" href="' + c.file + '" ' +
+                       'target="_blank" rel="noopener">Open in a tab</a>' +
+                '</div>' +
+            '</div>' +
+        '</section>';
+    }).join('');
+
+    /* Each preview renders the real page at 1440px and is scaled to its frame. */
+    function fit() {
+        Array.prototype.forEach.call(document.querySelectorAll('.frame'), function (t) {
             var f = t.querySelector('iframe');
+            if (!f) return;
             var ratio = parseFloat(f.dataset.ratio);
             var s = t.clientWidth / 1440;
             f.style.width = '1440px';
@@ -247,8 +284,8 @@
             f.style.transform = 'scale(' + s + ')';
         });
     }
-    fitThumbs();
-    window.addEventListener('resize', fitThumbs);
+    fit();
+    window.addEventListener('resize', fit);
 
     /* ---- Viewer ---- */
     var viewer = document.getElementById('viewer');
@@ -259,24 +296,20 @@
     function show(i) {
         cur = (i + M.length) % M.length;
         var c = M[cur];
-        frame.src = c.file;
+        frame.src = c.file + STAMP;
         document.getElementById('v-title').textContent = c.title;
-        document.getElementById('v-from').textContent = META[c.n].cat + ', ' + c.idea;
-        document.getElementById('v-note').innerHTML = META[c.n].note;
+        document.getElementById('v-from').textContent = META[c.n].cat;
         document.getElementById('v-count').textContent = (cur + 1) + '/' + M.length;
         document.getElementById('v-open').href = c.file;
     }
-
     function open(i) {
         show(i);
         viewer.classList.add('open');
         document.body.classList.add('viewing');
-        document.body.style.overflow = 'hidden';
     }
     function close() {
         viewer.classList.remove('open');
         document.body.classList.remove('viewing');
-        document.body.style.overflow = '';
         frame.src = 'about:blank';
     }
     function setPhone(on) {
@@ -286,25 +319,16 @@
         document.getElementById('v-desktop').setAttribute('aria-pressed', String(!on));
     }
 
-    document.getElementById('mosaic').addEventListener('click', function (e) {
-        var t = e.target.closest('[data-i]');
-        if (t) open(parseInt(t.dataset.i, 10));
+    // One delegated handler for every [data-open] on the page.
+    document.addEventListener('click', function (e) {
+        var t = e.target.closest('[data-open]');
+        if (t) { e.preventDefault(); open(parseInt(t.dataset.open, 10)); }
     });
-    document.getElementById('mosaic').addEventListener('keydown', function (e) {
-        var t = e.target.closest('.thumb[data-i]');
-        if (t && (e.key === 'Enter' || e.key === ' ')) {
-            e.preventDefault();
-            open(parseInt(t.dataset.i, 10));
-        }
-    });
-
-    document.getElementById('v-prev').addEventListener('click', function () { show(cur - 1); });
-    document.getElementById('v-next').addEventListener('click', function () { show(cur + 1); });
-    document.getElementById('v-close').addEventListener('click', close);
-    document.getElementById('v-phone').addEventListener('click', function () { setPhone(true); });
-    document.getElementById('v-desktop').addEventListener('click', function () { setPhone(false); });
-
     document.addEventListener('keydown', function (e) {
+        var t = e.target.closest && e.target.closest('.frame[data-open]');
+        if (t && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault(); open(parseInt(t.dataset.open, 10)); return;
+        }
         if (!viewer.classList.contains('open')) return;
         if (e.key === 'Escape') close();
         else if (e.key === 'ArrowLeft') show(cur - 1);
@@ -312,7 +336,14 @@
         else if (e.key.toLowerCase() === 'p') setPhone(!phone);
         else if (/^[1-5]$/.test(e.key)) show(parseInt(e.key, 10) - 1);
     });
+
+    document.getElementById('v-prev').addEventListener('click', function () { show(cur - 1); });
+    document.getElementById('v-next').addEventListener('click', function () { show(cur + 1); });
+    document.getElementById('v-close').addEventListener('click', close);
+    document.getElementById('v-phone').addEventListener('click', function () { setPhone(true); });
+    document.getElementById('v-desktop').addEventListener('click', function () { setPhone(false); });
 })();
 </script>
+<script src="ui.js"></script>
 </body>
 </html>

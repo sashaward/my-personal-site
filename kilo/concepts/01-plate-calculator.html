@@ -7,158 +7,134 @@
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
 <link rel="stylesheet" href="kilo.css">
 <style>
-    body { background: var(--ground); }
+    .hero { padding: clamp(48px, 7vw, 88px) 22px clamp(30px, 4vw, 48px); text-align: center; }
+    .hero .eyebrow { margin-bottom: 14px; }
+    .hero h1 { margin-bottom: 14px; }
+    .hero .sub { color: var(--text-2); max-width: 36ch; margin: 0 auto; }
 
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    /* ---- The calculator, as the hero's product shot ---- */
+    .tool { padding: 0 22px clamp(56px, 8vw, 96px); }
+    .tool__in { max-width: var(--col); margin: 0 auto; text-align: center; }
 
-    .nav { display: flex; justify-content: space-between; align-items: center;
-           padding: 18px 0; }
-    .nav img { height: 22px; }
-    .nav a.contact { font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-                     color: var(--fg-2); text-decoration: none; }
-    .nav a.contact:hover { color: var(--fg); }
-
-    /* ---- The hero is the tool ---- */
-    .stage { padding: 56px 0 64px; text-align: center; }
-
-    .kicker { font-size: 11px; font-weight: 500; letter-spacing: .14em;
-              text-transform: uppercase; color: var(--fg-2); margin-bottom: 28px; }
-
-    /* Editable weight — the single biggest thing on the page. */
-    .entry { display: flex; align-items: baseline; justify-content: center; gap: 6px;
-             margin-bottom: 8px; }
+    .entry { display: flex; align-items: baseline; justify-content: center; gap: 4px; }
     .entry input {
-        font: inherit; font-size: clamp(5rem, 17vw, 11rem); font-weight: 700;
-        letter-spacing: -0.055em; line-height: .9;
-        background: none; border: 0; outline: none; color: var(--fg);
+        font: inherit; font-size: clamp(4.5rem, 15vw, 9rem); font-weight: 600;
+        letter-spacing: -0.012em; line-height: 1;
+        background: none; border: 0; outline: none; color: var(--text);
         width: 4.1ch; text-align: right; padding: 0;
-        font-variant-numeric: tabular-nums; caret-color: var(--p25);
+        font-variant-numeric: tabular-nums; caret-color: var(--accent);
     }
     .entry input::-webkit-outer-spin-button,
     .entry input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .entry input[type=number] { -moz-appearance: textfield; }
-    .entry .unit { font-size: clamp(1.1rem, 2.6vw, 1.6rem); font-weight: 700;
-                   letter-spacing: -.02em; color: var(--fg-2); }
+    .entry .unit { font-size: clamp(1.4rem, 3.4vw, 2.2rem); font-weight: 600;
+                   color: var(--text-2); }
+    .hint { font-size: 12px; color: var(--text-3); margin-top: 6px; }
 
-    .entry-hint { font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-                  color: var(--fg-3); margin-bottom: 26px; transition: color .2s; }
-    .entry:focus-within + .entry-hint { color: var(--fg-2); }
-
-    /* Slider doubles as the "warm up" gesture. */
-    .slider { width: min(560px, 100%); margin: 0 auto 36px; display: block;
+    .slider { width: min(520px, 100%); margin: 26px auto 8px; display: block;
               -webkit-appearance: none; appearance: none; background: none; height: 24px; }
     .slider::-webkit-slider-runnable-track {
-        height: 2px;
-        background: linear-gradient(90deg, var(--p25) 0%, var(--p25) var(--pct, 40%),
-                    rgba(255,255,255,.14) var(--pct, 40%), rgba(255,255,255,.14) 100%);
+        height: 4px; border-radius: 2px;
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent) var(--pct,40%),
+                    rgba(0,0,0,.12) var(--pct,40%), rgba(0,0,0,.12) 100%);
     }
     .slider::-webkit-slider-thumb {
-        -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
-        background: var(--fg); margin-top: -8px; cursor: grab;
+        -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%;
+        background: #fff; margin-top: -11px; cursor: grab;
+        box-shadow: 0 1px 4px rgba(0,0,0,.25), 0 0 0 .5px rgba(0,0,0,.06);
     }
     .slider::-webkit-slider-thumb:active { cursor: grabbing; }
-    .slider::-moz-range-track { height: 2px; background: rgba(255,255,255,.14); }
-    .slider::-moz-range-progress { height: 2px; background: var(--p25); }
-    .slider::-moz-range-thumb { width: 18px; height: 18px; border: 0; border-radius: 50%;
-        background: var(--fg); cursor: grab; }
+    .slider::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(0,0,0,.12); }
+    .slider::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--accent); }
+    .slider::-moz-range-thumb { width: 26px; height: 26px; border: 0; border-radius: 50%;
+        background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.25); cursor: grab; }
 
-    /* ---- The bar ---- */
-    .bar-holder { margin: 0 auto 14px; max-width: 980px; }
+    .bar-holder { margin: 6px auto 12px; max-width: 900px; }
     .kbar { width: 100%; height: auto; display: block; overflow: visible; }
     .kbar__total { display: none; }
-    .kbar__plate { animation: plateDrop .42s cubic-bezier(.2,1.3,.4,1) backwards; }
+    .kbar__plate { animation: plateDrop .45s var(--ease) backwards; }
     @keyframes plateDrop {
-        from { opacity: 0; transform: translateY(-38px) scaleY(.7); }
+        from { opacity: 0; transform: translateY(-34px) scaleY(.78); }
         to   { opacity: 1; transform: translateY(0) scaleY(1); }
     }
 
-    .readout { font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-               color: var(--fg); min-height: 20px; }
-    .readout .muted { color: var(--fg-2); }
-    .notice { font-size: 14px; font-weight: 500; letter-spacing: -.01em;
-              color: var(--p15); margin-top: 10px; min-height: 19px; }
+    .readout { font-size: 17px; color: var(--text); min-height: 24px; }
+    .readout .muted { color: var(--text-2); }
+    .notice { font-size: 15px; color: var(--accent); margin-top: 8px; min-height: 22px; }
     .notice:empty { margin-top: 0; }
 
-    /* ---- Presets ---- */
-    .presets { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
-               margin: 34px 0 0; }
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+               margin-top: 28px; }
     .preset {
-        border: 0; background: rgba(255,255,255,.1); color: var(--fg);
-        border-radius: var(--radius-pill); padding: 11px 20px;
-        font-family: inherit; font-size: 12px; font-weight: 500;
-        letter-spacing: -.005em; cursor: pointer;
-        transition: background .18s, color .18s, transform .12s;
+        border: 0; background: rgba(0,0,0,.05); color: var(--text);
+        border-radius: var(--r-pill); padding: 9px 18px;
+        font-family: inherit; font-size: 15px; cursor: pointer;
+        transition: background .2s var(--ease), color .2s var(--ease);
     }
-    .preset:hover { background: rgba(255,255,255,.2); }
-    .preset:active { transform: scale(.98); }
-    .preset[aria-pressed="true"] { background: var(--fg); color: #000; }
-    .preset .w { color: var(--fg-2); margin-left: 7px; font-variant-numeric: tabular-nums; }
-    .preset[aria-pressed="true"] .w { color: rgba(0,0,0,.45); }
+    .preset:hover { background: rgba(0,0,0,.09); }
+    .preset[aria-pressed="true"] { background: var(--accent); color: #fff; }
+    .preset .w { color: var(--text-2); margin-left: 8px; font-variant-numeric: tabular-nums; }
+    .preset[aria-pressed="true"] .w { color: rgba(255,255,255,.72); }
 
-    .opts { display: flex; gap: 20px; justify-content: center; margin-top: 24px;
-            font-size: 14px; font-weight: 500; letter-spacing: -.01em; color: var(--fg-2); }
-    .opts label { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
-    .opts select {
-        font-family: inherit; font-size: 12px; font-weight: 500;
-        background: rgba(255,255,255,.1); color: var(--fg);
-        border: 0; border-radius: var(--radius-pill); padding: 7px 12px; cursor: pointer;
-    }
+    .picker { margin-top: 34px; }
+    .picker .lbl { font-size: 12px; color: var(--text-2); margin-bottom: 12px; }
 
-    /* ---- The turn: this was the app all along ---- */
-    .turn { border-top: 1px solid var(--hair-soft); margin-top: 72px;
-            padding: 80px 0 88px; text-align: center; }
-    .turn h2 { font-size: clamp(1.9rem, 5vw, 3.4rem); font-weight: 700;
-               letter-spacing: -.04em; line-height: 1; margin-bottom: 18px; }
-    .turn h2 span { color: var(--fg-2); }
-    .turn p { color: var(--fg-2); font-size: 14px; font-weight: 500;
-              letter-spacing: -.01em; line-height: 1.4; max-width: 46ch;
-              margin: 0 auto 32px; }
+    /* ---- Feature sections ---- */
+    .feat { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .feat .ap-card { display: flex; flex-direction: column; justify-content: flex-end;
+                     min-height: 340px; }
+    .feat h3 { margin-bottom: 10px; }
+    .feat p { color: var(--text-2); font-size: 15px; line-height: 1.45; }
+    .feat .big { font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 600;
+                 letter-spacing: -0.01em; margin-bottom: 8px;
+                 font-variant-numeric: tabular-nums; }
 
-    .cta { display: inline-flex; align-items: center; gap: 8px;
-           background: var(--fg); color: #000; padding: 12px 24px;
-           border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
-           letter-spacing: -.005em; text-decoration: none;
-           transition: background .2s, transform .12s; }
-    .cta:hover { background: #e2e2e2; }
-    .cta:active { transform: scale(.98); }
-    .cta svg { width: 15px; height: 15px; }
+    .shots { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+             margin-top: clamp(30px, 4vw, 48px); }
+    .shots img { width: 210px; border-radius: 26px;
+                 box-shadow: 0 18px 50px -16px rgba(0,0,0,.4); }
 
-    .shots { display: flex; justify-content: center; gap: var(--gutter);
-             margin-top: 64px; flex-wrap: wrap; }
-    .shots img { width: 200px; border-radius: var(--radius); }
+    .foot { text-align: center; padding: 40px 22px 64px; }
+    .foot a { color: var(--text-3); font-size: 12px; text-decoration: none; }
+    .foot a:hover { color: var(--text-2); }
 
-    footer { text-align: center; padding: 36px 0 72px; }
-    footer a { color: var(--fg-3); font-size: 14px; font-weight: 500;
-               letter-spacing: -.01em; text-decoration: none; }
-    footer a:hover { color: var(--fg-2); }
-
-    @media (max-width: 600px) {
-        .entry input { width: 4ch; }
-        .shots img { width: 140px; }
-        .opts { flex-direction: column; gap: 10px; align-items: center; }
+    @media (max-width: 760px) {
+        .feat { grid-template-columns: 1fr; }
+        .feat .ap-card { min-height: 260px; }
+        .shots img { width: 150px; }
     }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-    <nav class="nav">
-        <a href="/kilo/"><img class="k-wordmark" src="../images/wordmark.png" alt="Kilo"></a>
-        <a class="contact" href="mailto:kilolifting@gmail.com">Contact</a>
-    </nav>
+<nav class="ap-nav" data-nav>
+    <div class="ap-nav__in">
+        <span class="ap-nav__name">Kilo <small>Plate calculator</small></span>
+        <span class="ap-nav__sp"></span>
+        <span class="ap-btn ap-btn--sm ap-btn--ghost tnum" id="nav-weight">105 kg</span>
+        <a class="ap-btn ap-btn--sm ap-btn--primary"
+           href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
+           target="_blank" rel="noopener">Download</a>
+    </div>
+</nav>
 
-    <main class="stage">
-        <p class="kicker">What's on the bar?</p>
+<header class="hero" data-nav-after>
+    <p class="eyebrow ap-eyebrow">Kilo</p>
+    <h1 class="ap-hero">What's on the bar?</h1>
+    <p class="sub ap-body">Put a number in. We'll work out the plates.</p>
+</header>
 
+<section class="tool">
+    <div class="tool__in">
         <div class="entry">
             <input id="weight" type="number" value="105" min="0" max="350" step="2.5"
                    inputmode="decimal" aria-label="Total weight in kilograms">
             <span class="unit">kg</span>
         </div>
-        <p class="entry-hint">Type a number, or drag</p>
+        <p class="hint">Type a number, or drag</p>
 
-        <input id="slider" class="slider" type="range" min="20" max="260" step="2.5" value="105"
-               aria-label="Total weight">
+        <input id="slider" class="slider" type="range" min="20" max="260" step="2.5"
+               value="105" aria-label="Total weight">
 
         <div class="bar-holder" id="bar"></div>
 
@@ -167,36 +143,54 @@
 
         <div class="presets" id="presets"></div>
 
-        <div class="opts">
-            <label>Bar
-                <select id="bar-weight">
-                    <option value="20" selected>20 kg</option>
-                    <option value="15">15 kg</option>
-                </select>
-            </label>
-            <label>Smallest plate
-                <select id="increment">
-                    <option value="2.5" selected>2.5 kg</option>
-                    <option value="0.5">0.5 kg micros</option>
-                </select>
-            </label>
+        <div class="picker">
+            <p class="lbl">Bar</p>
+            <div class="ap-swatches" data-swatch>
+                <button class="ap-swatch" style="--sw:#c9ccd2" data-value="20"
+                        data-label="20 kg bar — men's" aria-checked="true"></button>
+                <button class="ap-swatch" style="--sw:#e8b9bd" data-value="15"
+                        data-label="15 kg bar — women's" aria-checked="false"></button>
+            </div>
+            <p class="ap-swatch-label">20 kg bar — men's</p>
         </div>
-    </main>
-</div>
+    </div>
+</section>
 
-<section class="turn">
-    <div class="wrap">
-        <h2>You just used Kilo. <span>The app remembers.</span></h2>
-        <p>Every load you work out here, Kilo logs — against the lift, the date and
-           your best. Percentages, plate maths and PRs, worked out for you.</p>
+<section class="ap-section ap-section--alt">
+    <div class="ap-col">
+        <div class="ap-center ap-reveal" style="max-width:52ch;margin:0 auto 44px">
+            <h2 class="ap-h2" style="margin-bottom:14px">You just used Kilo.</h2>
+            <p class="ap-body ap-dim">That sum is one of the things the app does every
+               time you log a lift — along with the percentages, the PRs and the history.</p>
+        </div>
+        <div class="feat">
+            <div class="ap-card ap-reveal" data-d="1" style="background:#fff">
+                <p class="big tnum">4</p>
+                <h3 class="ap-h3">Taps to log a set</h3>
+                <p>Pick the lift, punch the weight, punch the reps. No forms, no feed,
+                   no streak to protect.</p>
+            </div>
+            <div class="ap-card ap-reveal" data-d="2" style="background:#fff">
+                <p class="big tnum">80%</p>
+                <h3 class="ap-h3">Already worked out</h3>
+                <p>Programme calls for a percentage? It's on screen in kilos, rounded
+                   to something you can actually load.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <a class="cta" href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
-           target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-            Download now
-        </a>
-
-        <div class="shots">
+<section class="ap-section ap-section--dark ap-center">
+    <div class="ap-col">
+        <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">Train with intent.</h2>
+        <p class="ap-body ap-dim ap-reveal" data-d="1" style="max-width:44ch;margin:0 auto 30px">
+           Log workouts, track PRs and see your progress — for every lift you train.</p>
+        <div class="ap-reveal" data-d="2">
+            <a class="ap-btn ap-btn--primary"
+               href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969"
+               target="_blank" rel="noopener">Download on the App Store</a>
+        </div>
+        <div class="shots ap-reveal" data-d="3">
             <img src="../images/app-screen-1.png" alt="">
             <img src="../images/app-screen-2.png" alt="">
             <img src="../images/app-screen-3.png" alt="">
@@ -204,7 +198,7 @@
     </div>
 </section>
 
-<footer><a href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a></footer>
+<footer class="foot"><a href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a></footer>
 
 <script src="plates.js"></script>
 <script src="concept.js"></script>
@@ -216,15 +210,17 @@
     var readout  = document.getElementById('readout');
     var notice   = document.getElementById('notice');
     var presetEl = document.getElementById('presets');
-    var barSel   = document.getElementById('bar-weight');
-    var incSel   = document.getElementById('increment');
+    var navW     = document.getElementById('nav-weight');
+
+    var barWeight = 20;
+    var increment = 2.5;
 
     var PRESETS = [
-        { name: 'Back squat',    w: 140 },
-        { name: 'Deadlift',      w: 180 },
-        { name: 'Clean & jerk',  w: 105 },
-        { name: 'Snatch',        w: 85  },
-        { name: 'Bench press',   w: 100 }
+        { name: 'Back squat',   w: 140 },
+        { name: 'Deadlift',     w: 180 },
+        { name: 'Clean & jerk', w: 105 },
+        { name: 'Snatch',       w: 85  },
+        { name: 'Bench press',  w: 100 }
     ];
 
     PRESETS.forEach(function (p) {
@@ -233,16 +229,14 @@
         b.type = 'button';
         b.setAttribute('aria-pressed', 'false');
         b.innerHTML = p.name + '<span class="w">' + p.w + '</span>';
-        b.addEventListener('click', function () { set(p.w, true); });
         b.dataset.w = p.w;
+        b.addEventListener('click', function () { set(p.w, true); });
         presetEl.appendChild(b);
     });
 
     var lastSig = '';
 
     function render(requested) {
-        var barWeight = parseFloat(barSel.value);
-        var increment = parseFloat(incSel.value);
         var config = Kilo.calculatePlates(requested, {
             barWeight: barWeight, increment: increment
         });
@@ -257,20 +251,17 @@
             lastSig = sig;
         }
 
-        if (!config.perSide.length) {
-            readout.innerHTML = '<span class="muted">Empty bar · ' + barWeight + ' kg</span>';
-        } else {
-            readout.innerHTML = Kilo.describe(config).replace('per side',
-                '<span class="muted">per side</span>');
-        }
+        readout.innerHTML = config.perSide.length
+            ? Kilo.describe(config).replace('per side', '<span class="muted">per side</span>')
+            : '<span class="muted">Empty bar · ' + barWeight + ' kg</span>';
 
         // The honest bit: say so when the number they asked for can't be loaded.
-        if (Math.abs(config.totalWeight - requested) > 0.001) {
-            notice.textContent = requested + ' kg won’t load on a ' + barWeight +
-                ' kg bar with ' + increment + ' kg plates. Nearest is ' + config.totalWeight + ' kg.';
-        } else {
-            notice.textContent = '';
-        }
+        notice.textContent = Math.abs(config.totalWeight - requested) > 0.001
+            ? requested + ' kg won’t load on a ' + barWeight + ' kg bar with ' +
+              increment + ' kg plates. Nearest is ' + config.totalWeight + ' kg.'
+            : '';
+
+        navW.textContent = Kilo.fmt(config.totalWeight) + ' kg';
 
         Array.prototype.forEach.call(presetEl.children, function (b) {
             b.setAttribute('aria-pressed',
@@ -291,15 +282,20 @@
 
     input.addEventListener('input', function () {
         var v = parseFloat(input.value);
-        if (isNaN(v)) return;
-        set(v, false);
+        if (!isNaN(v)) set(v, false);
     });
     slider.addEventListener('input', function () { set(parseFloat(slider.value), true); });
-    barSel.addEventListener('change', function () { render(parseFloat(input.value) || 0); });
-    incSel.addEventListener('change', function () { render(parseFloat(input.value) || 0); });
+
+    // The bar swatch is the shared Apple-style picker; it just reports a value.
+    document.addEventListener('swatch', function (e) {
+        barWeight = parseFloat(e.detail.value);
+        lastSig = '';
+        render(parseFloat(input.value) || 0);
+    });
 
     set(105, true);
 })();
 </script>
+<script src="ui.js"></script>
 </body>
 </html>
