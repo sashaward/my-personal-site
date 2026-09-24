@@ -14,22 +14,22 @@
     .hero .cue { font-size: 12px; color: var(--text-3); }
 
     /* ---- The dark chapter: a pinned bar that loads as you scroll ---- */
-    .chapter { background: var(--bg-dark); color: var(--d-text); position: relative; }
+    .chapter { background: var(--ink); color: var(--text); position: relative; }
 
     .rack {
         position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
         padding: 0 0 20px; pointer-events: none;
-        background: linear-gradient(to top, rgba(0,0,0,.95) 36%, rgba(0,0,0,0));
+        background: linear-gradient(to top, rgba(13,13,15,.96) 36%, rgba(13,13,15,0));
         opacity: 0; transition: opacity .45s var(--ease);
     }
     .rack.is-on { opacity: 1; }
     .rack svg { width: min(1100px, 92vw); height: auto; display: block; margin: 0 auto;
                 overflow: visible; }
     .rack .tally {
-        text-align: center; margin-top: 10px; font-size: 12px; color: var(--d-text-2);
+        text-align: center; margin-top: 10px; font-size: 12px; color: var(--text-2);
         font-variant-numeric: tabular-nums;
     }
-    .rack .tally b { color: var(--d-text); font-weight: 600; font-size: 17px; }
+    .rack .tally b { color: var(--acid); font-weight: 600; font-size: 17px; }
     .kbar__total { display: none; }
     .kbar__plate { animation: plateLoad .55s var(--ease) backwards; }
     @keyframes plateLoad {
@@ -62,7 +62,7 @@
                letter-spacing: -0.005em; line-height: 1.07; max-width: 17ch;
                margin-bottom: 18px; }
     .step h2 em { font-style: normal; color: var(--tint); }
-    .step p { font-size: clamp(1rem, 1.4vw, 1.25rem); color: var(--d-text-2);
+    .step p { font-size: clamp(1rem, 1.4vw, 1.25rem); color: var(--text-2);
               max-width: 46ch; line-height: 1.45; }
 
     .reveal { opacity: 0; transform: translateY(28px);
@@ -84,8 +84,8 @@
     .total-card .n { font-size: clamp(5rem, 17vw, 12rem); font-weight: 600;
                      letter-spacing: -0.015em; line-height: .9;
                      font-variant-numeric: tabular-nums; }
-    .total-card .n small { font-size: .2em; color: var(--d-text-2); }
-    .total-card p { color: var(--d-text-2); margin-top: 16px; }
+    .total-card .n small { font-size: .2em; color: var(--text-2); }
+    .total-card p { color: var(--text-2); margin-top: 16px; }
 
     .shots { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
              margin-top: clamp(30px, 4vw, 48px); }
@@ -115,9 +115,9 @@
     </div>
 </nav>
 
-<header class="hero" data-nav-after>
+<header class="hero mat-glow" data-nav-after>
     <p class="eyebrow ap-eyebrow">Kilo</p>
-    <h1 class="ap-hero">Every section<br>adds a plate.</h1>
+    <h1 class="ap-hero">Every section<br><span class="mat-metal">adds a plate.</span></h1>
     <p class="sub ap-body">Six reasons to train with Kilo. Scroll, and the bar loads —
        by the bottom of this page you'll have put 170 kg on it.</p>
     <p class="cue">Scroll to load</p>
@@ -125,7 +125,7 @@
 
 <nav class="rail" id="rail" aria-label="Sections"></nav>
 
-<div class="chapter" id="chapter">
+<div class="chapter mat-grain" id="chapter">
     <section class="step" data-plate="25" style="--tint:#ff4d52">
         <div class="ghost tnum">25<small>kg</small></div>
         <div class="step__in">
@@ -176,15 +176,15 @@
         </div>
     </section>
 
-    <section class="step total-card" data-plate="0" style="--tint:#c6f24e">
+    <section class="step total-card mat-glow" data-plate="0" style="--tint:#c7f24f">
         <div class="step__in">
-            <p class="n tnum reveal">170<small> kg</small></p>
+            <p class="n tnum reveal mat-metal">170<small> kg</small></p>
             <p class="ap-body reveal">Loaded. Now go and lift something.</p>
         </div>
     </section>
 </div>
 
-<section class="ap-section ap-center">
+<section class="ap-section ap-section--invert ap-center">
     <div class="ap-col">
         <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">Track your lifts.</h2>
         <p class="ap-body ap-dim ap-reveal" data-d="1" style="max-width:44ch;margin:0 auto 30px">

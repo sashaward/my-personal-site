@@ -15,8 +15,10 @@
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         position: relative; padding: 96px 22px; text-align: center;
     }
-    .scene--dark { background: var(--bg-dark); color: var(--d-text); }
-    .scene--alt  { background: var(--bg-alt); }
+    .scene--alt  { background: var(--ink-2); }
+    /* The inverted scenes use the shared token flip so their type adapts too. */
+    .scene--invert { background: var(--paper); --text: #0d0d0f; --text-2: #5b5b61;
+                     color: var(--text); }
 
     .eyebrow { margin-bottom: 20px; color: var(--tint); }
 
@@ -42,7 +44,6 @@
     }
     .sub { margin-top: 16px; max-width: 42ch; font-size: 17px; line-height: 1.45;
            color: var(--text-2); }
-    .scene--dark .sub { color: var(--d-text-2); }
 
     .caption, .sub, .eyebrow {
         opacity: 0; transform: translateY(24px);
@@ -52,7 +53,7 @@
     .scene.on .caption { opacity: 1; transform: none; transition-delay: .1s; }
     .scene.on .sub     { opacity: 1; transform: none; transition-delay: .2s; }
 
-    .opening .num { color: var(--text); }
+    .opening .num { color: #d7dae0; }
     .opening .caption { max-width: 20ch; }
 
     .cue { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
@@ -94,29 +95,29 @@
 
 <main id="main">
 
-    <section class="scene opening" style="--tint:#1d1d1f" data-nav-after>
-        <p class="eyebrow ap-eyebrow" style="--tint:var(--accent)">Kilo</p>
+    <section class="scene opening mat-glow" style="--tint:#d7dae0" data-nav-after>
+        <p class="eyebrow ap-eyebrow" style="color:var(--acid)">Kilo</p>
         <p class="num"><span class="roll" data-to="0"></span></p>
         <p class="caption ap-h2">Screenshots don't lift anything. Numbers do.</p>
         <p class="sub">Seven of them. That's the whole pitch.</p>
         <p class="cue">Scroll</p>
     </section>
 
-    <section class="scene scene--dark" style="--tint:#ff4d52">
+    <section class="scene mat-grain" style="--tint:#ff4d52">
         <p class="eyebrow ap-eyebrow">Your back squat, last Tuesday</p>
         <p class="num"><span class="roll" data-to="140"></span><span class="unit">kg</span></p>
         <p class="caption">Kilo knew it was a PR before you did.</p>
         <p class="sub">It checks every set you log against every set you've ever logged.</p>
     </section>
 
-    <section class="scene scene--alt" style="--tint:#0b6ce8">
+    <section class="scene scene--invert" style="--tint:#408cff">
         <p class="eyebrow ap-eyebrow">To log that set</p>
         <p class="num"><span class="roll" data-to="4"></span><span class="unit">taps</span></p>
         <p class="caption">Lift, tap, rack. Nothing else on the screen.</p>
         <p class="sub">No streak to protect, no feed, no one to impress between sets.</p>
     </section>
 
-    <section class="scene scene--dark" style="--tint:#ffd959">
+    <section class="scene mat-grain" style="--tint:#ffd959">
         <p class="eyebrow ap-eyebrow">80% of that 140</p>
         <p class="num"><span class="roll" data-to="110"></span><span class="unit">kg</span></p>
         <p class="caption">Already rounded to a number you can load.</p>
@@ -124,21 +125,21 @@
            nearest weight that actually exists. Kilo did that sum too.</p>
     </section>
 
-    <section class="scene scene--alt" style="--tint:#00a878">
+    <section class="scene scene--invert" style="--tint:#0e9c6a">
         <p class="eyebrow ap-eyebrow">Of your training, on one line</p>
         <p class="num"><span class="roll" data-to="26"></span><span class="unit">months</span></p>
         <p class="caption">The plateaus, the jumps, the eight weeks you missed.</p>
         <p class="sub">Progress is only obvious at a distance. Kilo keeps the distance.</p>
     </section>
 
-    <section class="scene scene--dark" style="--tint:#a6a6b3">
+    <section class="scene mat-grain" style="--tint:#a6a6b3">
         <p class="eyebrow ap-eyebrow">Ads, upsells and notifications</p>
         <p class="num"><span class="roll" data-to="0"></span></p>
         <p class="caption">Nothing here wants your attention twice a day.</p>
         <p class="sub">Open it in the gym. Close it. That's the relationship.</p>
     </section>
 
-    <section class="scene final" style="--tint:#0b6ce8">
+    <section class="scene final mat-glow mat-knurl" style="--tint:#c7f24f">
         <p class="eyebrow ap-eyebrow">Number seven</p>
         <p class="num"><span class="roll" data-to="1"></span></p>
         <p class="caption">One app, for the only metric that counts.</p>

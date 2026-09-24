@@ -102,8 +102,9 @@
         global.addEventListener('resize', onScroll);
         sweep();
 
-        // 3. Last resort. Better an un-animated page than an empty one.
-        global.setTimeout(showAll, 4000);
+        // 3. Last resort. Better an un-animated page than an empty one — and
+        //    soon enough that nobody sits looking at a blank section.
+        global.setTimeout(showAll, 2500);
     }
 
     /* ---- Horizontal snap gallery ----------------------------------------- */

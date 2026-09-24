@@ -9,7 +9,7 @@
 <style>
     /* ---- The gate: one question, nothing else ---- */
     .gate {
-        position: fixed; inset: 0; z-index: 200; background: var(--bg);
+        position: fixed; inset: 0; z-index: 200; background: var(--ink);
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         padding: 28px; text-align: center;
         transition: opacity .5s var(--ease), transform .5s var(--ease);
@@ -29,12 +29,12 @@
     .gate-field input::-webkit-outer-spin-button,
     .gate-field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .gate-field input[type=number] { -moz-appearance: textfield; }
-    .gate-field input::placeholder { color: rgba(0,0,0,.16); }
+    .gate-field input::placeholder { color: rgba(255,255,255,.14); }
     .gate-field span { font-size: clamp(1.2rem, 3vw, 1.9rem); color: var(--text-2);
                        font-weight: 600; }
     .gate-rule { width: min(300px, 70vw); height: 2px; background: var(--hair);
                  margin: 10px auto 0; transition: background .25s var(--ease); }
-    .gate-field:focus-within ~ .gate-rule { background: var(--accent); }
+    .gate-field:focus-within ~ .gate-rule { background: var(--acid); }
 
     .gate-acts { margin-top: 40px; display: flex; flex-direction: column;
                  align-items: center; gap: 16px; }
@@ -46,7 +46,7 @@
     .hero { padding: clamp(48px, 7vw, 88px) 22px clamp(30px, 4vw, 44px); text-align: center; }
     .hero .eyebrow { margin-bottom: 14px; }
     .hero h1 { margin-bottom: 16px; }
-    .hero h1 em { font-style: normal; color: var(--accent);
+    .hero h1 em { font-style: normal; color: var(--acid);
                   font-variant-numeric: tabular-nums; }
     .hero .sub { color: var(--text-2); max-width: 46ch; margin: 0 auto; }
 
@@ -62,7 +62,7 @@
               font-variant-numeric: tabular-nums; font-size: 15px; }
     .pct tr { cursor: pointer; }
     .pct tbody tr:hover td { color: var(--text); }
-    .pct tr[aria-selected="true"] .p { color: var(--accent); font-weight: 600; }
+    .pct tr[aria-selected="true"] .p { color: var(--acid); font-weight: 600; }
     .pct .p { color: var(--text-2); width: 4.5ch; }
     .pct .kg { font-size: 17px; font-weight: 600; }
     .pct .load { color: var(--text-2); font-size: 13px; }
@@ -84,7 +84,7 @@
                letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1; }
     .proj .n small { font-size: .38em; color: var(--text-2); font-weight: 400; }
     .proj .l { font-size: 13px; color: var(--text-2); margin-top: 10px; line-height: 1.35; }
-    .proj .up { color: var(--mint); }
+    .proj .up { color: var(--acid-text); }
 
     .shots { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
              margin-top: clamp(30px, 4vw, 48px); }
@@ -104,7 +104,7 @@
 <body>
 
 <!-- One question. Nothing else is shown until it's answered. -->
-<div class="gate" id="gate">
+<div class="gate mat-glow" id="gate">
     <p class="eyebrow ap-eyebrow">Kilo</p>
     <h1 class="ap-hero">What's your back squat?</h1>
     <p class="hint ap-body">Best single, in kilos. We'll build the rest of this page around it.</p>
@@ -140,7 +140,7 @@
         </div>
     </nav>
 
-    <header class="hero" data-nav-after>
+    <header class="hero mat-glow" data-nav-after>
         <p class="eyebrow ap-eyebrow">Built from your number</p>
         <h1 class="ap-hero">At <em id="h-max">—</em>,<br>this is your training.</h1>
         <p class="sub ap-body">One lift on one day. Kilo does this for every lift you
@@ -167,7 +167,7 @@
         </div>
     </section>
 
-    <section class="ap-section ap-section--alt">
+    <section class="ap-section ap-section--invert">
         <div class="ap-col">
             <h2 class="ap-h2 ap-center ap-reveal" style="margin-bottom:44px">Where this goes.</h2>
             <div class="proj">
@@ -187,9 +187,10 @@
         </div>
     </section>
 
-    <section class="ap-section ap-section--dark ap-center">
+    <section class="ap-section ap-center mat-glow mat-knurl">
         <div class="ap-col">
-            <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">That took one number.</h2>
+            <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">
+                <span class="mat-metal">That took one number.</span></h2>
             <p class="ap-body ap-dim ap-reveal" data-d="1"
                style="max-width:44ch;margin:0 auto 30px">
                Kilo knows all of them. Log a lift and every percentage, plate load and

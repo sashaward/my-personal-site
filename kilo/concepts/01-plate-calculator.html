@@ -21,6 +21,7 @@
         font: inherit; font-size: clamp(4.5rem, 15vw, 9rem); font-weight: 600;
         letter-spacing: -0.012em; line-height: 1;
         background: none; border: 0; outline: none; color: var(--text);
+        caret-color: var(--acid);
         width: 4.1ch; text-align: right; padding: 0;
         font-variant-numeric: tabular-nums; caret-color: var(--accent);
     }
@@ -35,19 +36,19 @@
               -webkit-appearance: none; appearance: none; background: none; height: 24px; }
     .slider::-webkit-slider-runnable-track {
         height: 4px; border-radius: 2px;
-        background: linear-gradient(90deg, var(--accent) 0%, var(--accent) var(--pct,40%),
-                    rgba(0,0,0,.12) var(--pct,40%), rgba(0,0,0,.12) 100%);
+        background: linear-gradient(90deg, var(--acid) 0%, var(--acid) var(--pct,40%),
+                    rgba(255,255,255,.14) var(--pct,40%), rgba(255,255,255,.14) 100%);
     }
     .slider::-webkit-slider-thumb {
         -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%;
-        background: #fff; margin-top: -11px; cursor: grab;
-        box-shadow: 0 1px 4px rgba(0,0,0,.25), 0 0 0 .5px rgba(0,0,0,.06);
+        background: var(--metal-flat); margin-top: -11px; cursor: grab;
+        box-shadow: 0 2px 8px rgba(0,0,0,.6);
     }
     .slider::-webkit-slider-thumb:active { cursor: grabbing; }
-    .slider::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(0,0,0,.12); }
-    .slider::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--accent); }
+    .slider::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(255,255,255,.14); }
+    .slider::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--acid); }
     .slider::-moz-range-thumb { width: 26px; height: 26px; border: 0; border-radius: 50%;
-        background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.25); cursor: grab; }
+        background: #d7dae0; box-shadow: 0 2px 8px rgba(0,0,0,.6); cursor: grab; }
 
     .bar-holder { margin: 6px auto 12px; max-width: 900px; }
     .kbar { width: 100%; height: auto; display: block; overflow: visible; }
@@ -60,21 +61,21 @@
 
     .readout { font-size: 17px; color: var(--text); min-height: 24px; }
     .readout .muted { color: var(--text-2); }
-    .notice { font-size: 15px; color: var(--accent); margin-top: 8px; min-height: 22px; }
+    .notice { font-size: 15px; color: var(--acid); margin-top: 8px; min-height: 22px; }
     .notice:empty { margin-top: 0; }
 
     .presets { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
                margin-top: 28px; }
     .preset {
-        border: 0; background: rgba(0,0,0,.05); color: var(--text);
+        border: 0; background: rgba(255,255,255,.08); color: var(--text);
         border-radius: var(--r-pill); padding: 9px 18px;
         font-family: inherit; font-size: 15px; cursor: pointer;
         transition: background .2s var(--ease), color .2s var(--ease);
     }
-    .preset:hover { background: rgba(0,0,0,.09); }
-    .preset[aria-pressed="true"] { background: var(--accent); color: #fff; }
+    .preset:hover { background: rgba(255,255,255,.16); }
+    .preset[aria-pressed="true"] { background: var(--acid); color: var(--on-acid); }
     .preset .w { color: var(--text-2); margin-left: 8px; font-variant-numeric: tabular-nums; }
-    .preset[aria-pressed="true"] .w { color: rgba(255,255,255,.72); }
+    .preset[aria-pressed="true"] .w { color: rgba(13,13,15,.5); }
 
     .picker { margin-top: 34px; }
     .picker .lbl { font-size: 12px; color: var(--text-2); margin-bottom: 12px; }
@@ -87,7 +88,7 @@
     .feat p { color: var(--text-2); font-size: 15px; line-height: 1.45; }
     .feat .big { font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 600;
                  letter-spacing: -0.01em; margin-bottom: 8px;
-                 font-variant-numeric: tabular-nums; }
+                 font-variant-numeric: tabular-nums; color: var(--acid-text); }
 
     .shots { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
              margin-top: clamp(30px, 4vw, 48px); }
@@ -118,7 +119,7 @@
     </div>
 </nav>
 
-<header class="hero" data-nav-after>
+<header class="hero mat-glow" data-nav-after>
     <p class="eyebrow ap-eyebrow">Kilo</p>
     <h1 class="ap-hero">What's on the bar?</h1>
     <p class="sub ap-body">Put a number in. We'll work out the plates.</p>
@@ -146,9 +147,9 @@
         <div class="picker">
             <p class="lbl">Bar</p>
             <div class="ap-swatches" data-swatch>
-                <button class="ap-swatch" style="--sw:#c9ccd2" data-value="20"
+                <button class="ap-swatch" style="--sw:linear-gradient(180deg,#e8ebf0,#83878f)" data-value="20"
                         data-label="20 kg bar — men's" aria-checked="true"></button>
-                <button class="ap-swatch" style="--sw:#e8b9bd" data-value="15"
+                <button class="ap-swatch" style="--sw:linear-gradient(180deg,#f0d9db,#9e8183)" data-value="15"
                         data-label="15 kg bar — women's" aria-checked="false"></button>
             </div>
             <p class="ap-swatch-label">20 kg bar — men's</p>
@@ -156,7 +157,7 @@
     </div>
 </section>
 
-<section class="ap-section ap-section--alt">
+<section class="ap-section ap-section--invert">
     <div class="ap-col">
         <div class="ap-center ap-reveal" style="max-width:52ch;margin:0 auto 44px">
             <h2 class="ap-h2" style="margin-bottom:14px">You just used Kilo.</h2>
@@ -164,13 +165,13 @@
                time you log a lift — along with the percentages, the PRs and the history.</p>
         </div>
         <div class="feat">
-            <div class="ap-card ap-reveal" data-d="1" style="background:#fff">
+            <div class="ap-card ap-reveal" data-d="1">
                 <p class="big tnum">4</p>
                 <h3 class="ap-h3">Taps to log a set</h3>
                 <p>Pick the lift, punch the weight, punch the reps. No forms, no feed,
                    no streak to protect.</p>
             </div>
-            <div class="ap-card ap-reveal" data-d="2" style="background:#fff">
+            <div class="ap-card ap-reveal" data-d="2">
                 <p class="big tnum">80%</p>
                 <h3 class="ap-h3">Already worked out</h3>
                 <p>Programme calls for a percentage? It's on screen in kilos, rounded
@@ -180,9 +181,10 @@
     </div>
 </section>
 
-<section class="ap-section ap-section--dark ap-center">
+<section class="ap-section ap-center mat-glow mat-knurl">
     <div class="ap-col">
-        <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">Train with intent.</h2>
+        <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">
+            <span class="mat-metal">Train with intent.</span></h2>
         <p class="ap-body ap-dim ap-reveal" data-d="1" style="max-width:44ch;margin:0 auto 30px">
            Log workouts, track PRs and see your progress — for every lift you train.</p>
         <div class="ap-reveal" data-d="2">

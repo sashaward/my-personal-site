@@ -12,7 +12,7 @@
     /* ---- The lift: a dark full-bleed opening ---- */
     .platform {
         position: relative; height: 100svh; overflow: hidden;
-        background: var(--bg-dark); color: var(--d-text);
+        background: var(--ink); color: var(--text);
         display: flex; flex-direction: column; justify-content: flex-end;
         touch-action: none;
     }
@@ -54,7 +54,7 @@
                      overflow: hidden; }
     .effort .fill { height: 100%; width: 0%; background: var(--acid);
                     transition: background .2s var(--ease); }
-    .effort .label { font-size: 12px; color: var(--d-text-2); margin-top: 12px; }
+    .effort .label { font-size: 12px; color: var(--text-2); margin-top: 12px; }
     .lifted .effort { opacity: 0; }
 
     /* The thing being lifted: headline + loaded bar, as one rigid object. */
@@ -83,10 +83,10 @@
     }
 
     .feat { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .feat .ap-card { background: #fff; text-align: center; }
+    .feat .ap-card { text-align: center; }
     .feat .big { font-size: clamp(2.2rem, 4.4vw, 3rem); font-weight: 600;
                  letter-spacing: -0.01em; margin-bottom: 8px;
-                 font-variant-numeric: tabular-nums; }
+                 font-variant-numeric: tabular-nums; color: var(--acid-text); }
     .feat h3 { margin-bottom: 8px; }
     .feat p { color: var(--text-2); font-size: 15px; line-height: 1.45; }
 
@@ -119,8 +119,8 @@
     </div>
 </nav>
 
-<div class="platform" id="platform" data-nav-after>
-    <div class="brand"><a href="/kilo/"><img class="k-wordmark k-wordmark--light"
+<div class="platform mat-glow mat-grain" id="platform" data-nav-after>
+    <div class="brand"><a href="/kilo/"><img class="k-wordmark"
         src="../images/wordmark.png" alt="Kilo"></a></div>
     <div class="floor"></div>
 
@@ -131,7 +131,7 @@
 
     <div class="load" id="load" role="button" tabindex="0"
          aria-label="Drag upward to lift the bar and reveal the page">
-        <h1>Nothing moves<span>until you move it.</span></h1>
+        <h1><span class="mat-metal">Nothing moves</span><span>until you move it.</span></h1>
         <div id="bar"></div>
     </div>
 
@@ -142,7 +142,7 @@
 </div>
 
 <div class="after" id="more">
-    <section class="ap-section">
+    <section class="ap-section ap-section--invert">
         <div class="ap-col">
             <div class="ap-center" style="max-width:52ch;margin:0 auto 44px">
                 <p class="ap-eyebrow" style="margin-bottom:12px">Kilo</p>
@@ -172,9 +172,10 @@
         </div>
     </section>
 
-    <section class="ap-section ap-section--dark ap-center">
+    <section class="ap-section ap-center mat-glow mat-knurl">
         <div class="ap-col">
-            <h2 class="ap-h2" style="margin-bottom:16px">Train with intent.</h2>
+            <h2 class="ap-h2" style="margin-bottom:16px">
+                <span class="mat-metal">Train with intent.</span></h2>
             <p class="ap-body ap-dim" style="max-width:44ch;margin:0 auto 30px">
                Log workouts, track PRs and see your progress.</p>
             <a class="ap-btn ap-btn--primary"
