@@ -32,6 +32,7 @@
 
     /* ---- Accent: Acid Kilo, doing all the work ---- */
     --acid: #c7f24f;
+    --acid-rgb: 199 242 79;
     --acid-bright: #d6fa6a;
     --on-acid: #0d0d0f;
     /* Acid is a fill, not an ink. At 1.4:1 on white it is unreadable as text,
@@ -56,6 +57,17 @@
     --p15: #ffd959;
     --p10: #59e6b3;
     --p5:  #a6a6b3;
+
+    /* ---- Panel sheen: grey light from the top-left, falling to near-black ---- */
+    --sheen: radial-gradient(125% 105% at 0% 0%,
+                 rgb(255 255 255 / .09) 0%, rgb(255 255 255 / .022) 38%, transparent 68%),
+             linear-gradient(158deg, #1d1d21 0%, #151518 44%, #0f0f12 100%);
+    --sheen-lift: radial-gradient(125% 105% at 0% 0%,
+                 rgb(255 255 255 / .16) 0%, rgb(255 255 255 / .05) 38%, transparent 70%),
+             linear-gradient(158deg, #2b2b31 0%, #1c1c21 46%, #141417 100%);
+    --sheen-quiet: radial-gradient(125% 105% at 0% 0%,
+                 rgb(255 255 255 / .05) 0%, rgb(255 255 255 / .012) 40%, transparent 70%),
+             linear-gradient(158deg, #171719 0%, #121214 46%, #0e0e10 100%);
 
     /* ---- Geometry ---- */
     --col: 980px;
@@ -140,16 +152,22 @@ a { color: inherit; }
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.38'/%3E%3C/svg%3E");
 }
 
-/* Acid light spilling from the top of a section. */
+/* Light spilling from the top of a section. Grey by default so the ambient
+   light stays monochrome; .mat-glow--acid is reserved for a page's closing
+   CTA, where the accent earns its one appearance as light rather than ink. */
 .mat-glow { position: relative; isolation: isolate; }
 .mat-glow::before {
     content: ''; position: absolute; left: 50%; top: -10%;
-    /* Capped at 100% of the container: at 130% this pushed ~58px past the
+    /* Capped at 100% of the container: wider than this pushed ~58px past the
        viewport on a phone and created a horizontal scrollbar. */
-    width: min(1100px, 100%); height: 420px; transform: translateX(-50%);
+    width: min(1100px, 100%); height: 440px; transform: translateX(-50%);
     background: radial-gradient(50% 50% at 50% 50%,
-                rgba(199,242,79,.16) 0%, rgba(199,242,79,.05) 45%, transparent 72%);
+                rgb(255 255 255 / .07) 0%, rgb(255 255 255 / .02) 45%, transparent 72%);
     pointer-events: none; z-index: -1;
+}
+.mat-glow--acid::before {
+    background: radial-gradient(50% 50% at 50% 50%,
+                rgb(var(--acid-rgb) / .2) 0%, rgb(var(--acid-rgb) / .06) 45%, transparent 72%);
 }
 
 /* ---- Layout ------------------------------------------------------------ */
@@ -178,18 +196,63 @@ a { color: inherit; }
 .ap-col--wide { max-width: var(--col-wide); margin: 0 auto; }
 .ap-center { text-align: center; }
 
-.ap-card {
-    background: var(--bg-card); border-radius: var(--r-card);
-    padding: clamp(28px, 4vw, 48px); overflow: hidden; position: relative;
-    border: 1px solid var(--hair);
+/* Panels are not flat fills. Each catches a soft grey light from its
+   top-left corner and falls away to near-black, with a hairline edge and a
+   lit top rule. The ambient light in this system is always monochrome, which
+   keeps the acid an accent rather than letting it become decoration. */
+.ap-card, .sheen {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--r-card);
+    padding: clamp(28px, 4vw, 48px);
+    background: var(--sheen);
+    border: 1px solid rgb(255 255 255 / .08);
 }
+.sheen { padding: 0; }
+
 /* A hairline of light along the top edge, like the sheen on a sleeve. */
-.ap-card::before {
-    content: ''; position: absolute; left: 10%; right: 10%; top: 0; height: 1px;
-    background: var(--metal-edge); opacity: .4;
+.ap-card::before, .sheen::before {
+    content: ''; position: absolute; left: 8%; right: 8%; top: 0; height: 1px;
+    background: var(--metal-edge); opacity: .45; pointer-events: none;
 }
-.ap-section--invert .ap-card { border-color: rgba(0,0,0,.07); }
-.ap-section--invert .ap-card::before { opacity: .5; }
+
+/* The featured panel, lit harder — the reference's highlighted tier. */
+.ap-card--lift, .sheen--lift {
+    background: var(--sheen-lift); border-color: rgb(255 255 255 / .14);
+}
+.ap-card--lift::before, .sheen--lift::before { opacity: .8; }
+
+/* For panels carrying a lot of text, where the gradient would fight it. */
+.ap-card--quiet, .sheen--quiet { background: var(--sheen-quiet); }
+
+/* The same gradient language on the light ground — lit from the same corner,
+   falling the same way, so an inverted section reads as the same material
+   under different lighting rather than as a different component. */
+.ap-section--invert .ap-card {
+    background:
+        radial-gradient(125% 105% at 0% 0%,
+            rgb(255 255 255 / .95) 0%, rgb(255 255 255 / .45) 40%, transparent 72%),
+        linear-gradient(158deg, #fbfbfc 0%, #f2f2f4 46%, #e9e9ed 100%);
+    border-color: rgba(0, 0, 0, .07);
+}
+.ap-section--invert .ap-card::before {
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / .9), transparent);
+    opacity: .9;
+}
+
+/* ---- Ambient wash -------------------------------------------------------
+   The same grey light at section scale, bleeding in from one edge. */
+.wash { position: relative; isolation: isolate; }
+.wash::after {
+    content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(70% 60% at 50% 0%,
+                rgb(255 255 255 / .055) 0%, rgb(255 255 255 / .015) 45%, transparent 72%);
+}
+.wash--left::after  { background: radial-gradient(60% 70% at 0% 30%,
+                rgb(255 255 255 / .06) 0%, rgb(255 255 255 / .015) 48%, transparent 74%); }
+.wash--right::after { background: radial-gradient(60% 70% at 100% 30%,
+                rgb(255 255 255 / .06) 0%, rgb(255 255 255 / .015) 48%, transparent 74%); }
+.ap-section--invert .wash::after { display: none; }
 
 /* ---- Controls ----------------------------------------------------------- */
 

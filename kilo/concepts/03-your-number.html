@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilo · What's your squat?</title>
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
-<link rel="stylesheet" href="kilo.css">
+<link rel="stylesheet" href="kilo.css?v=5">
 <style>
     /* ---- The gate: one question, nothing else ---- */
     .gate {
@@ -80,6 +80,7 @@
 
     .proj { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
             text-align: center; }
+    .proj > div { padding: 30px 22px; }
     .proj .n { font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 600;
                letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1; }
     .proj .n small { font-size: .38em; color: var(--text-2); font-weight: 400; }
@@ -147,7 +148,7 @@
            train, every time you log one.</p>
     </header>
 
-    <section class="ap-section--tight">
+    <section class="ap-section--tight wash wash--left">
         <div class="ap-col">
             <div class="grid">
                 <div class="ap-card ap-reveal">
@@ -157,7 +158,7 @@
                         <tbody id="pct-body"></tbody>
                     </table>
                 </div>
-                <div class="ap-card bar-panel ap-reveal" data-d="1">
+                <div class="ap-card ap-card--lift bar-panel ap-reveal" data-d="1">
                     <h3 class="ap-h3">On the bar</h3>
                     <div id="bar"></div>
                     <p class="big tnum" id="bar-kg">—</p>
@@ -171,15 +172,15 @@
         <div class="ap-col">
             <h2 class="ap-h2 ap-center ap-reveal" style="margin-bottom:44px">Where this goes.</h2>
             <div class="proj">
-                <div class="ap-reveal" data-d="1">
+                <div class="ap-card ap-reveal" data-d="1">
                     <p class="n tnum" id="p-rep">—</p>
                     <p class="l">Estimated 5-rep max, from Epley</p>
                 </div>
-                <div class="ap-reveal" data-d="2">
+                <div class="ap-card ap-card--lift ap-reveal" data-d="2">
                     <p class="n tnum up" id="p-12">—</p>
                     <p class="l">In 12 weeks at +2.5 kg a week</p>
                 </div>
-                <div class="ap-reveal" data-d="3">
+                <div class="ap-card ap-reveal" data-d="3">
                     <p class="n tnum" id="p-tonnage">—</p>
                     <p class="l">Tonnage in one 5 × 5 at 75%</p>
                 </div>
@@ -187,7 +188,7 @@
         </div>
     </section>
 
-    <section class="ap-section ap-center mat-glow mat-knurl">
+    <section class="ap-section ap-center mat-glow mat-glow--acid mat-knurl">
         <div class="ap-col">
             <h2 class="ap-h2 ap-reveal" style="margin-bottom:16px">
                 <span class="mat-metal">That took one number.</span></h2>
@@ -211,8 +212,8 @@
     <footer class="foot"><a href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a></footer>
 </div>
 
-<script src="plates.js"></script>
-<script src="concept.js"></script>
+<script src="plates.js?v=5"></script>
+<script src="concept.js?v=5"></script>
 <script>
 (function () {
     var gate  = document.getElementById('gate');
@@ -304,6 +305,6 @@
     setTimeout(function () { input.focus(); }, 300);
 })();
 </script>
-<script src="ui.js"></script>
+<script src="ui.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilo · The numbers</title>
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
-<link rel="stylesheet" href="kilo.css">
+<link rel="stylesheet" href="kilo.css?v=5">
 <style>
     html { scroll-snap-type: y proximity; }
 
@@ -16,6 +16,16 @@
         position: relative; padding: 96px 22px; text-align: center;
     }
     .scene--alt  { background: var(--ink-2); }
+    /* Grey light behind each numeral, arriving as the scene does. */
+    .scene { isolation: isolate; }
+    .scene::after {
+        content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+        background: radial-gradient(58% 48% at 50% 38%,
+            rgb(255 255 255 / .06) 0%, rgb(255 255 255 / .018) 46%, transparent 74%);
+        opacity: 0; transition: opacity 1.1s var(--ease);
+    }
+    .scene.on::after { opacity: 1; }
+    .scene--invert::after { display: none; }
     /* The inverted scenes use the shared token flip so their type adapts too. */
     .scene--invert { background: var(--paper); --text: #0d0d0f; --text-2: #5b5b61;
                      color: var(--text); }
@@ -139,7 +149,7 @@
         <p class="sub">Open it in the gym. Close it. That's the relationship.</p>
     </section>
 
-    <section class="scene final mat-glow mat-knurl" style="--tint:#c7f24f">
+    <section class="scene final mat-glow mat-glow--acid mat-knurl" style="--tint:#c7f24f">
         <p class="eyebrow ap-eyebrow">Number seven</p>
         <p class="num"><span class="roll" data-to="1"></span></p>
         <p class="caption">One app, for the only metric that counts.</p>
@@ -153,7 +163,7 @@
 
 </main>
 
-<script src="concept.js"></script>
+<script src="concept.js?v=5"></script>
 <script>
 (function () {
     var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
@@ -235,6 +245,6 @@
     scenes.forEach(function (s) { io.observe(s); });
 })();
 </script>
-<script src="ui.js"></script>
+<script src="ui.js?v=5"></script>
 </body>
 </html>

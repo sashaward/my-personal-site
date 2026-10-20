@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilo · Load the bar</title>
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
-<link rel="stylesheet" href="kilo.css">
+<link rel="stylesheet" href="kilo.css?v=5">
 <style>
     .hero { padding: clamp(48px, 7vw, 92px) 22px clamp(40px, 6vw, 72px); text-align: center; }
     .hero .eyebrow { margin-bottom: 14px; }
@@ -39,9 +39,19 @@
 
     .step {
         min-height: 100svh; display: flex; align-items: center;
-        position: relative; overflow: hidden;
+        position: relative; overflow: hidden; isolation: isolate;
         padding: 96px 22px 240px;
     }
+    /* A grey wash behind each step, so the ghost numeral sits in light rather
+       than on flat black. It arrives with the plate. */
+    .step::before {
+        content: ''; position: absolute; left: 50%; top: 44%; z-index: -1;
+        width: min(1200px, 100%); height: 540px; transform: translate(-50%, -50%);
+        background: radial-gradient(50% 50% at 50% 50%,
+            rgb(255 255 255 / .06) 0%, rgb(255 255 255 / .018) 46%, transparent 74%);
+        opacity: 0; transition: opacity 1s var(--ease); pointer-events: none;
+    }
+    .step.on::before { opacity: 1; }
     .step__in { max-width: var(--col); margin: 0 auto; width: 100%; position: relative; z-index: 2; }
 
     /* The section's plate weight, set enormous behind the copy. */
@@ -176,7 +186,7 @@
         </div>
     </section>
 
-    <section class="step total-card mat-glow" data-plate="0" style="--tint:#c7f24f">
+    <section class="step total-card mat-glow mat-glow--acid" data-plate="0" style="--tint:#c7f24f">
         <div class="step__in">
             <p class="n tnum reveal mat-metal">170<small> kg</small></p>
             <p class="ap-body reveal">Loaded. Now go and lift something.</p>
@@ -209,8 +219,8 @@
     <p class="tally"><b class="tnum" id="w">20</b> kg · <span id="wsub">empty bar</span></p>
 </div>
 
-<script src="plates.js"></script>
-<script src="concept.js"></script>
+<script src="plates.js?v=5"></script>
+<script src="concept.js?v=5"></script>
 <script>
 (function () {
     var steps   = Array.prototype.slice.call(document.querySelectorAll('.step'));
@@ -304,6 +314,6 @@
     draw(0);
 })();
 </script>
-<script src="ui.js"></script>
+<script src="ui.js?v=5"></script>
 </body>
 </html>
