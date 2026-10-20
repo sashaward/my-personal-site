@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilo · Lift it</title>
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
-<link rel="stylesheet" href="kilo.css?v=3">
+<link rel="stylesheet" href="kilo.css">
 <style>
     body.locked { overflow: hidden; height: 100svh; }
 
@@ -119,8 +119,7 @@
     </div>
 </nav>
 
-<div class="platform mat-glow mat-grain" style="--glow-rgb:var(--p25-rgb)"
-     id="platform" data-nav-after>
+<div class="platform mat-glow mat-grain" id="platform" data-nav-after>
     <div class="brand"><a href="/kilo/"><img class="k-wordmark"
         src="../images/wordmark.png" alt="Kilo"></a></div>
     <div class="floor"></div>
@@ -154,17 +153,17 @@
                    gamed — what you lifted.</p>
             </div>
             <div class="feat">
-                <div class="ap-card lum lum--soft lum--react lum--acid">
+                <div class="ap-card">
                     <p class="big tnum">4</p>
                     <h3 class="ap-h3">Taps to log</h3>
                     <p>Lift, tap, rack. Nothing else on the screen.</p>
                 </div>
-                <div class="ap-card lum lum--soft lum--react lum--red">
+                <div class="ap-card">
                     <p class="big tnum">180</p>
                     <h3 class="ap-h3">Plate maths, solved</h3>
                     <p>The fewest plates a side, for any number you can think of.</p>
                 </div>
-                <div class="ap-card lum lum--soft lum--react lum--mint">
+                <div class="ap-card">
                     <p class="big tnum">26</p>
                     <h3 class="ap-h3">Months on one line</h3>
                     <p>The plateaus, the jumps, and the weeks you missed.</p>
@@ -193,8 +192,8 @@
     <footer class="foot"><a href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a></footer>
 </div>
 
-<script src="plates.js?v=3"></script>
-<script src="concept.js?v=3"></script>
+<script src="plates.js"></script>
+<script src="concept.js"></script>
 <script>
 (function () {
     var platform = document.getElementById('platform');
@@ -325,6 +324,6 @@
     paint();
 })();
 </script>
-<script src="ui.js?v=3"></script>
+<script src="ui.js"></script>
 </body>
 </html>

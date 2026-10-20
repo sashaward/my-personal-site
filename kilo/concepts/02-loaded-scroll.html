@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilo · Load the bar</title>
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
-<link rel="stylesheet" href="kilo.css?v=3">
+<link rel="stylesheet" href="kilo.css">
 <style>
     .hero { padding: clamp(48px, 7vw, 92px) 22px clamp(40px, 6vw, 72px); text-align: center; }
     .hero .eyebrow { margin-bottom: 14px; }
@@ -39,22 +39,9 @@
 
     .step {
         min-height: 100svh; display: flex; align-items: center;
-        position: relative; overflow: hidden; isolation: isolate;
+        position: relative; overflow: hidden;
         padding: 96px 22px 240px;
     }
-    /* Each step is lit by the plate it adds. The bloom only comes up once the
-       step is active, so the light arrives with the plate. */
-    .step::before {
-        content: ''; position: absolute; left: 50%; top: 42%; z-index: -1;
-        width: min(1200px, 100%); height: 560px;
-        transform: translate(-50%, -50%);
-        background: radial-gradient(48% 48% at 50% 50%,
-            rgb(var(--tint-rgb) / .3) 0%, rgb(var(--tint-rgb) / .09) 44%, transparent 72%);
-        filter: blur(24px);
-        opacity: 0; transition: opacity 1s var(--ease);
-        pointer-events: none;
-    }
-    .step.on::before { opacity: 1; }
     .step__in { max-width: var(--col); margin: 0 auto; width: 100%; position: relative; z-index: 2; }
 
     /* The section's plate weight, set enormous behind the copy. */
@@ -139,7 +126,7 @@
 <nav class="rail" id="rail" aria-label="Sections"></nav>
 
 <div class="chapter mat-grain" id="chapter">
-    <section class="step" data-plate="25" style="--tint:#ff4d52;--tint-rgb:var(--p25-rgb)">
+    <section class="step" data-plate="25" style="--tint:#ff4d52">
         <div class="ghost tnum">25<small>kg</small></div>
         <div class="step__in">
             <p class="tag reveal"><i></i> First plate · 25 kg</p>
@@ -149,7 +136,7 @@
         </div>
     </section>
 
-    <section class="step" data-plate="20" style="--tint:#408cff;--tint-rgb:var(--p20-rgb)">
+    <section class="step" data-plate="20" style="--tint:#408cff">
         <div class="ghost tnum">20<small>kg</small></div>
         <div class="step__in">
             <p class="tag reveal"><i></i> Second plate · 20 kg</p>
@@ -159,7 +146,7 @@
         </div>
     </section>
 
-    <section class="step" data-plate="15" style="--tint:#ffd959;--tint-rgb:var(--p15-rgb)">
+    <section class="step" data-plate="15" style="--tint:#ffd959">
         <div class="ghost tnum">15<small>kg</small></div>
         <div class="step__in">
             <p class="tag reveal"><i></i> Third plate · 15 kg</p>
@@ -169,7 +156,7 @@
         </div>
     </section>
 
-    <section class="step" data-plate="10" style="--tint:#59e6b3;--tint-rgb:var(--p10-rgb)">
+    <section class="step" data-plate="10" style="--tint:#59e6b3">
         <div class="ghost tnum">10<small>kg</small></div>
         <div class="step__in">
             <p class="tag reveal"><i></i> Fourth plate · 10 kg</p>
@@ -179,7 +166,7 @@
         </div>
     </section>
 
-    <section class="step" data-plate="5" style="--tint:#a6a6b3;--tint-rgb:166 166 179">
+    <section class="step" data-plate="5" style="--tint:#a6a6b3">
         <div class="ghost tnum">5<small>kg</small></div>
         <div class="step__in">
             <p class="tag reveal"><i></i> Fifth plate · 5 kg</p>
@@ -189,8 +176,7 @@
         </div>
     </section>
 
-    <section class="step total-card mat-glow" data-plate="0"
-             style="--tint:#c7f24f;--tint-rgb:var(--acid-rgb)">
+    <section class="step total-card mat-glow" data-plate="0" style="--tint:#c7f24f">
         <div class="step__in">
             <p class="n tnum reveal mat-metal">170<small> kg</small></p>
             <p class="ap-body reveal">Loaded. Now go and lift something.</p>
@@ -223,8 +209,8 @@
     <p class="tally"><b class="tnum" id="w">20</b> kg · <span id="wsub">empty bar</span></p>
 </div>
 
-<script src="plates.js?v=3"></script>
-<script src="concept.js?v=3"></script>
+<script src="plates.js"></script>
+<script src="concept.js"></script>
 <script>
 (function () {
     var steps   = Array.prototype.slice.call(document.querySelectorAll('.step'));
@@ -318,6 +304,6 @@
     draw(0);
 })();
 </script>
-<script src="ui.js?v=3"></script>
+<script src="ui.js"></script>
 </body>
 </html>

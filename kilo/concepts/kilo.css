@@ -57,16 +57,6 @@
     --p10: #59e6b3;
     --p5:  #a6a6b3;
 
-    /* Same colours as bare channels, so blooms can be mixed at any alpha with
-       rgb(var(--x) / a) — no color-mix() dependency. */
-    --acid-rgb: 199 242 79;
-    --p25-rgb: 255 77 82;
-    --p20-rgb: 64 140 255;
-    --p15-rgb: 255 217 89;
-    --p10-rgb: 89 230 179;
-    --violet-rgb: 150 90 255;
-    --cyan-rgb: 90 214 255;
-
     /* ---- Geometry ---- */
     --col: 980px;
     --col-wide: 1200px;
@@ -150,16 +140,15 @@ a { color: inherit; }
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.38'/%3E%3C/svg%3E");
 }
 
-/* Light spilling from the top of a section. Acid by default; set --glow-rgb
-   to key it to a plate colour instead. */
-.mat-glow { position: relative; isolation: isolate; --glow-rgb: var(--acid-rgb); }
+/* Acid light spilling from the top of a section. */
+.mat-glow { position: relative; isolation: isolate; }
 .mat-glow::before {
     content: ''; position: absolute; left: 50%; top: -10%;
     /* Capped at 100% of the container: at 130% this pushed ~58px past the
        viewport on a phone and created a horizontal scrollbar. */
-    width: min(1100px, 100%); height: 460px; transform: translateX(-50%);
+    width: min(1100px, 100%); height: 420px; transform: translateX(-50%);
     background: radial-gradient(50% 50% at 50% 50%,
-                rgb(var(--glow-rgb) / .22) 0%, rgb(var(--glow-rgb) / .07) 45%, transparent 72%);
+                rgba(199,242,79,.16) 0%, rgba(199,242,79,.05) 45%, transparent 72%);
     pointer-events: none; z-index: -1;
 }
 
@@ -201,97 +190,6 @@ a { color: inherit; }
 }
 .ap-section--invert .ap-card { border-color: rgba(0,0,0,.07); }
 .ap-section--invert .ap-card::before { opacity: .5; }
-
-/* ---- Luminous cards -----------------------------------------------------
-   A dark panel holding its own light: two blurred colour blooms behind the
-   content, a vignette pulling the edges back down, and a lit rim along the
-   top. The light is always a Kilo colour — a plate or the acid — so the cards
-   read as branded rather than as generic neon.
-
-   Composable with .ap-card. Declared after it so .lum::before wins; the metal
-   edge .ap-card would have drawn is folded into .lum::after's inset shadow. */
-
-.lum {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    border-radius: var(--r-card);
-    background: #0a0a0c;
-    /* Bloom colours and where the primary one sits. */
-    --lum-a: var(--acid-rgb);
-    --lum-b: var(--p20-rgb);
-    --lum-x: 24%;
-    --lum-y: 16%;
-    --lum-strength: 1;
-}
-
-.lum::before {
-    content: '';
-    position: absolute;
-    inset: -35%;
-    z-index: -2;
-    background:
-        radial-gradient(38% 38% at var(--lum-x) var(--lum-y),
-            rgb(var(--lum-a) / 1) 0%, rgb(var(--lum-a) / .45) 42%, transparent 68%),
-        radial-gradient(42% 42% at calc(100% - var(--lum-x)) calc(100% - var(--lum-y)),
-            rgb(var(--lum-b) / .85) 0%, rgb(var(--lum-b) / .3) 45%, transparent 70%);
-    filter: blur(30px) saturate(150%);
-    opacity: var(--lum-strength);
-    transition: opacity .5s var(--ease), transform .6s var(--ease);
-}
-
-/* Vignette plus rim. Keeping both on one pseudo-element leaves ::before free
-   for the bloom and avoids a third wrapper. */
-.lum::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    pointer-events: none;
-    background: radial-gradient(130% 120% at 50% 38%,
-                transparent 38%, rgb(8 8 10 / .3) 78%, rgb(8 8 10 / .6) 100%);
-    box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / .16),
-        inset 0 0 0 1px rgb(255 255 255 / .07);
-}
-
-/* Text-heavy panels pull the light back, but not so far that the colour
-   disappears — at .4 the blooms read as grey smudges rather than light. */
-.lum--soft { --lum-strength: .72; }
-.lum--lift { --lum-strength: 1.15; }
-
-/* The bloom drifts and brightens on hover — the card catching the light. */
-.lum--react:hover::before { opacity: calc(var(--lum-strength) * 1.3);
-                            transform: translate3d(0, -4%, 0) scale(1.06); }
-
-/* Colourways, each keyed to a plate. */
-.lum--acid { --lum-a: var(--acid-rgb);   --lum-b: var(--p10-rgb); }
-.lum--red  { --lum-a: var(--p25-rgb);    --lum-b: var(--violet-rgb); }
-.lum--blue { --lum-a: var(--p20-rgb);    --lum-b: var(--violet-rgb); }
-.lum--gold { --lum-a: var(--p15-rgb);    --lum-b: var(--p25-rgb); }
-.lum--mint { --lum-a: var(--p10-rgb);    --lum-b: var(--cyan-rgb); }
-.lum--ice  { --lum-a: var(--cyan-rgb);   --lum-b: var(--violet-rgb); }
-
-/* A full-bleed bloom for large icon-style squircles. */
-.lum--tile { border-radius: clamp(26px, 5vw, 44px); --lum-strength: 1.25;
-             --lum-x: 32%; --lum-y: 24%; }
-.lum--tile::after { background: radial-gradient(130% 120% at 50% 40%,
-                    transparent 42%, rgb(8 8 10 / .3) 82%, rgb(8 8 10 / .55) 100%); }
-
-/* Inside an inverted section a luminous card would be a hole in the page, so
-   it keeps its own dark ground and flips its type back. */
-.ap-section--invert .lum {
-    --text: #f5f5f7;
-    --text-2: #9a9aa0;
-    --acid-text: var(--acid);
-    color: var(--text);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .lum--react:hover::before { transform: none; }
-}
-
 
 /* ---- Controls ----------------------------------------------------------- */
 

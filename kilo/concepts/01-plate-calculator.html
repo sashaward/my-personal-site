@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilo · What's on the bar?</title>
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
-<link rel="stylesheet" href="kilo.css?v=3">
+<link rel="stylesheet" href="kilo.css">
 <style>
     .hero { padding: clamp(48px, 7vw, 88px) 22px clamp(30px, 4vw, 48px); text-align: center; }
     .hero .eyebrow { margin-bottom: 14px; }
@@ -119,7 +119,7 @@
     </div>
 </nav>
 
-<header class="hero mat-glow" style="--glow-rgb:var(--p25-rgb)" data-nav-after>
+<header class="hero mat-glow" data-nav-after>
     <p class="eyebrow ap-eyebrow">Kilo</p>
     <h1 class="ap-hero">What's on the bar?</h1>
     <p class="sub ap-body">Put a number in. We'll work out the plates.</p>
@@ -165,13 +165,13 @@
                time you log a lift — along with the percentages, the PRs and the history.</p>
         </div>
         <div class="feat">
-            <div class="ap-card lum lum--soft lum--react lum--acid ap-reveal" data-d="1">
+            <div class="ap-card ap-reveal" data-d="1">
                 <p class="big tnum">4</p>
                 <h3 class="ap-h3">Taps to log a set</h3>
                 <p>Pick the lift, punch the weight, punch the reps. No forms, no feed,
                    no streak to protect.</p>
             </div>
-            <div class="ap-card lum lum--soft lum--react lum--blue ap-reveal" data-d="2">
+            <div class="ap-card ap-reveal" data-d="2">
                 <p class="big tnum">80%</p>
                 <h3 class="ap-h3">Already worked out</h3>
                 <p>Programme calls for a percentage? It's on screen in kilos, rounded
@@ -202,8 +202,8 @@
 
 <footer class="foot"><a href="mailto:kilolifting@gmail.com">kilolifting@gmail.com</a></footer>
 
-<script src="plates.js?v=3"></script>
-<script src="concept.js?v=3"></script>
+<script src="plates.js"></script>
+<script src="concept.js"></script>
 <script>
 (function () {
     var input    = document.getElementById('weight');
@@ -298,6 +298,6 @@
     set(105, true);
 })();
 </script>
-<script src="ui.js?v=3"></script>
+<script src="ui.js"></script>
 </body>
 </html>
