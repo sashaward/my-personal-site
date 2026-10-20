@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilo · Site concepts</title>
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
-<link rel="stylesheet" href="kilo.css">
+<link rel="stylesheet" href="kilo.css?v=3">
 <style>
     /* ---- Preview frames: a live page standing in for Apple's product media ---- */
     .frame {
         position: relative; overflow: hidden; cursor: pointer;
-        /* Placeholder tone while the frame loads. Neutral rather than black so
-           a light concept doesn't flash dark before it paints. */
-        border-radius: var(--r-card); background: var(--ink-2);
+        border-radius: var(--r-card); background: #0a0a0c;
         box-shadow: 0 2px 10px rgba(0,0,0,.06), 0 18px 48px -18px rgba(0,0,0,.28);
     }
     .frame iframe {
@@ -39,11 +37,7 @@
     .hero .acts { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
     /* ---- Highlights strip ---- */
-    .hl { background: var(--bg-card); border-radius: var(--r-card);
-          padding: 26px 24px 28px; height: 100%; display: flex; flex-direction: column;
-          border: 1px solid var(--hair); position: relative; overflow: hidden; }
-    .hl::before { content: ''; position: absolute; left: 8%; right: 8%; top: 0; height: 1px;
-                  background: var(--metal-edge); opacity: .45; }
+    .hl { padding: 26px 24px 28px; height: 100%; display: flex; flex-direction: column; }
     .hl .n { font-size: 12px; font-weight: 600; color: var(--acid);
              letter-spacing: .02em; margin-bottom: 14px; }
     .hl h3 { margin-bottom: 10px; }
@@ -60,10 +54,7 @@
                 margin-top: clamp(24px, 3vw, 36px); }
     .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
                max-width: 780px; margin: clamp(24px, 3vw, 36px) auto 0; }
-    .verdict div { background: rgba(255,255,255,.05); border-radius: var(--r-media);
-                   padding: 18px 20px; border: 1px solid var(--hair); }
-    .ap-section--invert .verdict div { background: rgba(0,0,0,.04);
-                   border-color: rgba(0,0,0,.07); }
+    .verdict div { border-radius: var(--r-media); padding: 18px 20px; }
     .verdict b { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px;
                  letter-spacing: .02em; }
     .verdict .bet b { color: var(--acid-text); }
@@ -183,7 +174,7 @@
     <div class="stage" id="v-stage"><iframe id="v-frame" title="Concept preview"></iframe></div>
 </div>
 
-<script src="concept.js"></script>
+<script src="concept.js?v=3"></script>
 <script>
 (function () {
     var M = KiloConcepts.MANIFEST;
@@ -193,31 +184,31 @@
     var STAMP = '?r=' + Date.now();
 
     var META = {
-        1: { cat: 'Working tool', ratio: 16/10, dark: false,
+        1: { cat: 'Working tool', ratio: 16/10, dark: false, lum: 'lum--red',
              head: 'The hero is the product.',
              body: 'Instead of a headline you skim, a plate calculator you use. ' +
                    'Type a weight and the bar loads with the fewest plates a side.',
              bet: 'A tool people actually use beats a headline they skim.',
              risk: 'It demos one feature, not the product.' },
-        2: { cat: 'Scroll mechanic', ratio: 16/10, dark: true,
+        2: { cat: 'Scroll mechanic', ratio: 16/10, dark: true, lum: 'lum--blue',
              head: 'Every section adds a plate.',
              body: 'Six reasons to train with Kilo, and each one you scroll past ' +
                    'loads a plate onto a bar fixed at the bottom of the screen.',
              bet: 'Nobody else can credibly own these five colours.',
              risk: 'The gimmick has to survive a second visit.' },
-        3: { cat: 'Personalisation', ratio: 16/10, dark: false,
+        3: { cat: 'Personalisation', ratio: 16/10, dark: false, lum: 'lum--acid',
              head: 'One question, then it’s your site.',
              body: 'It asks for your back squat before anything else. Every ' +
                    'percentage, plate load and projection after that is yours.',
              bet: 'Something a screenshot grid can never do.',
              risk: 'A gate before the content costs you visitors.' },
-        4: { cat: 'Direct manipulation', ratio: 16/10, dark: true,
+        4: { cat: 'Direct manipulation', ratio: 16/10, dark: true, lum: 'lum--gold',
              head: 'Nothing moves until you move it.',
              body: 'The headline and a loaded bar sit on the floor. You drag them ' +
                    'up against real resistance — hardest at lockout.',
              bet: 'The visitor performs the product’s subject matter.',
              risk: 'Friction in front of the pitch.' },
-        5: { cat: 'Typographic', ratio: 16/10, dark: false,
+        5: { cat: 'Typographic', ratio: 16/10, dark: false, lum: 'lum--mint',
              head: 'Seven numbers. No screenshots.',
              body: 'One figure per screen, rolling into place like an odometer. ' +
                    'There is not a single device mockup on the page.',
@@ -229,7 +220,7 @@
     document.getElementById('hl-track').innerHTML = M.map(function (c, i) {
         var m = META[c.n];
         return '<div class="ap-gallery__item">' +
-            '<div class="hl">' +
+            '<div class="hl lum lum--soft lum--react ' + m.lum + '">' +
                 '<p class="n">' + String(c.n).padStart(2, '0') + ' &nbsp;' + m.cat + '</p>' +
                 '<h3 class="ap-h3">' + c.title + '</h3>' +
                 '<p>' + m.body + '</p>' +
@@ -260,8 +251,10 @@
                     '<span class="veil"><span>Preview</span></span>' +
                 '</div>' +
                 '<div class="verdict ap-reveal" data-d="2">' +
-                    '<div class="bet"><b>The bet</b><p>' + m.bet + '</p></div>' +
-                    '<div class="risk"><b>The risk</b><p>' + m.risk + '</p></div>' +
+                    '<div class="bet lum lum--soft ' + m.lum + '"><b>The bet</b><p>' +
+                        m.bet + '</p></div>' +
+                    '<div class="risk lum lum--soft"><b>The risk</b><p>' +
+                        m.risk + '</p></div>' +
                 '</div>' +
                 '<div class="cs__acts ap-reveal" data-d="3">' +
                     '<button class="ap-btn ' +
@@ -346,6 +339,6 @@
     document.getElementById('v-desktop').addEventListener('click', function () { setPhone(false); });
 })();
 </script>
-<script src="ui.js"></script>
+<script src="ui.js?v=3"></script>
 </body>
 </html>

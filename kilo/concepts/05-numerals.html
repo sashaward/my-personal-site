@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kilo · The numbers</title>
 <link rel="shortcut icon" type="image/png" href="../images/app-icon.png">
-<link rel="stylesheet" href="kilo.css">
+<link rel="stylesheet" href="kilo.css?v=3">
 <style>
     html { scroll-snap-type: y proximity; }
 
@@ -13,8 +13,23 @@
     .scene {
         min-height: 100svh; scroll-snap-align: start;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        position: relative; padding: 96px 22px; text-align: center;
+        position: relative; padding: 96px 22px; text-align: center; isolation: isolate;
+        /* Clips the bloom below, which is deliberately wider than the scene. */
+        overflow: hidden;
     }
+    /* The numeral lights the scene it sits in. */
+    .scene::after {
+        content: ''; position: absolute; left: 50%; top: 46%; z-index: -1;
+        width: min(1200px, 100%); height: 620px; transform: translate(-50%, -50%);
+        background: radial-gradient(46% 46% at 50% 50%,
+            rgb(var(--tint-rgb) / .26) 0%, rgb(var(--tint-rgb) / .08) 44%, transparent 72%);
+        filter: blur(26px); opacity: 0; transition: opacity 1.1s var(--ease);
+        pointer-events: none;
+    }
+    .scene.on::after { opacity: 1; }
+    /* On white the same bloom would just grey the page down. */
+    .scene--invert::after { mix-blend-mode: multiply; }
+    .scene--invert.on::after { opacity: .45; }
     .scene--alt  { background: var(--ink-2); }
     /* The inverted scenes use the shared token flip so their type adapts too. */
     .scene--invert { background: var(--paper); --text: #0d0d0f; --text-2: #5b5b61;
@@ -95,7 +110,7 @@
 
 <main id="main">
 
-    <section class="scene opening mat-glow" style="--tint:#d7dae0" data-nav-after>
+    <section class="scene opening mat-glow" style="--tint:#d7dae0;--tint-rgb:var(--acid-rgb)" data-nav-after>
         <p class="eyebrow ap-eyebrow" style="color:var(--acid)">Kilo</p>
         <p class="num"><span class="roll" data-to="0"></span></p>
         <p class="caption ap-h2">Screenshots don't lift anything. Numbers do.</p>
@@ -103,21 +118,21 @@
         <p class="cue">Scroll</p>
     </section>
 
-    <section class="scene mat-grain" style="--tint:#ff4d52">
+    <section class="scene mat-grain" style="--tint:#ff4d52;--tint-rgb:var(--p25-rgb)">
         <p class="eyebrow ap-eyebrow">Your back squat, last Tuesday</p>
         <p class="num"><span class="roll" data-to="140"></span><span class="unit">kg</span></p>
         <p class="caption">Kilo knew it was a PR before you did.</p>
         <p class="sub">It checks every set you log against every set you've ever logged.</p>
     </section>
 
-    <section class="scene scene--invert" style="--tint:#408cff">
+    <section class="scene scene--invert" style="--tint:#408cff;--tint-rgb:var(--p20-rgb)">
         <p class="eyebrow ap-eyebrow">To log that set</p>
         <p class="num"><span class="roll" data-to="4"></span><span class="unit">taps</span></p>
         <p class="caption">Lift, tap, rack. Nothing else on the screen.</p>
         <p class="sub">No streak to protect, no feed, no one to impress between sets.</p>
     </section>
 
-    <section class="scene mat-grain" style="--tint:#ffd959">
+    <section class="scene mat-grain" style="--tint:#ffd959;--tint-rgb:var(--p15-rgb)">
         <p class="eyebrow ap-eyebrow">80% of that 140</p>
         <p class="num"><span class="roll" data-to="110"></span><span class="unit">kg</span></p>
         <p class="caption">Already rounded to a number you can load.</p>
@@ -125,21 +140,21 @@
            nearest weight that actually exists. Kilo did that sum too.</p>
     </section>
 
-    <section class="scene scene--invert" style="--tint:#0e9c6a">
+    <section class="scene scene--invert" style="--tint:#0e9c6a;--tint-rgb:14 156 106">
         <p class="eyebrow ap-eyebrow">Of your training, on one line</p>
         <p class="num"><span class="roll" data-to="26"></span><span class="unit">months</span></p>
         <p class="caption">The plateaus, the jumps, the eight weeks you missed.</p>
         <p class="sub">Progress is only obvious at a distance. Kilo keeps the distance.</p>
     </section>
 
-    <section class="scene mat-grain" style="--tint:#a6a6b3">
+    <section class="scene mat-grain" style="--tint:#a6a6b3;--tint-rgb:166 166 179">
         <p class="eyebrow ap-eyebrow">Ads, upsells and notifications</p>
         <p class="num"><span class="roll" data-to="0"></span></p>
         <p class="caption">Nothing here wants your attention twice a day.</p>
         <p class="sub">Open it in the gym. Close it. That's the relationship.</p>
     </section>
 
-    <section class="scene final mat-glow mat-knurl" style="--tint:#c7f24f">
+    <section class="scene final mat-glow mat-knurl" style="--tint:#c7f24f;--tint-rgb:var(--acid-rgb)">
         <p class="eyebrow ap-eyebrow">Number seven</p>
         <p class="num"><span class="roll" data-to="1"></span></p>
         <p class="caption">One app, for the only metric that counts.</p>
@@ -153,7 +168,7 @@
 
 </main>
 
-<script src="concept.js"></script>
+<script src="concept.js?v=3"></script>
 <script>
 (function () {
     var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
@@ -235,6 +250,6 @@
     scenes.forEach(function (s) { io.observe(s); });
 })();
 </script>
-<script src="ui.js"></script>
+<script src="ui.js?v=3"></script>
 </body>
 </html>
