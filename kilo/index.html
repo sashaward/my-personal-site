@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kilo · Track your lifts</title>
-    <link rel="shortcut icon" type="image/png" href="./images/app-icon.png">
+    <link rel="icon" type="image/svg+xml" href="./images/favicon.svg">
     <style>
         * {
             margin: 0;
@@ -74,22 +74,28 @@
         }
 
         .hero__icon-wrap {
-            margin-bottom: 64px;
+            position: relative;
+            margin-bottom: 24px;
             opacity: 0;
             transform: scale(0.95);
             animation: fadeScaleIn 1s ease-out 0.2s forwards;
         }
 
         .hero__icon {
-            width: 160px;
-            height: 160px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease-out;
+            /* 240px box renders the icon square at ~159px; the rest is glow bleed. */
+            width: 240px;
+            height: 240px;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease-out;
         }
 
         .hero__icon:hover {
-            transform: scale(1.02) rotate(-3deg);
+            transform: translateY(-16px) scale(1.03);
+            filter: drop-shadow(0 28px 28px rgba(0, 0, 0, 0.65));
+        }
+
+        .hero__icon {
+            -webkit-user-drag: none;
+            user-select: none;
         }
 
         .hero__title {
@@ -103,6 +109,11 @@
             opacity: 0;
             transform: translateY(20px);
             animation: fadeSlideUp 0.8s ease-out 0.5s forwards;
+        }
+
+        /* Each sentence of the heading gets its own line */
+        .hero__title-line {
+            display: block;
         }
 
         .hero__title-muted {
@@ -127,7 +138,7 @@
             animation: fadeSlideUp 0.8s ease-out 0.9s forwards;
         }
 
-        .hero__cta {
+        .cta {
             display: inline-flex;
             align-items: center;
             gap: 12px;
@@ -141,18 +152,90 @@
             transition: background-color 0.15s, box-shadow 0.3s, transform 0.15s;
         }
 
-        .hero__cta:hover {
+        .cta:hover {
             background-color: #e4e4e7;
             box-shadow: 0 10px 40px rgba(255, 255, 255, 0.2);
         }
 
-        .hero__cta:active {
+        .cta:active {
             transform: scale(0.98);
         }
 
-        .hero__cta svg {
+        .cta svg {
             width: 24px;
             height: 24px;
+        }
+
+        /* Lift pills that burst out of the app icon while it is hovered */
+        .lift-burst {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .lift-pill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1;
+            user-select: none;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.3);
+            transition: transform 0.55s cubic-bezier(0.34, 1.4, 0.5, 1), opacity 0.25s ease-out;
+            will-change: transform, opacity;
+        }
+
+        .lift-pill__gain {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #C6F24D;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .lift-pill__arrow {
+            width: 14px;
+            height: 14px;
+            flex: none;
+        }
+
+        /* Landed on the page */
+        .lift-pill.is-landed {
+            opacity: 1;
+            transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px))) scale(1) rotate(var(--r, 0deg));
+        }
+
+        /* Folding back into the icon */
+        .lift-pill.is-folding {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.25);
+            transition: transform 0.45s cubic-bezier(0.5, 0, 0.75, 0), opacity 0.4s ease-in;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .lift-pill,
+            .lift-pill.is-folding {
+                transition: opacity 0.2s linear;
+            }
+
+            .lift-pill.is-landed {
+                transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px)));
+            }
         }
 
         /* Phones scroll section */
@@ -203,6 +286,52 @@
 
         .phone--3 {
             z-index: 10;
+        }
+
+        /* Closing CTA */
+        .closing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 140px 32px 140px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .closing__title {
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        /* Each sentence of the heading gets its own line */
+        .closing__title-line {
+            display: block;
+        }
+
+        .closing__title-muted {
+            color: #a1a1aa;
+        }
+
+        .closing__meta {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #52525b;
+        }
+
+        /* Scroll reveal - fails open, so content shows even if the JS never runs */
+        .reveal-ready .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        .reveal-ready .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
 
         /* Footer */
@@ -265,15 +394,15 @@
             }
 
             .hero__icon {
-                width: 120px;
-                height: 120px;
+                width: 180px;
+                height: 180px;
             }
 
             .hero__icon-wrap {
-                margin-bottom: 48px;
+                margin-bottom: 18px;
             }
 
-            .hero__cta {
+            .cta {
                 padding: 16px 36px;
                 font-size: 16px;
             }
@@ -284,6 +413,15 @@
 
             .phones-section {
                 height: 120vh;
+            }
+
+            .closing {
+                padding: 80px 24px 24px;
+            }
+
+            .lift-pill {
+                padding: 8px 14px;
+                font-size: 12px;
             }
         }
 
@@ -305,11 +443,12 @@
 
     <main class="hero">
         <div class="hero__icon-wrap">
-            <img class="hero__icon" src="./images/app-icon.png" alt="Kilo App">
+            <img class="hero__icon" src="./images/app-icon.svg" alt="Kilo App">
         </div>
 
         <h1 class="hero__title">
-            Track your lifts. <span class="hero__title-muted">Build your strength.</span>
+            <span class="hero__title-line">Track your lifts.</span>
+            <span class="hero__title-line hero__title-muted">Build your strength.</span>
         </h1>
 
         <p class="hero__subtitle">
@@ -317,11 +456,11 @@
         </p>
 
         <div class="hero__cta-wrap">
-            <a class="hero__cta" href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969" target="_blank" rel="noopener noreferrer">
+            <a class="cta" href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969" target="_blank" rel="noopener noreferrer">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                 </svg>
-                Download now
+                Download for free
             </a>
         </div>
     </main>
@@ -340,6 +479,22 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="closing reveal" id="closing">
+        <h2 class="closing__title">
+            <span class="closing__title-line">Ready to lift?</span>
+            <span class="closing__title-line closing__title-muted">Start tracking today.</span>
+        </h2>
+
+        <a class="cta" href="https://apps.apple.com/app/kilo-your-lifts-in-one-place/id6739643969" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+            </svg>
+            Download for free
+        </a>
+
+        <p class="closing__meta">Available on the App Store</p>
     </section>
 
     <footer class="footer">
@@ -413,6 +568,196 @@
             }, { passive: true });
 
             onScroll();
+        })();
+    </script>
+
+    <script>
+        (function() {
+            var targets = document.querySelectorAll('.reveal');
+            if (!targets.length) return;
+
+            // No IntersectionObserver or reduced motion: leave everything visible.
+            if (!('IntersectionObserver' in window)) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            document.documentElement.classList.add('reveal-ready');
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+
+            targets.forEach(function(el) {
+                observer.observe(el);
+            });
+
+            // Safety net: if anything goes wrong, reveal everything after 2s.
+            window.setTimeout(function() {
+                targets.forEach(function(el) {
+                    el.classList.add('is-visible');
+                });
+            }, 2000);
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var icon = document.querySelector('.hero__icon');
+            var wrap = document.querySelector('.hero__icon-wrap');
+            if (!icon || !wrap) return;
+
+            // Lifts Kilo supports, with the increase shown on each pill.
+            var LIFTS = [
+                { name: 'Back squat',     gain: 12 },
+                { name: 'Deadlift',       gain: 15 },
+                { name: 'Bench press',    gain: 7 },
+                { name: 'Snatch',         gain: 5 },
+                { name: 'Clean & jerk',   gain: 8 },
+                { name: 'Overhead squat', gain: 6 },
+                { name: 'Strict press',   gain: 4 }
+            ];
+
+            // One slot per lift, spaced by equal ARC LENGTH on a 300x128 ellipse
+            // around the icon - equal angles bunch up on a squashed ellipse. The
+            // run is offset half a step so the gap falls straight down, keeping
+            // pills off the headline. Top-centre sits 20px higher again.
+            // Order interleaves sides so consecutive pills never land adjacent.
+            var SLOTS = [
+                { x: -281, y:   45 },
+                { x:  100, y:  121 },
+                { x:  196, y:  -97 },
+                { x: -100, y:  121 },
+                { x:  281, y:   45 },
+                { x: -196, y:  -97 },
+                { x:    0, y: -148 }
+            ];
+
+            var layer = document.createElement('div');
+            layer.className = 'lift-burst';
+            layer.setAttribute('aria-hidden', 'true');
+            wrap.appendChild(layer);
+
+            icon.setAttribute('draggable', 'false');
+
+            // One pill every 0.5s for as long as the cursor stays on the icon.
+            var EMIT_INTERVAL = 500;
+
+            var live = [];
+            var liftIndex = 0;
+            var slotIndex = 0;
+            var timer = null;
+
+            // Keep the spread inside the viewport on narrow windows. 300 is the
+            // ring's x-radius; 110 leaves room for half a pill past it.
+            function scatter() {
+                return Math.min(1, Math.max(0.4, (window.innerWidth / 2 - 110) / 300));
+            }
+
+            function fold(pill, delay) {
+                if (!pill) return;
+                pill.classList.remove('is-landed');
+                pill.classList.add('is-folding');
+                pill.style.transitionDelay = (delay || 0) + 'ms';
+                window.setTimeout(function () {
+                    if (pill.parentNode) pill.parentNode.removeChild(pill);
+                }, 650 + (delay || 0));
+            }
+
+            function foldAll() {
+                var pills = live.slice();
+                live.length = 0;
+                slotIndex = 0;
+                liftIndex = 0;
+                // Last one out folds first.
+                for (var i = pills.length - 1, d = 0; i >= 0; i--, d++) {
+                    fold(pills[i], d * 40);
+                }
+            }
+
+            function arrow() {
+                var ns = 'http://www.w3.org/2000/svg';
+                var svg = document.createElementNS(ns, 'svg');
+                svg.setAttribute('class', 'lift-pill__arrow');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('aria-hidden', 'true');
+                var path = document.createElementNS(ns, 'path');
+                // Material Symbols "north_east"
+                path.setAttribute('d', 'M17,8.4L6.1,19.3q-0.28,0.27-0.7,0.27T4.7,19.3q-0.28-0.28-0.28-0.7T4.7,17.9L15.6,7H10Q9.58,7 9.29,6.71Q9,6.43 9,6T9.29,5.29Q9.58,5 10,5h8q0.43,0 0.71,0.29T19,6v8q0,0.42-0.29,0.71T18,15t-0.71-0.29T17,14V8.4Z');
+                path.setAttribute('fill', 'currentColor');
+                svg.appendChild(path);
+                return svg;
+            }
+
+            function spawn() {
+                // Every lift is out - nothing left to throw.
+                if (liftIndex >= LIFTS.length) return;
+
+                var lift = LIFTS[liftIndex];
+                liftIndex++;
+
+                var pill = document.createElement('span');
+                pill.className = 'lift-pill';
+
+                var name = document.createElement('span');
+                name.className = 'lift-pill__name';
+                name.textContent = lift.name;
+                pill.appendChild(name);
+
+                var gain = document.createElement('span');
+                gain.className = 'lift-pill__gain';
+                gain.appendChild(arrow());
+                gain.appendChild(document.createTextNode(lift.gain + 'KG'));
+                pill.appendChild(gain);
+
+                var slot = SLOTS[slotIndex % SLOTS.length];
+                slotIndex++;
+
+                var s = scatter();
+                var tilt = (2 + Math.random() * 4) * (slot.x < 0 ? -1 : 1);
+
+                pill.style.setProperty('--x', Math.round(slot.x * s) + 'px');
+                pill.style.setProperty('--y', Math.round(slot.y) + 'px');
+                pill.style.setProperty('--r', tilt.toFixed(2) + 'deg');
+
+                layer.appendChild(pill);
+                live.push(pill);
+
+                // Flush styles so the transition runs from the collapsed state.
+                void pill.offsetWidth;
+                pill.classList.add('is-landed');
+            }
+
+            function start() {
+                if (timer) return;
+                spawn();
+                if (liftIndex >= LIFTS.length) return;
+
+                timer = window.setInterval(function () {
+                    spawn();
+                    // Stop the animation once every lift has landed.
+                    if (liftIndex >= LIFTS.length) stop();
+                }, EMIT_INTERVAL);
+            }
+
+            function stop() {
+                window.clearInterval(timer);
+                timer = null;
+            }
+
+            icon.addEventListener('pointerenter', function (event) {
+                // Hover only - touch has no hover state to leave.
+                if (event.pointerType === 'touch') return;
+                start();
+            });
+
+            icon.addEventListener('pointerleave', function () {
+                stop();
+                foldAll();
+            });
         })();
     </script>
 
