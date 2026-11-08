@@ -510,10 +510,26 @@
 
             if (!section || !phone1 || !phone2 || !phone3) return;
 
+            // How far the outer phones may travel. Derived from the viewport and
+            // the phone's real rendered width so they never run off the edge on
+            // a narrow screen; 350px stays the cap on wide ones.
+            function getSpread() {
+                var intended = window.innerWidth < 768 ? 180 : 350;
+                var phoneW = phone1.getBoundingClientRect().width || 288;
+                var room = (window.innerWidth / 2) - (phoneW / 2) - 16;
+                return Math.max(0, Math.min(intended, room));
+            }
+
             var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (reducedMotion) {
-                phone1.style.transform = 'translateX(-350px) rotate(0deg)';
-                phone3.style.transform = 'translateX(350px) rotate(0deg)';
+                var restSpread = getSpread();
+                phone1.style.transform = 'translateX(' + (-restSpread) + 'px) rotate(0deg)';
+                phone3.style.transform = 'translateX(' + restSpread + 'px) rotate(0deg)';
+                window.addEventListener('resize', function() {
+                    var s = getSpread();
+                    phone1.style.transform = 'translateX(' + (-s) + 'px) rotate(0deg)';
+                    phone3.style.transform = 'translateX(' + s + 'px) rotate(0deg)';
+                });
                 return;
             }
 
@@ -541,7 +557,7 @@
                 var progress = clamp(scrolled / scrollableDistance, 0, 1);
                 var easedProgress = easeOutCubic(progress);
 
-                var maxSpread = window.innerWidth < 768 ? 180 : 350;
+                var maxSpread = getSpread();
 
                 var phone1X = lerp(0, -maxSpread, easedProgress);
                 var phone1Rot = lerp(-15, 0, easedProgress);
@@ -566,6 +582,8 @@
                     ticking = true;
                 }
             }, { passive: true });
+
+            window.addEventListener('resize', onScroll);
 
             onScroll();
         })();
